@@ -1,0 +1,74 @@
+.login-container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container form {
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.login-container form input {
+    margin-top: 20px;
+    border: 1px solid #555;
+    background: #ccc;
+    border-radius: 10px;
+    height: 48px;
+    padding: 0 20px;
+    font-size: 16px;
+    text-align: center;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+}
+
+.login-container form button {
+    margin-top: 20px;
+    margin-left: 50px;
+    margin-right: 50px;
+    border: 0;
+    border-radius: 30px;
+    height: 48px;
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+    color: #ccc;
+    cursor: pointer;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+}
+
+.login-container form button.login {
+    background: #BC132B;
+}
+
+.login-container form button.registrese {
+    background: #EE3A3A;
+}
+
+.login-container form h1 {
+    text-align: center;
+    font-size: 16px;
+    color: #777;
+    margin-top: 40px;
+}
+
+.login-container h1.ou {
+    margin: 50px;
+    color: #777;
+}
+
+.login-container button.halfpugg {
+    border: 0;
+    border-radius: 40px;
+    height: 80px;
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+    background: #22D69A;
+    color: #21302A;
+    padding: 30px;
+    cursor: pointer;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+}
