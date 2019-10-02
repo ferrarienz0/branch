@@ -15,7 +15,7 @@
 .login-container form input {
     margin-top: 20px;
     border: 1px solid #555;
-    background: #ccc;
+    background: #eee;
     border-radius: 10px;
     height: 48px;
     padding: 0 20px;
@@ -34,17 +34,46 @@
     font-size: 16px;
     text-align: center;
     font-weight: bold;
-    color: #ccc;
+    color: #eee;
     cursor: pointer;
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
 }
 
-.login-container form button.login {
-    background: #BC132B;
+.login-container form a {
+    margin-top: 20px;
+    margin-left: 50px;
+    display: flex;
+    margin-right: 50px;
+    border: 0;
+    border-radius: 30px;
+    height: 48px;
+    font-size: 16px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #eee;
+    cursor: pointer;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+    text-decoration: none;
 }
 
-.login-container form button.registrese {
-    background: #EE3A3A;
+.login-container form a#login {
+    background: #bc132b;
+}
+
+.login-container form a#registrese {
+    background: #ee3a3a;
+}
+
+.login-container form a#login:hover {
+    background: rgb(143, 10, 30);
+    transition: 0.1s;
+}
+
+.login-container form a#registrese:hover {
+    background: #b31e1e;
+    transition: 0.1s;
 }
 
 .login-container form h1 {
@@ -66,9 +95,14 @@
     font-size: 16px;
     text-align: center;
     font-weight: bold;
-    background: #22D69A;
-    color: #21302A;
+    background: #22d69a;
+    color: #21302a;
     padding: 30px;
     cursor: pointer;
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+}
+
+.login-container button.halfpugg:hover {
+    background: #0f9e6e;
+    transition: 0.1s;
 }
