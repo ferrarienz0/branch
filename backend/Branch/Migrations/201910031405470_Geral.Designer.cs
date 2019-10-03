@@ -13,7 +13,7 @@ namespace Branch.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201910022359424_Geral"; }
+            get { return "201910031405470_Geral"; }
         }
         
         string IMigrationMetadata.Source

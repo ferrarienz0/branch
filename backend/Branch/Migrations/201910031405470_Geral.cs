@@ -28,13 +28,14 @@ namespace Branch.Migrations
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
-                        Fristname = c.String(nullable: false),
+                        Firstname = c.String(nullable: false),
                         Lastname = c.String(nullable: false),
                         Nickname = c.String(nullable: false),
                         Password = c.String(nullable: false),
                         Email = c.String(nullable: false),
                     })
                 .PrimaryKey(t => t.ID)
+                .Index(t => t.Nickname, unique: true)
                 .Index(t => t.Email, unique: true);
             
             CreateTable(
@@ -436,6 +437,7 @@ namespace Branch.Migrations
             DropIndex("dbo.Carts", new[] { "IDUser_ID" });
             DropIndex("dbo.Carts", new[] { "IDMarketplace_ID" });
             DropIndex("dbo.Users", new[] { "Email" });
+            DropIndex("dbo.Users", new[] { "Nickname" });
             DropIndex("dbo.Addresses", new[] { "IDUser_ID" });
             DropTable("dbo.UserSubjects");
             DropTable("dbo.UserMedias");
