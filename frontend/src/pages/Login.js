@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import './Login.css';
+import './Start.css';
 //import api from '../services/api';
 import logo from '../assets/logo.svg';
 
@@ -22,7 +22,7 @@ export default class Login extends Component {
 
     render() {
         return (
-            <div className="login-container">
+            <div className="start-container">
                 <form onSubmit={this.handleSubmit}>
                     <img src={logo} alt="Branch" />
                     <input
@@ -38,11 +38,11 @@ export default class Login extends Component {
                             this.setState({ password: e.target.value })
                         }
                     />
-                    <Link id="login" to="/home" type="submit">
+                    <Link className="red" to="/home" type="submit">
                         Login
                     </Link>
                     <h1>Ainda não possui uma conta?</h1>
-                    <Link id="registrese" to="/register" type="submit">
+                    <Link className="orange" to="/register" type="submit">
                         Registre-se
                     </Link>
                 </form>
