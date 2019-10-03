@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Web;
+
+namespace Branch.Models
+{
+    public class Cart
+    {
+        [Key][Required]
+        public int ID { get; set; }
+
+        [Required]
+        public bool Finished { get; set; }
+
+        [Required]
+        public float Total { get; set; }
+
+        [Required]
+        public Marketplace IDMarketplace { get; set; }
+
+        [Required]
+        public User IDUser { get; set; }
+    }
+}
