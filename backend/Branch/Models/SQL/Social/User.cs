@@ -27,5 +27,8 @@ namespace Branch.Models
         [Required][Index(IsUnique = true)]
         public string Email { get; set; }
 
+        [Required]
+        public DateTime BirthDate { get; set; }
+
     }
 }

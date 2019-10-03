@@ -33,6 +33,7 @@ namespace Branch.Migrations
                         Nickname = c.String(nullable: false),
                         Password = c.String(nullable: false),
                         Email = c.String(nullable: false),
+                        BirthDate = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.ID)
                 .Index(t => t.Nickname, unique: true)
