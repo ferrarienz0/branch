@@ -45,6 +45,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -160,6 +166,37 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910022359424_Geral.cs" />
+    <Compile Include="Migrations\201910022359424_Geral.Designer.cs">
+      <DependentUpon>201910022359424_Geral.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Context.cs" />
+    <Compile Include="Models\Media\Media.cs" />
+    <Compile Include="Models\Relationship\GameMedia.cs" />
+    <Compile Include="Models\Relationship\MarketplaceMedia.cs" />
+    <Compile Include="Models\Relationship\ProductMedia.cs" />
+    <Compile Include="Models\Relationship\TeamGame.cs" />
+    <Compile Include="Models\Relationship\TeamMedia.cs" />
+    <Compile Include="Models\Relationship\UserMedia.cs" />
+    <Compile Include="Models\Social\Address.cs" />
+    <Compile Include="Models\Store\Cart.cs" />
+    <Compile Include="Models\Game\Category.cs" />
+    <Compile Include="Models\Social\Follow.cs" />
+    <Compile Include="Models\Game\Game.cs" />
+    <Compile Include="Models\Relationship\GameCategory.cs" />
+    <Compile Include="Models\Store\Marketplace.cs" />
+    <Compile Include="Models\Game\Pro.cs" />
+    <Compile Include="Models\Store\Product.cs" />
+    <Compile Include="Models\Relationship\ProductCart.cs" />
+    <Compile Include="Models\Social\Subject.cs" />
+    <Compile Include="Models\Relationship\SubjectGame.cs" />
+    <Compile Include="Models\Game\Team.cs" />
+    <Compile Include="Models\Store\TypeProduct.cs" />
+    <Compile Include="Models\Social\User.cs" />
+    <Compile Include="Models\Relationship\UserSubject.cs" />
+    <Compile Include="Models\Relationship\UserGame.cs" />
+    <Compile Include="Models\Media\TypeMedia.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -215,7 +252,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -245,6 +281,11 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201910022359424_Geral.resx">
+      <DependentUpon>201910022359424_Geral.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
