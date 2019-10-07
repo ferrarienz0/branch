@@ -1,0 +1,38 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Web;
+
+namespace Branch.Models
+{
+    public class Product
+    {
+        [Key][Required]
+        public int ID { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        public string Description { get; set; }
+
+        [Required]
+        public float Price { get; set; }
+
+        [Required]
+        public int Stock { get; set; }
+
+        [Required]
+        public float CurrentDiscount { get; set; }
+
+        [Required]
+        public float MaxDiscount { get; set; }
+
+        [Required]
+        public TypeProduct IDTypeProduct { get; set; }
+
+        [Required]
+        public Marketplace IDMarketplace { get; set; }
+    }
+}
