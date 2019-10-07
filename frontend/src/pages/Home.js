@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { IoMdPerson, IoMdMenu } from 'react-icons/io';
+import { FaRegPaperPlane, FaImage } from 'react-icons/fa';
+import { MdGif } from 'react-icons/md';
 import './Home.css';
 import icone from '../assets/icone.svg';
-import { IconContext } from 'react-icons';
 
 export default class Home extends Component {
     state = {
-        image: null
-    }
+        image: null,
+    };
     render() {
         return (
             <div className="home-container">
@@ -24,16 +25,23 @@ export default class Home extends Component {
                     <div className="perfil">
                         <div className="photo">
                             {this.image == null ? (
-                                <IoMdPerson className="userIcon"/>
+                                <IoMdPerson className="userIcon" />
                             ) : (
-                                <img src={this.image}/>
+                                <img src={this.image} />
                             )}
                         </div>
-                        <IoMdMenu className="menuIcon"/>
+                        <IoMdMenu className="menuIcon" />
                     </div>
                     <div className="feed">
                         <div className="myPost">
-
+                            <input type="text" />
+                            <div className="optionsPost">
+                                <button className="send">
+                                    <FaRegPaperPlane className="sendIcon" />
+                                </button>
+                                <FaImage className="imageIcon" />
+                                <MdGif className="gifIcon" />
+                            </div>
                         </div>
                     </div>
                     <div className="tips"></div>
