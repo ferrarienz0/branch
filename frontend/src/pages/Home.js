@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
-import { IoIosPerson } from 'react-icons/io';
+import { IoMdPerson, IoMdMenu } from 'react-icons/io';
 import './Home.css';
 import icone from '../assets/icone.svg';
+import { IconContext } from 'react-icons';
 
 export default class Home extends Component {
+    state = {
+        image: null
+    }
     render() {
         return (
             <div className="home-container">
@@ -12,15 +16,27 @@ export default class Home extends Component {
                     rel="stylesheet"
                 />
                 <div className="head">
-                    <img src={icone} alt="Branch" />
+                    <div>
+                        <img src={icone} alt="Branch" />
+                    </div>
                 </div>
                 <div className="body">
                     <div className="perfil">
                         <div className="photo">
-                            <IoIosPerson />
+                            {this.image == null ? (
+                                <IoMdPerson className="userIcon"/>
+                            ) : (
+                                <img src={this.image}/>
+                            )}
+                        </div>
+                        <IoMdMenu className="menuIcon"/>
+                    </div>
+                    <div className="feed">
+                        <div className="myPost">
+
                         </div>
                     </div>
-                    <div className="feed"></div>
+                    <div className="tips"></div>
                 </div>
             </div>
         );
