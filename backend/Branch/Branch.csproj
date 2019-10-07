@@ -45,6 +45,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Crc32C.NET, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Crc32C.NET.1.0.5.0\lib\net20\Crc32C.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="DnsClient, Version=1.2.0.0, Culture=neutral, PublicKeyToken=4574bb5573c51424, processorArchitecture=MSIL">
+      <HintPath>..\packages\DnsClient.1.2.0\lib\net471\DnsClient.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -52,9 +58,32 @@
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MongoDB.Bson, Version=2.9.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Bson.2.9.2\lib\net452\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=2.9.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.2.9.2\lib\net452\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver.Core, Version=2.9.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.Core.2.9.2\lib\net452\MongoDB.Driver.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpCompress, Version=0.23.0.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpCompress.0.23.0\lib\net45\SharpCompress.dll</HintPath>
+    </Reference>
+    <Reference Include="Snappy.NET, Version=1.1.1.8, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Snappy.NET.1.1.1.8\lib\net45\Snappy.NET.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.4.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -166,37 +195,39 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201910022359424_Geral.cs" />
-    <Compile Include="Migrations\201910022359424_Geral.Designer.cs">
-      <DependentUpon>201910022359424_Geral.cs</DependentUpon>
+    <Compile Include="Migrations\201910031445466_Geral.cs" />
+    <Compile Include="Migrations\201910031445466_Geral.Designer.cs">
+      <DependentUpon>201910031445466_Geral.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\Context.cs" />
-    <Compile Include="Models\Media\Media.cs" />
-    <Compile Include="Models\Relationship\GameMedia.cs" />
-    <Compile Include="Models\Relationship\MarketplaceMedia.cs" />
-    <Compile Include="Models\Relationship\ProductMedia.cs" />
-    <Compile Include="Models\Relationship\TeamGame.cs" />
-    <Compile Include="Models\Relationship\TeamMedia.cs" />
-    <Compile Include="Models\Relationship\UserMedia.cs" />
-    <Compile Include="Models\Social\Address.cs" />
-    <Compile Include="Models\Store\Cart.cs" />
-    <Compile Include="Models\Game\Category.cs" />
-    <Compile Include="Models\Social\Follow.cs" />
-    <Compile Include="Models\Game\Game.cs" />
-    <Compile Include="Models\Relationship\GameCategory.cs" />
-    <Compile Include="Models\Store\Marketplace.cs" />
-    <Compile Include="Models\Game\Pro.cs" />
-    <Compile Include="Models\Store\Product.cs" />
-    <Compile Include="Models\Relationship\ProductCart.cs" />
-    <Compile Include="Models\Social\Subject.cs" />
-    <Compile Include="Models\Relationship\SubjectGame.cs" />
-    <Compile Include="Models\Game\Team.cs" />
-    <Compile Include="Models\Store\TypeProduct.cs" />
-    <Compile Include="Models\Social\User.cs" />
-    <Compile Include="Models\Relationship\UserSubject.cs" />
-    <Compile Include="Models\Relationship\UserGame.cs" />
-    <Compile Include="Models\Media\TypeMedia.cs" />
+    <Compile Include="Models\NoSQL\DataAcessExample.cs" />
+    <Compile Include="Models\NoSQL\ExampleModel.cs" />
+    <Compile Include="Models\SQL\Context.cs" />
+    <Compile Include="Models\SQL\Media\Media.cs" />
+    <Compile Include="Models\SQL\Relationship\GameMedia.cs" />
+    <Compile Include="Models\SQL\Relationship\MarketplaceMedia.cs" />
+    <Compile Include="Models\SQL\Relationship\ProductMedia.cs" />
+    <Compile Include="Models\SQL\Relationship\TeamGame.cs" />
+    <Compile Include="Models\SQL\Relationship\TeamMedia.cs" />
+    <Compile Include="Models\SQL\Relationship\UserMedia.cs" />
+    <Compile Include="Models\SQL\Social\Address.cs" />
+    <Compile Include="Models\SQL\Store\Cart.cs" />
+    <Compile Include="Models\SQL\Game\Category.cs" />
+    <Compile Include="Models\SQL\Social\Follow.cs" />
+    <Compile Include="Models\SQL\Game\Game.cs" />
+    <Compile Include="Models\SQL\Relationship\GameCategory.cs" />
+    <Compile Include="Models\SQL\Store\Marketplace.cs" />
+    <Compile Include="Models\SQL\Game\Pro.cs" />
+    <Compile Include="Models\SQL\Store\Product.cs" />
+    <Compile Include="Models\SQL\Relationship\ProductCart.cs" />
+    <Compile Include="Models\SQL\Social\Subject.cs" />
+    <Compile Include="Models\SQL\Relationship\SubjectGame.cs" />
+    <Compile Include="Models\SQL\Game\Team.cs" />
+    <Compile Include="Models\SQL\Store\TypeProduct.cs" />
+    <Compile Include="Models\SQL\Social\User.cs" />
+    <Compile Include="Models\SQL\Relationship\UserSubject.cs" />
+    <Compile Include="Models\SQL\Relationship\UserGame.cs" />
+    <Compile Include="Models\SQL\Media\TypeMedia.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -283,8 +314,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201910022359424_Geral.resx">
-      <DependentUpon>201910022359424_Geral.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201910031445466_Geral.resx">
+      <DependentUpon>201910031445466_Geral.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

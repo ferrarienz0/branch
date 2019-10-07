@@ -13,12 +13,12 @@ namespace Branch.Models
         public int ID { get; set; }
 
         [Required]
-        public string Fristname { get; set; }
+        public string Firstname { get; set; }
 
         [Required]
         public string Lastname{ get; set; }
 
-        [Required]
+        [Required][Index(IsUnique = true)]
         public string Nickname { get; set; }
 
         [Required]
@@ -26,6 +26,9 @@ namespace Branch.Models
 
         [Required][Index(IsUnique = true)]
         public string Email { get; set; }
+
+        [Required]
+        public DateTime BirthDate { get; set; }
 
     }
 }
