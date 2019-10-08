@@ -41,15 +41,6 @@
     background: #30272a;
 }
 
-.userIcon {
-    height: 100%;
-    width: 100%;
-    padding: 10px;
-    justify-content: center;
-    color: #be9aa9;
-    cursor: pointer;
-}
-
 .menuIcon {
     margin-top: 20px;
     width: 25px;
@@ -62,15 +53,9 @@
     color: #f1d0de;
 }
 
-.photo {
+.perfil div {
     width: 75px;
     height: 75px;
-    position: relative;
-    border-radius: 50%;
-    background: #6e5b63;
-    display: flex;
-    vertical-align: middle;
-    justify-content: center;
 }
 
 .feed {
@@ -131,9 +116,8 @@
     align-items: center;
 }
 
-.imageIcon,
-.gifIcon {
-    margin-bottom: 10px;
+.clipIcon {
+    margin-bottom: 20px;
 }
 
 .sendIcon path {

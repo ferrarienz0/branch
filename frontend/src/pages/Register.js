@@ -1,33 +1,39 @@
 import React, { Component } from 'react';
-const axios = require('axios');
 import { Link } from 'react-router-dom';
 import './Start.css';
 import api from '../services/api';
 import logo from '../assets/logo.svg';
+const axios = require('axios');
 
 export default class Register extends Component {
     state = {
         name: '',
         lastname: '',
-        End: {
-            CEP: '',
-            logradouro: '',
-            complemento: '',
-            bairro: '',
-            cidade: '',
-            estado: '',
-        },
+        CEP: '',
+        logradouro: '',
+        complemento: '',
+        bairro: '',
+        cidade: '',
+        estado: '',
         datebirth: '',
         email: '',
         username: '',
         password: '',
         next: 0,
-        a: ''
     };
     handleSubmit = e => {
         e.preventDefault();
         console.log(this.state.datebirth);
     };
+    async handleAddress(e){
+        const address = await axios.get(`viacep.com.br/ws/${e.target.value}/json/`)
+        this.setState({CEP: e.target.value,
+                       logradouro: address.logradouro,
+                       complemento: address.complemento,
+                       bairro: address.bairro,
+                       cidade: address.localidade,
+                       estado: address.uf});
+    }
     render() {
         const { next } = this.state;
         switch (next) {
@@ -53,19 +59,7 @@ export default class Register extends Component {
                             <input
                                 placeholder="CEP"
                                 type="CEP"
-                                onChange={async e =>
-                                    this.a = await axios.get(`viacep.com.br/ws/${e.target.value}/json/`)
-                                    this.setState({
-                                        End.CEP =
-                                            CEP: require,
-                                            logradouro: '',
-                                            complemento: '',
-                                            bairro: '',
-                                            cidade: '',
-                                            estado: '',
-                                        }
-                                    })
-                                }
+                                onChange={e => this.handleAddress(e)}
                             />
                             <input
                                 min="1900-01-01"

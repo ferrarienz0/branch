@@ -2,14 +2,17 @@ import React, { Component } from 'react';
 import { IoMdPerson, IoMdMenu } from 'react-icons/io';
 import {
     FaUserCircle,
-    FaRegPaperPlane,
+    FaPaperPlane,
     FaImage,
+    FaPaperclip,
     FaRegThumbsUp,
     FaRegThumbsDown,
 } from 'react-icons/fa';
 import { MdGif } from 'react-icons/md';
 import './Home.css';
 import icone from '../assets/icone.svg';
+import Post from './Post';
+import UserImage from './UserImage';
 
 export default class Home extends Component {
     state = {
@@ -29,12 +32,8 @@ export default class Home extends Component {
                 </div>
                 <div className="body">
                     <div className="perfil">
-                        <div className="photo">
-                            {this.image == null ? (
-                                <FaUserCircle className="userIcon" />
-                            ) : (
-                                <img src={this.image} />
-                            )}
+                        <div>
+                            <UserImage/>
                         </div>
                         <IoMdMenu className="menuIcon" />
                     </div>
@@ -43,12 +42,13 @@ export default class Home extends Component {
                             <textarea type="text" />
                             <div className="optionsPost">
                                 <button className="send">
-                                    <FaRegPaperPlane className="sendIcon" />
+                                    <FaPaperPlane className="sendIcon" />
                                 </button>
-                                <FaImage className="imageIcon" />
-                                <MdGif className="gifIcon" />
+                                <FaPaperclip className="clipIcon" />
                             </div>
                         </div>
+                        <Post postID=""/>
+                        <Post postID=""/>
                     </div>
                     <div className="tips"></div>
                 </div>

@@ -1,0 +1,13 @@
+.post-container {
+    margin: 5px;
+    height: 200px;
+    border: 1px solid #6e5b63;
+    border-radius: 5px;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+}
+
+.post-container .userImageDiv {
+    height: 60px;
+    width: 60px;
+    margin: 10px;
+}
