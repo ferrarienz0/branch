@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import { IoMdPerson, IoMdMenu } from 'react-icons/io';
-import { FaRegPaperPlane, FaImage } from 'react-icons/fa';
+import {
+    FaUserCircle,
+    FaRegPaperPlane,
+    FaImage,
+    FaRegThumbsUp,
+    FaRegThumbsDown,
+} from 'react-icons/fa';
 import { MdGif } from 'react-icons/md';
 import './Home.css';
 import icone from '../assets/icone.svg';
@@ -25,7 +31,7 @@ export default class Home extends Component {
                     <div className="perfil">
                         <div className="photo">
                             {this.image == null ? (
-                                <IoMdPerson className="userIcon" />
+                                <FaUserCircle className="userIcon" />
                             ) : (
                                 <img src={this.image} />
                             )}
