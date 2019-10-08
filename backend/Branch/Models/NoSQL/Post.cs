@@ -49,7 +49,7 @@ namespace Branch.Models.NoSQL
 
         [BsonElement("shares")]
         [BsonRequired()]
-        public int Shares { get; set; }
+        public List<int> Shares { get; set; }
 
         [BsonElement("created_at")]
         [BsonRequired()]
