@@ -34,7 +34,7 @@ export default class Home extends Component {
                     </div>
                     <div className="feed">
                         <div className="myPost">
-                            <input type="text" />
+                            <textarea type="text" />
                             <div className="optionsPost">
                                 <button className="send">
                                     <FaRegPaperPlane className="sendIcon" />

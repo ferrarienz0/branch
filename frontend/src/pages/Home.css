@@ -91,18 +91,22 @@
     border-color: #6e5b63;
 }
 
-.myPost input {
+.myPost textarea {
     height: 100%;
     width: 100%;
     border: 0;
-    background: #6e5b63;
     border-bottom: 1px solid;
     border-color: #6e5b63;
+    border-radius:4px;
+    background: #cccccc;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+    resize: none;
 }
 
 .myPost .optionsPost {
     padding: 0;
     height: 100%;
+    width: 100px;
     margin-left: 10px;
     display: flex;
     justify-content: center;
