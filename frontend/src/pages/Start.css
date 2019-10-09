@@ -1,0 +1,138 @@
+.start-container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.start-container div {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.start-container .row a,
+button {
+    display: flex;
+    width: 100%;
+    margin: 10px;
+    border: 0;
+    border-radius: 30px;
+    height: 48px;
+    font-size: 16px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #eee;
+    cursor: pointer;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+    text-decoration: none;
+}
+
+.start-container form {
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.start-container form input {
+    margin: 10px 0 10px 0;
+    border: 1px solid #555;
+    background: #eee;
+    border-radius: 10px;
+    height: 48px;
+    padding: 0 20px;
+    font-size: 16px;
+    text-align: center;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+}
+
+.start-container #proximo {
+    display: flex;
+    border: 0;
+    margin: 10px 0;
+    border-radius: 30px;
+    height: 48px;
+    font-size: 16px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #eee;
+    cursor: pointer;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+    text-decoration: none;
+}
+
+.start-container form a,
+button {
+    display: flex;
+    margin: 10px 0;
+    border: 0;
+    border-radius: 30px;
+    height: 48px;
+    font-size: 16px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #eee;
+    cursor: pointer;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+    text-decoration: none;
+}
+
+.start-container form .red {
+    background: #bc132b;
+}
+
+.start-container form .orange {
+    background: #ee3a3a;
+}
+
+.start-container form .red:hover {
+    background: rgb(143, 10, 30);
+    transition: 0.1s;
+}
+
+.start-container form .orange:hover {
+    background: #b31e1e;
+    transition: 0.1s;
+}
+
+.start-container h1 {
+    text-align: center;
+    font-size: 16px;
+    color: #777;
+    margin-top: 40px;
+}
+
+.start-container h1.ou {
+    margin: 50px;
+    font-size: 24px;
+    color: #777;
+}
+
+.start-container button.halfpugg {
+    border: 0;
+    border-radius: 40px;
+    width: 250px;
+    height: 80px;
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+    background: #22d69a;
+    color: #21302a;
+    padding: 30px;
+    cursor: pointer;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+}
+
+.start-container button.halfpugg:hover {
+    background: #0f9e6e;
+    transition: 0.1s;
+}

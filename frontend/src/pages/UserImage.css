@@ -1,0 +1,14 @@
+.userimage-container {
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    color: #be9aa9;
+    cursor: pointer;
+}
+
+.userimage-container .userIcon {
+    height: 100%;
+    width: 100%;
+    color: #be9aa9;
+    cursor: pointer;
+}
