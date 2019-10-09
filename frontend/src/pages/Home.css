@@ -23,6 +23,16 @@
     cursor: pointer;
 }
 
+.home-container .head #space {
+    width: 100%;
+}
+
+.home-container .head #sair {
+    cursor: pointer;
+
+    color: #ee3a3a;
+}
+
 .body {
     width: 100%;
     height: 100%;
@@ -121,7 +131,7 @@
 }
 
 .sendIcon path {
-    color: #f1d0de;
+    color: #f5a69c;
 }
 
 .tips {

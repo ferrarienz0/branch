@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 import { IoMdPerson, IoMdMenu } from 'react-icons/io';
 import {
-    FaUserCircle,
     FaPaperPlane,
-    FaImage,
     FaPaperclip,
-    FaRegThumbsUp,
-    FaRegThumbsDown,
+    FaShoppingCart,
 } from 'react-icons/fa';
-import { MdGif } from 'react-icons/md';
 import './Home.css';
 import icone from '../assets/icone.svg';
 import Post from './Post';
@@ -27,24 +23,26 @@ export default class Home extends Component {
                 />
                 <div className="head">
                     <div>
-                        <img src={icone} alt="Branch" />
+                        <img src={icone} alt="Branch"/>
                     </div>
+                    <div id="space"/>
+                    <p id="sair"><strong>Sair</strong></p>
                 </div>
                 <div className="body">
                     <div className="perfil">
                         <div>
                             <UserImage/>
                         </div>
-                        <IoMdMenu className="menuIcon" />
+                        <FaShoppingCart className="menuIcon"/>
                     </div>
                     <div className="feed">
                         <div className="myPost">
-                            <textarea type="text" />
+                            <textarea type="text"/>
                             <div className="optionsPost">
                                 <button className="send">
-                                    <FaPaperPlane className="sendIcon" />
+                                    <FaPaperPlane className="sendIcon"/>
                                 </button>
-                                <FaPaperclip className="clipIcon" />
+                                <FaPaperclip className="clipIcon"/>
                             </div>
                         </div>
                         <Post postID=""/>
