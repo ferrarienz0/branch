@@ -14,8 +14,8 @@ namespace Branch.Models.NoSQL
 
         public DataAcess()
         {
-            Client = new MongoClient("CONNECTION_STRING");
-            Database = Client.GetDatabase("DATABASE_NAME");
+            Client = new MongoClient("mongodb+srv://branchadmin:branch6969@branch-nosql-o5f6b.mongodb.net/test?retryWrites=true&w=majority");
+            Database = Client.GetDatabase("branch-nosql");
             PostCollection = Database.GetCollection<Post>("posts");
         }
     }

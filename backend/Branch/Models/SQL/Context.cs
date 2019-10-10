@@ -58,7 +58,7 @@ namespace Branch.Models
 
         public DbSet<UserSubject> UserSubjects { get; set; }
 
-        public Context()
+        public Context() : base("branchsql")
         {
 
         }

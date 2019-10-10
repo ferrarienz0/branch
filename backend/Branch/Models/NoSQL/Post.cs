@@ -50,13 +50,5 @@ namespace Branch.Models.NoSQL
         [BsonElement("shares")]
         [BsonRequired()]
         public List<int> Shares { get; set; }
-
-        [BsonElement("created_at")]
-        [BsonRequired()]
-        public DateTime CreatedAt { get; set; }
-
-        [BsonElement("modified_at")]
-        [BsonRequired()]
-        public DateTime ModifiedAt { get; set; }
     }
 }
