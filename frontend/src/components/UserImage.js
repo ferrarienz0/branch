@@ -2,12 +2,12 @@ import React from 'react';
 import { FaUserCircle } from 'react-icons/fa';
 import './UserImage.css';
 
-export default function UserImage( props ) {
+export default function UserImage(props) {
     const user = props.user;
     return (
-        <div className="userimage-container">
+        <div id="userimage-container">
             {user == null ? (
-                <FaUserCircle className="userIcon" />
+                <FaUserCircle id="user-icon" />
             ) : (
                 <img src={user.image} />
             )}
