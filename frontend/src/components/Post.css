@@ -24,6 +24,29 @@
 #post-container #head #user-image {
     height: 50px;
     width: 50px;
+
+    position: relative;
+}
+
+#post-container #head #user-image #follow-icon {
+    height: 20px;
+    width: 20px;
+    right: -5px;
+    bottom: 0;
+
+    position: absolute;
+    cursor: pointer;
+
+    color: #ffeff5;
+}
+
+#post-container #head #user-image #follow-icon:hover {
+    height: 25px;
+    width: 25px;
+    right: -7.5px;
+    bottom: -2.5px;
+
+    color: #ffffff;
 }
 
 #post-container #head #user-name {

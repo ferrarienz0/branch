@@ -7,6 +7,8 @@ import {
     FaComment,
     FaComments,
     FaCartPlus,
+    FaUserPlus,
+    FaUserTimes
 } from 'react-icons/fa';
 import UserImage from './UserImage';
 import './Post.css';
@@ -21,6 +23,7 @@ export default class Post extends Component {
                 <div id="head">
                     <div id="user-image">
                         <UserImage />
+                        <FaUserPlus id="follow-icon"/>
                     </div>
                     <div id="user-name">
                         <strong>@Lorem_Ipsum</strong>

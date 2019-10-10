@@ -18,8 +18,11 @@ export default class Topic extends Component {
     render() {
         return (
             <div id="topic-container">
+                <div>
                 <p id="hashtag">#Topico</p>
+
                 <div />
+                </div>
             </div>
         );
     }
