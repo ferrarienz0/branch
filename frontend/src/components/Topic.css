@@ -1,0 +1,17 @@
+#topic-container {
+    height: 200px;
+    margin: 5px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid #6e5b63;
+    border-radius: 5px;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+}
+
+#topic-container #hashtag {
+    color: rgb(180, 180, 180);
+}
