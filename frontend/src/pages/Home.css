@@ -32,8 +32,8 @@
 }
 
 #home-container #head #sair {
-    display: flex;
-    align-items: center;
+    height: 100%;
+    width: 25px;
     cursor: pointer;
 
     color: #ee3a3a;

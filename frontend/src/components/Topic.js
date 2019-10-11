@@ -6,9 +6,8 @@ import {
     FaThumbsDown,
     FaComment,
     FaComments,
-    FaCartPlus,
+    FaPlus,
 } from 'react-icons/fa';
-import UserImage from './UserImage';
 import './Topic.css';
 
 export default class Topic extends Component {
@@ -17,11 +16,21 @@ export default class Topic extends Component {
     };
     render() {
         return (
-            <div id="topic-container">
-                <div>
-                <p id="hashtag">#Topico</p>
-
-                <div />
+            <div
+                id="topic-container"
+                style={{
+                    background: `url('${this.props.wallpaper}')`,
+                    'background-position': 'center',
+                    'background-repeat': 'no-repeat',
+                    'background-size': 'cover',
+                }}
+            >
+                <div id="gradient">
+                    <h2 id="hashtag">#{this.props.hashtag}</h2>
+                    <div id="foot">
+                        <FaComment id="comment" />
+                        <FaPlus id="plus" />
+                    </div>
                 </div>
             </div>
         );

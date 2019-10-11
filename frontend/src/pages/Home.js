@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { IoMdPerson, IoMdMenu } from 'react-icons/io';
-import { FaPaperPlane, FaPaperclip, FaShoppingCart } from 'react-icons/fa';
+import {
+    FaPaperPlane,
+    FaPaperclip,
+    FaShoppingCart,
+    FaPowerOff,
+} from 'react-icons/fa';
 import './Home.css';
 import icone from '../assets/icone.svg';
 import HeadPost from '../components/HeadPost';
@@ -20,9 +25,7 @@ export default class Home extends Component {
                         <img src={icone} alt="Branch" />
                     </div>
                     <div id="space" />
-                    <p id="sair">
-                        <strong>Sair</strong>
-                    </p>
+                    <FaPowerOff id="sair" />
                 </div>
                 <div id="body">
                     <div id="perfil">
@@ -32,7 +35,14 @@ export default class Home extends Component {
                         <FaShoppingCart className="menuIcon" />
                     </div>
                     <div id="topics">
-                        <Topic topicID="" />
+                        <Topic
+                            hashtag="LeagueOfLegends"
+                            wallpaper="https://lolstatic-a.akamaihd.net/frontpage/apps/prod/LolGameInfo-Harbinger/pt_BR/b49c208c106c3566ac66bc70dc62993c84c0511e/assets/assets/images/gi-landing-top.jpg"
+                        />
+                        <Topic
+                            hashtag="Overwatch"
+                            wallpaper="https://observatoriodegames.bol.uol.com.br/wp-content/uploads/2019/09/overwatch.jpg"
+                        />
                     </div>
                     <div id="posts">
                         <HeadPost postID="" />
