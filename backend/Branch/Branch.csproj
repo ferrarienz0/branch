@@ -235,6 +235,10 @@
     <Compile Include="Migrations\201910092054448_DoAll.Designer.cs">
       <DependentUpon>201910092054448_DoAll.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910122253049_UpdateDB.cs" />
+    <Compile Include="Migrations\201910122253049_UpdateDB.Designer.cs">
+      <DependentUpon>201910122253049_UpdateDB.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\NoSQL\DataAcess.cs" />
     <Compile Include="Models\NoSQL\Post.cs" />
@@ -244,7 +248,6 @@
     <Compile Include="Models\SQL\Relationship\MarketplaceMedia.cs" />
     <Compile Include="Models\SQL\Relationship\ProductMedia.cs" />
     <Compile Include="Models\SQL\Relationship\TeamGame.cs" />
-    <Compile Include="Models\SQL\Relationship\TeamMedia.cs" />
     <Compile Include="Models\SQL\Relationship\UserMedia.cs" />
     <Compile Include="Models\SQL\Social\Address.cs" />
     <Compile Include="Models\SQL\Store\Cart.cs" />
@@ -355,6 +358,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910092054448_DoAll.resx">
       <DependentUpon>201910092054448_DoAll.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910122253049_UpdateDB.resx">
+      <DependentUpon>201910122253049_UpdateDB.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
