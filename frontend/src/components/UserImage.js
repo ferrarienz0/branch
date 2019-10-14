@@ -2,14 +2,24 @@ import React from 'react';
 import { FaUserCircle } from 'react-icons/fa';
 import './UserImage.css';
 
+//componente responsável por exibir o ícone do usuário
 export default function UserImage(props) {
-    const user = props.user;
     return (
         <div id="userimage-container">
-            {user == null ? (
+            {props.image == null ? (
                 <FaUserCircle id="user-icon" />
             ) : (
-                <img src={user.image} />
+                <div
+                    id="user-image"
+                    style={{
+                        height: `${props.size}`,
+                        width: `${props.size}`,
+                        background: `url('${props.image}')`,
+                        'background-position': 'center',
+                        'background-repeat': 'no-repeat',
+                        'background-size': 'cover',
+                    }}
+                />
             )}
         </div>
     );

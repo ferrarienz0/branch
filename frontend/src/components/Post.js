@@ -1,32 +1,41 @@
 import React, { Component } from 'react';
 import {
-    FaRegThumbsUp,
     FaThumbsUp,
-    FaRegThumbsDown,
     FaThumbsDown,
+    FaRegThumbsUp,
+    FaRegThumbsDown,
     FaComment,
     FaComments,
     FaCartPlus,
     FaUserPlus,
-    FaUserTimes
 } from 'react-icons/fa';
 import UserImage from './UserImage';
 import './Post.css';
 
 export default class Post extends Component {
     state = {
-        ID: this.props.postID,
+        color: this.props.head == null ? '' : '#252122',
+        marginLeft: this.props.head == null ? '40px' : '5px',
+        ID: this.props.user.id,
+        like: false,
+        dislike: false,
     };
     render() {
         return (
-            <div id="post-container">
+            <div
+                id="post-container"
+                style={{
+                    background: this.state.color,
+                    marginLeft: this.state.marginLeft,
+                }}
+            >
                 <div id="head">
                     <div id="user-image">
-                        <UserImage />
-                        <FaUserPlus id="follow-icon"/>
+                        <UserImage size="50px" image={this.props.user.image} />
+                        <FaUserPlus id="follow-icon" />
                     </div>
                     <div id="user-name">
-                        <strong>@Lorem_Ipsum</strong>
+                        <strong>{this.props.user.username}</strong>
                     </div>
                     <div id="comments">
                         <FaComments id="comments-icon" />
@@ -45,8 +54,16 @@ export default class Post extends Component {
                     )}
                 </div>
                 <div id="foot">
-                    <FaRegThumbsDown id="dislike-icon" />
-                    <FaRegThumbsUp id="like-icon" />
+                    {this.state.dislike ? (
+                        <FaThumbsDown id="dislike-icon" />
+                    ) : (
+                        <FaRegThumbsDown id="dislike-icon" />
+                    )}
+                    {this.state.like ? (
+                        <FaThumbsUp id="like-icon" />
+                    ) : (
+                        <FaRegThumbsUp id="like-icon" />
+                    )}
                     <FaComment id="comment-icon" />
                     {this.state.ID.is_product == null ? (
                         <FaCartPlus id="cart-icon" />
@@ -54,7 +71,6 @@ export default class Post extends Component {
                         <FaCartPlus id="cart-icon" />
                     )}
                 </div>
-                <div id="right-post"></div>
             </div>
         );
     }

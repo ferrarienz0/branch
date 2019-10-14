@@ -1,13 +1,5 @@
 import React, { Component } from 'react';
-import {
-    FaRegThumbsUp,
-    FaThumbsUp,
-    FaRegThumbsDown,
-    FaThumbsDown,
-    FaComment,
-    FaComments,
-    FaPlus,
-} from 'react-icons/fa';
+import { FaComment, FaPlus } from 'react-icons/fa';
 import './Topic.css';
 
 export default class Topic extends Component {
@@ -20,9 +12,9 @@ export default class Topic extends Component {
                 id="topic-container"
                 style={{
                     background: `url('${this.props.wallpaper}')`,
-                    'background-position': 'center',
-                    'background-repeat': 'no-repeat',
-                    'background-size': 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'cover',
                 }}
             >
                 <div id="gradient">

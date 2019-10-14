@@ -22,9 +22,6 @@
 }
 
 #post-container #head #user-image {
-    height: 50px;
-    width: 50px;
-
     position: relative;
 }
 
@@ -37,7 +34,7 @@
     position: absolute;
     cursor: pointer;
 
-    color: #ffeff5;
+    color: #ffffff;
 }
 
 #post-container #head #user-image #follow-icon:hover {
@@ -81,6 +78,8 @@
     padding: 10px;
 
     display: flex;
+
+    background: none;
 }
 
 #post-container #body #comment {

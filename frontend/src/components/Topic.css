@@ -26,6 +26,14 @@
     );
 }
 
+#topic-container #gradient:hover {
+    background-image: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 1),
+        rgba(0, 0, 0, 0) 100%
+    );
+}
+
 #topic-container #gradient #hashtag {
     color: rgb(255, 255, 255);
     text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.6);
