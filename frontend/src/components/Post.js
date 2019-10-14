@@ -55,14 +55,26 @@ export default class Post extends Component {
                 </div>
                 <div id="foot">
                     {this.state.dislike ? (
-                        <FaThumbsDown id="dislike-icon" />
+                        <FaThumbsDown
+                            onClick={() => this.setState({ dislike: false })}
+                            id="dislike-icon"
+                        />
                     ) : (
-                        <FaRegThumbsDown id="dislike-icon" />
+                        <FaRegThumbsDown
+                            onClick={() => this.setState({ dislike: true })}
+                            id="dislike-icon"
+                        />
                     )}
                     {this.state.like ? (
-                        <FaThumbsUp id="like-icon" />
+                        <FaThumbsUp
+                            onClick={() => this.setState({ like: false })}
+                            id="like-icon"
+                        />
                     ) : (
-                        <FaRegThumbsUp id="like-icon" />
+                        <FaRegThumbsUp
+                            onClick={() => this.setState({ like: true })}
+                            id="like-icon"
+                        />
                     )}
                     <FaComment id="comment-icon" />
                     {this.state.ID.is_product == null ? (

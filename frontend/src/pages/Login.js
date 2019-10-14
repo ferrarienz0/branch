@@ -1,23 +1,19 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './Login.css';
+import md5 from 'md5';
 //import api from '../services/api';
 import logo from '../assets/logo.svg';
 
 export default class Login extends Component {
-    //export default function Login({ history }) {
-    //const [ username, setUsername ] = useState('');
     state = {
         username: '',
         password: '',
     };
-    //const [eUsername, eSetUsername] = useState();
-    //const [ePassword, eSetPassword] = useState();
     handleSubmit = e => {
         e.preventDefault();
         console.log(this.state.username);
         //const response = await api.post('/algumacoisa');
-        //history.push('/home');
     };
 
     render() {
@@ -37,10 +33,14 @@ export default class Login extends Component {
                         type="password"
                         placeholder="Senha"
                         onChange={e =>
-                            this.setState({ password: e.target.value })
+                            this.setState({ password: md5(e.target.value) })
                         }
                     />
-                    <Link id="login-button" to="/home" type="submit">
+                    <Link
+                        id="login-button"
+                        to={`/home/${this.state.password}`}
+                        type="submit"
+                    >
                         Login
                     </Link>
                     <h1 id="phrase">Ainda não possui uma conta?</h1>

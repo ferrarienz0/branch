@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { FaShoppingCart, FaPowerOff } from 'react-icons/fa';
 import './Home.css';
 import icone from '../assets/icone.svg';
-import HeadPost from '../components/HeadPost';
 import Topic from '../components/Topic';
 import Post from '../components/Post';
 import UserImage from '../components/UserImage';
@@ -11,6 +10,17 @@ import UserImage from '../components/UserImage';
 export default class Home extends Component {
     state = {
         image: null,
+        posts: [
+            {
+                user: {
+                    name: 'Marcos',
+                    lastname: 'Loli',
+                    username: 'xxMarc0sxx',
+                    image:
+                        'https://i.pinimg.com/originals/04/b7/4b/04b74ba86504a599a8aeb5b57251ed69.png',
+                },
+            },
+        ],
         users: [
             {
                 id: 0,
