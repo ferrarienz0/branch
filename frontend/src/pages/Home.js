@@ -111,9 +111,23 @@ export default class Home extends Component {
                         />
                     </div>
                     <div id="posts">
-                        <Post head="" postID="" user={this.state.users[1]} />
-                        <Post postID="" user={this.state.users[2]} />
-                        <Post postID="" user={this.state.users[3]} />
+                        <Post
+                            head=""
+                            post={this.state.posts[1]}
+                            user={this.state.users[1]}
+                        />
+                        <Post
+                            post={this.state.posts[2]}
+                            user={this.state.users[2]}
+                        />
+                        <Post
+                            post={this.state.posts[0]}
+                            user={this.state.users[0]}
+                        />
+                        <Post
+                            post={this.state.posts[3]}
+                            user={this.state.users[3]}
+                        />
                     </div>
                 </div>
             </div>

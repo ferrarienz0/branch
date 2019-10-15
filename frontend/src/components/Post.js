@@ -36,22 +36,17 @@ export default class Post extends Component {
                     </div>
                     <div id="user-name">
                         <strong>{this.props.user.username}</strong>
+                        <p id="name">
+                            {this.props.user.name} {this.props.user.lastname}
+                        </p>
                     </div>
                     <div id="comments">
                         <FaComments id="comments-icon" />
                     </div>
                 </div>
                 <div id="body">
-                    <p id="comment">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua. Ut enim ad minim veniam, quis nostrud
-                        exercitation ullamco laboris nisi ut aliquip ex ea
-                        commodo consequat
-                    </p>
-                    {this.state.ID.image == null ? null : (
-                        <image id="midia"></image>
-                    )}
+                    <p id="comment">{this.props.post.text}</p>
+                    <img id="image" src={this.props.post.image} />
                 </div>
                 <div id="foot">
                     {this.state.dislike ? (
