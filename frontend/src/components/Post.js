@@ -16,7 +16,7 @@ export default class Post extends Component {
     state = {
         color: this.props.head == null ? '' : '#252122',
         marginLeft: this.props.head == null ? '40px' : '5px',
-        ID: this.props.user.id,
+        ID: this.props.user,
         like: false,
         dislike: false,
     };
