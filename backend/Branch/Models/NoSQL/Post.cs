@@ -9,7 +9,9 @@ namespace Branch.Models.NoSQL
 {
     public class Post
     {
-        [BsonId][BsonRequired()]
+        [BsonId]
+        [BsonElement("id")]
+        [BsonRequired()]
         public ObjectId ID { get; set; }
 
         [BsonElement("user_id")][BsonRequired()]
@@ -30,6 +32,14 @@ namespace Branch.Models.NoSQL
         [BsonRequired()]
         public List<string> Hashtags { get; set; }
 
+        [BsonElement("likes")]
+        [BsonRequired()]
+        public List<int> Likes { get; set; }
+
+        [BsonElement("dislikes")]
+        [BsonRequired()]
+        public List<int> Dislikes { get; set; }
+
         [BsonElement("mentions")]
         [BsonRequired()]
         public List<int> Mentions { get; set; }
@@ -39,6 +49,7 @@ namespace Branch.Models.NoSQL
         public List<ObjectId> Comments { get; set; }
 
         [BsonElement("parent")]
+        [BsonIgnoreIfNull]
         public ObjectId Parent { get; set; }
 
         [BsonElement("childrens")]

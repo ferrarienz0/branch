@@ -10,7 +10,6 @@ namespace Branch.Models
     public class MarketplaceMedia
     {
         [Key]
-        [Required]
         public int ID { get; set; }
 
         [Required]

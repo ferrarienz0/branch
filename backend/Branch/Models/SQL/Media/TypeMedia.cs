@@ -10,7 +10,6 @@ namespace Branch.Models
     public class TypeMedia
     {
         [Key]
-        [Required]
         public int ID { get; set; }
 
         [Required]

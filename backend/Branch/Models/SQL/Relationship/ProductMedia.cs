@@ -10,7 +10,6 @@ namespace Branch.Models
     public class ProductMedia
     {
         [Key]
-        [Required]
         public int ID { get; set; }
 
         [Required]
