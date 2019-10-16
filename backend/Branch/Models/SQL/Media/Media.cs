@@ -16,5 +16,11 @@ namespace Branch.Models
         [Required]
         [Index(IsUnique = true)]
         public string URL { get; set; }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTime CreatedAt { get; set; }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTime UpdatedAt { get; set; }
     }
 }

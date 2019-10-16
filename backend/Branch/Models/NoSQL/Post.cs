@@ -15,25 +15,16 @@ namespace Branch.Models.NoSQL
         [BsonElement("user_id")][BsonRequired()]
         public int IDUser { get; set; }
 
-        [BsonElement("content_path")]
+        [BsonElement("is_product")]
         [BsonRequired()]
-        public string ContentPath { get; set; }
+        public bool IsProduct { get; set; }
 
-        [BsonElement("ggs")]
+        [BsonElement("text")]
         [BsonRequired()]
-        public string GGs { get; set; }
+        public string Text { get; set; }
 
-        [BsonElement("bgs")]
-        [BsonRequired()]
-        public string BGs { get; set; }
-
-        [BsonElement("hfs")]
-        [BsonRequired()]
-        public string HFs { get; set; }
-
-        [BsonElement("trolls")]
-        [BsonRequired()]
-        public string Trolls { get; set; }
+        [BsonElement("medias")]
+        public List<int> Medias { get; set; }
 
         [BsonElement("hashtags")]
         [BsonRequired()]
@@ -47,8 +38,10 @@ namespace Branch.Models.NoSQL
         [BsonRequired()]
         public List<ObjectId> Comments { get; set; }
 
-        [BsonElement("shares")]
-        [BsonRequired()]
-        public List<int> Shares { get; set; }
+        [BsonElement("parent")]
+        public ObjectId Parent { get; set; }
+
+        [BsonElement("childrens")]
+        public List<ObjectId> Childrens { get; set; }
     }
 }
