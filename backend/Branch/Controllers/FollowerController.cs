@@ -8,20 +8,20 @@ using System.Web.Http;
 
 namespace Branch.Controllers
 {
-    public class UserController : ApiController
+    public class FollowerController : ApiController
     {
         [HttpPost]
-        [Route("user")]
-        public IHttpActionResult Store([FromBody] User NewUser)
+        [Route("follower")]
+        public IHttpActionResult Store([FromBody] Follow NewFollow)
         {
             var SQLContext = new Context();
 
             try
             {
-                var Response = SQLContext.Users.Add(NewUser);
+                var Response = SQLContext.Follows.Add(NewFollow);
                 SQLContext.SaveChanges();
                 SQLContext.Dispose();
-                
+
                 return Ok(Response);
             }
             catch
@@ -32,14 +32,14 @@ namespace Branch.Controllers
         }
 
         [HttpGet]
-        [Route("user")]
+        [Route("follower")]
         public IHttpActionResult Index([FromUri] int UserId)
         {
             var SQLContext = new Context();
 
             try
             {
-                var Response = SQLContext.Users.Where(x => x.ID == UserId).ToList().First();
+                var Response = SQLContext.Follows.Where(x => x.IDFollowed.ID == UserId).ToList();
                 SQLContext.SaveChangesAsync();
                 SQLContext.Dispose();
 

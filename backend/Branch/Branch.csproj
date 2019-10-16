@@ -222,6 +222,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\FollowerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -239,6 +240,10 @@
     <Compile Include="Migrations\201910122253049_UpdateDB.cs" />
     <Compile Include="Migrations\201910122253049_UpdateDB.Designer.cs">
       <DependentUpon>201910122253049_UpdateDB.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910160205354_fix-id.cs" />
+    <Compile Include="Migrations\201910160205354_fix-id.Designer.cs">
+      <DependentUpon>201910160205354_fix-id.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\NoSQL\DataAcess.cs" />
@@ -362,6 +367,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910122253049_UpdateDB.resx">
       <DependentUpon>201910122253049_UpdateDB.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910160205354_fix-id.resx">
+      <DependentUpon>201910160205354_fix-id.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
