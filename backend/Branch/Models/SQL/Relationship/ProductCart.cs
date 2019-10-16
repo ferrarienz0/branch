@@ -9,7 +9,7 @@ namespace Branch.Models
 {
     public class ProductCart
     {
-        [Key][Required]
+        [Key]
         public int ID { get; set; }
 
         [Required]

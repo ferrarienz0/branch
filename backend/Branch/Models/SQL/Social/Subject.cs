@@ -10,7 +10,6 @@ namespace Branch.Models
     public class Subject
     {
         [Key]
-        [Required]
         public int ID { get; set; }
 
         [Required]

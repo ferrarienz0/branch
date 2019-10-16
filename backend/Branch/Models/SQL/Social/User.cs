@@ -9,7 +9,7 @@ namespace Branch.Models
 {
     public class User
     {
-        [Key][Required]
+        [Key]
         public int ID { get; set; }
 
         [Required]

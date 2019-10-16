@@ -10,7 +10,6 @@ namespace Branch.Models
     public class Pro
     {
         [Key]
-        [Required]
         public int ID { get; set; }
 
         [Required][Index(IsUnique = true)]
