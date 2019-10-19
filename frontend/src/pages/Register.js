@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './Register.css';
-import api from '../services/api';
+import viacep from '../services/viacep';
 import logo from '../assets/logo.svg';
 const axios = require('axios');
 
@@ -23,21 +23,32 @@ export default class Register extends Component {
     };
     handleSubmit = e => {
         e.preventDefault();
-        console.log(this.state.datebirth);
+        console.log(this.state);
     };
-    async handleAddress(e) {
-        const address = await axios.get(
-            `viacep.com.br/ws/${e.target.value}/json/`
+    handleAddress = async e => {
+        const { data: address } = await viacep.get(
+            `/ws/${e.target.value}/json/`
         );
+        console.log(address);
         this.setState({
-            CEP: e.target.value,
+            CEP: address.cep,
             logradouro: address.logradouro,
             complemento: address.complemento,
             bairro: address.bairro,
             cidade: address.localidade,
             estado: address.uf,
         });
-    }
+    };
+    handleLastname = e => {
+        this.setState({
+            lastname: e.target.value,
+        });
+    };
+    handleName = e => {
+        this.setState({
+            lastname: e.target.value,
+        });
+    };
     render() {
         const { next } = this.state;
         switch (next) {
@@ -49,24 +60,18 @@ export default class Register extends Component {
                             <input
                                 id="name-input"
                                 placeholder="Nome"
-                                onChange={e =>
-                                    this.setState({ name: e.target.value })
-                                }
+                                onChange={this.handleName}
                             />
                             <input
                                 id="lastname-input"
                                 placeholder="Sobrenome"
-                                onChange={e =>
-                                    this.setState({
-                                        lastname: e.target.value,
-                                    })
-                                }
+                                onChange={this.handleLastname}
                             />
                             <input
                                 id="cep-input"
                                 placeholder="CEP"
                                 type="CEP"
-                                onChange={e => this.handleAddress(e)}
+                                onChange={this.handleAddress}
                             />
                             <input
                                 id="date-input"
@@ -148,6 +153,7 @@ export default class Register extends Component {
                                     id="register-button"
                                     to="/wait"
                                     type="submit"
+                                    onSubmit={this.handleSubmit}
                                 >
                                     Registrar
                                 </Link>
