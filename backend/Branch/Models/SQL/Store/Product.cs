@@ -31,10 +31,10 @@ namespace Branch.Models
         public float MaxDiscount { get; set; }
 
         [Required]
-        public TypeProduct IDTypeProduct { get; set; }
+        public virtual TypeProduct IDTypeProduct { get; set; }
 
         [Required]
-        public Marketplace IDMarketplace { get; set; }
+        public virtual Marketplace IDMarketplace { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }

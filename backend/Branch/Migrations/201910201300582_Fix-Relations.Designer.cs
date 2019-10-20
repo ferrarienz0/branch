@@ -7,13 +7,13 @@ namespace Branch.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class Geral : IMigrationMetadata
+    public sealed partial class FixRelations : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Geral));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(FixRelations));
         
         string IMigrationMetadata.Id
         {
-            get { return "201910031445466_Geral"; }
+            get { return "201910201300582_Fix-Relations"; }
         }
         
         string IMigrationMetadata.Source

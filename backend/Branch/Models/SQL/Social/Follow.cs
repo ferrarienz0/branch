@@ -16,10 +16,10 @@ namespace Branch.Models
         public int Affinity { get; set; }
 
         [Required]
-        public User IDFollower { get; set; }
+        public virtual User IDFollower { get; set; }
 
         [Required]
-        public User IDFollowed { get; set; }
+        public virtual User IDFollowed { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }

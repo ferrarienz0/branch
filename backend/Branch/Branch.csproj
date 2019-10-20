@@ -235,21 +235,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201910031445466_Geral.cs" />
-    <Compile Include="Migrations\201910031445466_Geral.Designer.cs">
-      <DependentUpon>201910031445466_Geral.cs</DependentUpon>
+    <Compile Include="Migrations\201910201251471_Redo.cs" />
+    <Compile Include="Migrations\201910201251471_Redo.Designer.cs">
+      <DependentUpon>201910201251471_Redo.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201910092054448_DoAll.cs" />
-    <Compile Include="Migrations\201910092054448_DoAll.Designer.cs">
-      <DependentUpon>201910092054448_DoAll.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910122253049_UpdateDB.cs" />
-    <Compile Include="Migrations\201910122253049_UpdateDB.Designer.cs">
-      <DependentUpon>201910122253049_UpdateDB.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910160205354_fix-id.cs" />
-    <Compile Include="Migrations\201910160205354_fix-id.Designer.cs">
-      <DependentUpon>201910160205354_fix-id.cs</DependentUpon>
+    <Compile Include="Migrations\201910201300582_Fix-Relations.cs" />
+    <Compile Include="Migrations\201910201300582_Fix-Relations.Designer.cs">
+      <DependentUpon>201910201300582_Fix-Relations.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\NoSQL\DataAcess.cs" />
@@ -365,17 +357,11 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201910031445466_Geral.resx">
-      <DependentUpon>201910031445466_Geral.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201910201251471_Redo.resx">
+      <DependentUpon>201910201251471_Redo.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910092054448_DoAll.resx">
-      <DependentUpon>201910092054448_DoAll.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910122253049_UpdateDB.resx">
-      <DependentUpon>201910122253049_UpdateDB.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910160205354_fix-id.resx">
-      <DependentUpon>201910160205354_fix-id.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201910201300582_Fix-Relations.resx">
+      <DependentUpon>201910201300582_Fix-Relations.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

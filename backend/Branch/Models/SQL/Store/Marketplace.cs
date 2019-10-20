@@ -19,7 +19,7 @@ namespace Branch.Models
         public string Description { get; set; }
 
         [Required]
-        public Pro IDPro { get; set; }
+        public virtual Pro IDPro { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }

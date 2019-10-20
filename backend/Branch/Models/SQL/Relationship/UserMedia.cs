@@ -13,13 +13,13 @@ namespace Branch.Models
         public int ID { get; set; }
 
         [Required]
-        public Media IDMedia { get; set; }
+        public virtual Media IDMedia { get; set; }
 
         [Required]
-        public TypeMedia IDTypeMedia { get; set; }
+        public virtual TypeMedia IDTypeMedia { get; set; }
 
         [Required]
-        public User IDUser { get; set; }
+        public virtual User IDUser { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }

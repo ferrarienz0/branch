@@ -7,13 +7,13 @@ namespace Branch.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class UpdateDB : IMigrationMetadata
+    public sealed partial class Redo : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(UpdateDB));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Redo));
         
         string IMigrationMetadata.Id
         {
-            get { return "201910122253049_UpdateDB"; }
+            get { return "201910201251471_Redo"; }
         }
         
         string IMigrationMetadata.Source
