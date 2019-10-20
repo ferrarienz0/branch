@@ -3,7 +3,7 @@ namespace Branch.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Geral : DbMigration
+    public partial class Redo : DbMigration
     {
         public override void Up()
         {
@@ -11,17 +11,18 @@ namespace Branch.Migrations
                 "dbo.Addresses",
                 c => new
                     {
-                        ID = c.Int(nullable: false, identity: true),
+                        ID = c.Int(nullable: false),
                         CEP = c.String(nullable: false),
                         Logradouro = c.String(nullable: false),
                         Complemento = c.String(nullable: false),
                         Bairro = c.String(nullable: false),
                         Cidade = c.String(nullable: false),
-                        IDUser_ID = c.Int(nullable: false),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                     })
                 .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.Users", t => t.IDUser_ID, cascadeDelete: true)
-                .Index(t => t.IDUser_ID);
+                .ForeignKey("dbo.Users", t => t.ID)
+                .Index(t => t.ID);
             
             CreateTable(
                 "dbo.Users",
@@ -34,6 +35,8 @@ namespace Branch.Migrations
                         Password = c.String(nullable: false),
                         Email = c.String(nullable: false),
                         BirthDate = c.DateTime(nullable: false),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                     })
                 .PrimaryKey(t => t.ID)
                 .Index(t => t.Nickname, unique: true)
@@ -46,6 +49,8 @@ namespace Branch.Migrations
                         ID = c.Int(nullable: false, identity: true),
                         Finished = c.Boolean(nullable: false),
                         Total = c.Single(nullable: false),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                         IDMarketplace_ID = c.Int(nullable: false),
                         IDUser_ID = c.Int(nullable: false),
                     })
@@ -62,6 +67,8 @@ namespace Branch.Migrations
                         ID = c.Int(nullable: false, identity: true),
                         Name = c.String(nullable: false),
                         Description = c.String(nullable: false),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                         IDPro_ID = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.ID)
@@ -74,6 +81,8 @@ namespace Branch.Migrations
                     {
                         ID = c.Int(nullable: false, identity: true),
                         EmailContact = c.String(nullable: false),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                         IDTeam_ID = c.Int(nullable: false),
                         IDUser_ID = c.Int(nullable: false),
                     })
@@ -90,6 +99,8 @@ namespace Branch.Migrations
                     {
                         ID = c.Int(nullable: false, identity: true),
                         Name = c.String(nullable: false),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                     })
                 .PrimaryKey(t => t.ID);
             
@@ -99,6 +110,8 @@ namespace Branch.Migrations
                     {
                         ID = c.Int(nullable: false, identity: true),
                         Name = c.String(nullable: false),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                     })
                 .PrimaryKey(t => t.ID);
             
@@ -108,6 +121,8 @@ namespace Branch.Migrations
                     {
                         ID = c.Int(nullable: false, identity: true),
                         Affinity = c.Int(nullable: false),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                         IDFollowed_ID = c.Int(nullable: false),
                         IDFollower_ID = c.Int(nullable: false),
                     })
@@ -122,6 +137,8 @@ namespace Branch.Migrations
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                         IDCategory_ID = c.Int(nullable: false),
                         IDGame_ID = c.Int(nullable: false),
                     })
@@ -139,6 +156,8 @@ namespace Branch.Migrations
                         Title = c.String(nullable: false),
                         Description = c.String(nullable: false),
                         Abbreviation = c.String(nullable: false),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                     })
                 .PrimaryKey(t => t.ID);
             
@@ -147,6 +166,8 @@ namespace Branch.Migrations
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                         IDGame_ID = c.Int(nullable: false),
                         IDMedia_ID = c.Int(nullable: false),
                         IDTypeMedia_ID = c.Int(nullable: false),
@@ -165,6 +186,8 @@ namespace Branch.Migrations
                     {
                         ID = c.Int(nullable: false, identity: true),
                         URL = c.String(nullable: false),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                     })
                 .PrimaryKey(t => t.ID)
                 .Index(t => t.URL, unique: true);
@@ -175,6 +198,8 @@ namespace Branch.Migrations
                     {
                         ID = c.Int(nullable: false, identity: true),
                         Name = c.String(nullable: false),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                     })
                 .PrimaryKey(t => t.ID);
             
@@ -183,6 +208,8 @@ namespace Branch.Migrations
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                         IDMarketplace_ID = c.Int(nullable: false),
                         IDMedia_ID = c.Int(nullable: false),
                         IDTypeMedia_ID = c.Int(nullable: false),
@@ -201,6 +228,8 @@ namespace Branch.Migrations
                     {
                         ID = c.Int(nullable: false, identity: true),
                         Amount = c.Int(nullable: false),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                         IDCart_ID = c.Int(nullable: false),
                         IDProduct_ID = c.Int(nullable: false),
                     })
@@ -221,6 +250,8 @@ namespace Branch.Migrations
                         Stock = c.Int(nullable: false),
                         CurrentDiscount = c.Single(nullable: false),
                         MaxDiscount = c.Single(nullable: false),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                         IDMarketplace_ID = c.Int(nullable: false),
                         IDTypeProduct_ID = c.Int(nullable: false),
                     })
@@ -236,6 +267,8 @@ namespace Branch.Migrations
                     {
                         ID = c.Int(nullable: false, identity: true),
                         Name = c.String(nullable: false),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                     })
                 .PrimaryKey(t => t.ID);
             
@@ -244,6 +277,8 @@ namespace Branch.Migrations
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                         IDMedia_ID = c.Int(nullable: false),
                         IDProduct_ID = c.Int(nullable: false),
                         IDTypeMedia_ID = c.Int(nullable: false),
@@ -262,6 +297,8 @@ namespace Branch.Migrations
                     {
                         ID = c.Int(nullable: false, identity: true),
                         Affinity = c.Int(nullable: false),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                         IDGame_ID = c.Int(nullable: false),
                         IDSubject_ID = c.Int(nullable: false),
                     })
@@ -277,6 +314,8 @@ namespace Branch.Migrations
                     {
                         ID = c.Int(nullable: false, identity: true),
                         Hashtag = c.String(nullable: false),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                     })
                 .PrimaryKey(t => t.ID);
             
@@ -285,6 +324,8 @@ namespace Branch.Migrations
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                         IDGame_ID = c.Int(nullable: false),
                         IDTeam_ID = c.Int(nullable: false),
                     })
@@ -295,28 +336,13 @@ namespace Branch.Migrations
                 .Index(t => t.IDTeam_ID);
             
             CreateTable(
-                "dbo.TeamMedias",
-                c => new
-                    {
-                        ID = c.Int(nullable: false, identity: true),
-                        IDMedia_ID = c.Int(nullable: false),
-                        IDTeam_ID = c.Int(nullable: false),
-                        IDTypeMedia_ID = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.Media", t => t.IDMedia_ID, cascadeDelete: true)
-                .ForeignKey("dbo.Teams", t => t.IDTeam_ID, cascadeDelete: true)
-                .ForeignKey("dbo.TypeMedias", t => t.IDTypeMedia_ID, cascadeDelete: true)
-                .Index(t => t.IDMedia_ID)
-                .Index(t => t.IDTeam_ID)
-                .Index(t => t.IDTypeMedia_ID);
-            
-            CreateTable(
                 "dbo.UserGames",
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
                         Affinity = c.Int(nullable: false),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                         IDGame_ID = c.Int(nullable: false),
                         IDUser_ID = c.Int(nullable: false),
                     })
@@ -331,6 +357,8 @@ namespace Branch.Migrations
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                         IDMedia_ID = c.Int(nullable: false),
                         IDTypeMedia_ID = c.Int(nullable: false),
                         IDUser_ID = c.Int(nullable: false),
@@ -349,6 +377,8 @@ namespace Branch.Migrations
                     {
                         ID = c.Int(nullable: false, identity: true),
                         Affinity = c.Int(nullable: false),
+                        CreatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
+                        UpdatedAt = c.DateTime(defaultValueSql: "current_timestamp"),
                         IDSubject_ID = c.Int(nullable: false),
                         IDUser_ID = c.Int(nullable: false),
                     })
@@ -369,9 +399,6 @@ namespace Branch.Migrations
             DropForeignKey("dbo.UserMedias", "IDMedia_ID", "dbo.Media");
             DropForeignKey("dbo.UserGames", "IDUser_ID", "dbo.Users");
             DropForeignKey("dbo.UserGames", "IDGame_ID", "dbo.Games");
-            DropForeignKey("dbo.TeamMedias", "IDTypeMedia_ID", "dbo.TypeMedias");
-            DropForeignKey("dbo.TeamMedias", "IDTeam_ID", "dbo.Teams");
-            DropForeignKey("dbo.TeamMedias", "IDMedia_ID", "dbo.Media");
             DropForeignKey("dbo.TeamGames", "IDTeam_ID", "dbo.Teams");
             DropForeignKey("dbo.TeamGames", "IDGame_ID", "dbo.Games");
             DropForeignKey("dbo.SubjectGames", "IDSubject_ID", "dbo.Subjects");
@@ -398,7 +425,7 @@ namespace Branch.Migrations
             DropForeignKey("dbo.Marketplaces", "IDPro_ID", "dbo.Pros");
             DropForeignKey("dbo.Pros", "IDUser_ID", "dbo.Users");
             DropForeignKey("dbo.Pros", "IDTeam_ID", "dbo.Teams");
-            DropForeignKey("dbo.Addresses", "IDUser_ID", "dbo.Users");
+            DropForeignKey("dbo.Addresses", "ID", "dbo.Users");
             DropIndex("dbo.UserSubjects", new[] { "IDUser_ID" });
             DropIndex("dbo.UserSubjects", new[] { "IDSubject_ID" });
             DropIndex("dbo.UserMedias", new[] { "IDUser_ID" });
@@ -406,9 +433,6 @@ namespace Branch.Migrations
             DropIndex("dbo.UserMedias", new[] { "IDMedia_ID" });
             DropIndex("dbo.UserGames", new[] { "IDUser_ID" });
             DropIndex("dbo.UserGames", new[] { "IDGame_ID" });
-            DropIndex("dbo.TeamMedias", new[] { "IDTypeMedia_ID" });
-            DropIndex("dbo.TeamMedias", new[] { "IDTeam_ID" });
-            DropIndex("dbo.TeamMedias", new[] { "IDMedia_ID" });
             DropIndex("dbo.TeamGames", new[] { "IDTeam_ID" });
             DropIndex("dbo.TeamGames", new[] { "IDGame_ID" });
             DropIndex("dbo.SubjectGames", new[] { "IDSubject_ID" });
@@ -439,11 +463,10 @@ namespace Branch.Migrations
             DropIndex("dbo.Carts", new[] { "IDMarketplace_ID" });
             DropIndex("dbo.Users", new[] { "Email" });
             DropIndex("dbo.Users", new[] { "Nickname" });
-            DropIndex("dbo.Addresses", new[] { "IDUser_ID" });
+            DropIndex("dbo.Addresses", new[] { "ID" });
             DropTable("dbo.UserSubjects");
             DropTable("dbo.UserMedias");
             DropTable("dbo.UserGames");
-            DropTable("dbo.TeamMedias");
             DropTable("dbo.TeamGames");
             DropTable("dbo.Subjects");
             DropTable("dbo.SubjectGames");

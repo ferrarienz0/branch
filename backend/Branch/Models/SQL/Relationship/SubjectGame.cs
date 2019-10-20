@@ -16,10 +16,10 @@ namespace Branch.Models
         public int Affinity { get; set; }
 
         [Required]
-        public Subject IDSubject { get; set; }
+        public virtual Subject IDSubject { get; set; }
 
         [Required]
-        public Game IDGame { get; set; }
+        public virtual Game IDGame { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }

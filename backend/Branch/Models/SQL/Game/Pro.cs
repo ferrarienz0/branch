@@ -16,10 +16,10 @@ namespace Branch.Models
         public string EmailContact { get; set; }
 
         [Required]
-        public User IDUser { get; set; }
+        public virtual User IDUser { get; set; }
 
         [Required]
-        public Team IDTeam { get; set; }
+        public virtual Team IDTeam { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }

@@ -16,10 +16,10 @@ namespace Branch.Models
         public int Amount { get; set; }
 
         [Required]
-        public Product IDProduct { get; set; }
+        public virtual Product IDProduct { get; set; }
 
         [Required]
-        public Cart IDCart { get; set; }
+        public virtual Cart IDCart { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }

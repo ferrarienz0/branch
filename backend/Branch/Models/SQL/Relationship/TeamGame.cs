@@ -13,10 +13,10 @@ namespace Branch.Models
         public int ID { get; set; }
 
         [Required]
-        public Game IDGame { get; set; }
+        public virtual Game IDGame { get; set; }
 
         [Required]
-        public Team IDTeam { get; set; }
+        public virtual Team IDTeam { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }
