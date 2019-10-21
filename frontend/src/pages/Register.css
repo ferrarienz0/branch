@@ -90,6 +90,7 @@ button {
 
 #register-container #form #next-button,
 #back-button {
+    width: 100%;
     background: #ee3a3a;
 }
 
