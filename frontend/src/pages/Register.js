@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import md5 from 'md5';
 import './Register.css';
 import viacep from '../services/viacep';
 import logo from '../assets/logo.svg';
@@ -7,8 +8,11 @@ const axios = require('axios');
 
 export default class Register extends Component {
     state = {
-        name: '',
-        lastname: '',
+        Firstname: '',
+        Lastname: '',
+        Nickname: '',
+        Password: '',
+        Email: '',
         CEP: '',
         logradouro: '',
         complemento: '',
@@ -16,10 +20,8 @@ export default class Register extends Component {
         cidade: '',
         estado: '',
         datebirth: '',
-        email: '',
-        username: '',
-        password: '',
         next: 0,
+        pass: null,
     };
     handleSubmit = e => {
         e.preventDefault();
@@ -39,15 +41,38 @@ export default class Register extends Component {
             estado: address.uf,
         });
     };
-    handleLastname = e => {
+    handleFirstname = e => {
         this.setState({
-            lastname: e.target.value,
+            Firstname: e.target.value,
         });
     };
-    handleName = e => {
+    handleLastname = e => {
         this.setState({
-            lastname: e.target.value,
+            Lastname: e.target.value,
         });
+    };
+    handleBirthDate = e => {
+        this.setState({
+            datebirth: new Date(e.target.value),
+        });
+    };
+    handleEmail = e => {
+        this.setState({
+            Email: e.target.value,
+        });
+    };
+    handleNickname = e => {
+        this.setState({
+            Nickname: e.target.value,
+        });
+    };
+    handlePassword = e => {
+        if (this.state.pass === null) this.setState({ pass: e.target.value });
+        else if (this.state.pass === e.target.value) {
+            this.setState({
+                Password: md5(this.state.pass),
+            });
+        } else this.setState({ pass: null });
     };
     render() {
         const { next } = this.state;
@@ -60,7 +85,7 @@ export default class Register extends Component {
                             <input
                                 id="name-input"
                                 placeholder="Nome"
-                                onChange={this.handleName}
+                                onChange={this.handleFirstname}
                             />
                             <input
                                 id="lastname-input"
@@ -77,11 +102,7 @@ export default class Register extends Component {
                                 id="date-input"
                                 min="1900-01-01"
                                 type="date"
-                                onChange={e =>
-                                    this.setState({
-                                        datebirth: new Date(e.target.value),
-                                    })
-                                }
+                                onChange={this.handleBirthDate}
                             />
                             <button
                                 id="next-button"
@@ -105,38 +126,22 @@ export default class Register extends Component {
                             <input
                                 id="email-input"
                                 placeholder="E-mail"
-                                onChange={e =>
-                                    this.setState({
-                                        email: e.target.value,
-                                    })
-                                }
+                                onChange={this.handleEmail}
                             />
                             <input
                                 id="user-input"
                                 placeholder="Nome de usuário"
-                                onChange={e =>
-                                    this.setState({
-                                        email: e.target.value,
-                                    })
-                                }
+                                onChange={this.handleNickname}
                             />
                             <input
                                 id="password-input"
                                 placeholder="Senha"
-                                onChange={e =>
-                                    this.setState({
-                                        email: e.target.value,
-                                    })
-                                }
+                                onChange={this.handlePassword}
                             />
                             <input
                                 id="pass"
                                 placeholder="Confirme a senha"
-                                onChange={e =>
-                                    this.setState({
-                                        email: e.target.value,
-                                    })
-                                }
+                                onChange={this.handlePassword}
                             />
                             <div className="row">
                                 <button
