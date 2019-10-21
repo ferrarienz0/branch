@@ -9,8 +9,7 @@ namespace Branch.Models
 {
     public class Marketplace
     {
-        [Key]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string Name { get; set; }
@@ -19,7 +18,7 @@ namespace Branch.Models
         public string Description { get; set; }
 
         [Required]
-        public virtual Pro IDPro { get; set; }
+        public virtual Pro Pro { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }

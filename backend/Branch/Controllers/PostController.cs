@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using System.Web.Http.Description;
 
 namespace Branch.Controllers
 {
@@ -15,7 +16,7 @@ namespace Branch.Controllers
     {
         [HttpPost]
         [Route("post")]
-        public IHttpActionResult Store([FromBody] Post NewPost)
+        public IHttpActionResult PostPost([FromBody] Post NewPost)
         {
             var MongoContext = new DataAcess();
            
@@ -33,7 +34,8 @@ namespace Branch.Controllers
 
         [HttpGet]
         [Route("posts")]
-        public IHttpActionResult Index()
+        [ResponseType(typeof(Post))]
+        public IHttpActionResult GetPosts()
         {
             var MongoContext = new DataAcess();
 

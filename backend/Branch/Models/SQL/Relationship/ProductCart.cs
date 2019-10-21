@@ -9,17 +9,16 @@ namespace Branch.Models
 {
     public class ProductCart
     {
-        [Key]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public int Amount { get; set; }
 
         [Required]
-        public virtual Product IDProduct { get; set; }
+        public virtual Product Product { get; set; }
 
         [Required]
-        public virtual Cart IDCart { get; set; }
+        public virtual Cart Cart { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }

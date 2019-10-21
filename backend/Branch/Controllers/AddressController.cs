@@ -17,17 +17,17 @@ namespace Branch.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class AddressController : ApiController
     {
-        private readonly Context db = new Context();
+        private Context db = new Context();
 
-        // GET: Addresses
-        [Route("Addresses")]
+        [HttpGet]
+        [Route("address")]
         public IQueryable<Address> GetAddresses()
         {
             return db.Addresses;
         }
 
-        // GET: Addresses/5
-        [Route("Addresses")]
+        [HttpGet]
+        [Route("address")]
         [ResponseType(typeof(Address))]
         public async Task<IHttpActionResult> GetAddress(int id)
         {
@@ -40,8 +40,8 @@ namespace Branch.Controllers
             return Ok(address);
         }
 
-        // PUT: Addresses/5
-        [Route("Addresses")]
+        [HttpPut]
+        [Route("address")]
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutAddress(int id, Address address)
         {
@@ -50,7 +50,7 @@ namespace Branch.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != address.ID)
+            if (id != address.Id)
             {
                 return BadRequest();
             }
@@ -76,8 +76,8 @@ namespace Branch.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: Addresses
-        [Route("Addresses")]
+        [HttpPost]
+        [Route("address")]
         [ResponseType(typeof(Address))]
         public async Task<IHttpActionResult> PostAddress(Address address)
         {
@@ -87,28 +87,13 @@ namespace Branch.Controllers
             }
 
             db.Addresses.Add(address);
+            await db.SaveChangesAsync();
 
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (AddressExists(address.ID))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtRoute("DefaultApi", new { id = address.ID }, address);
+            return CreatedAtRoute("DefaultApi", new { id = address.Id }, address);
         }
 
-        // DELETE: Addresses/5
-        [Route("Addresses")]
+        [HttpDelete]
+        [Route("address")]
         [ResponseType(typeof(Address))]
         public async Task<IHttpActionResult> DeleteAddress(int id)
         {
@@ -135,7 +120,7 @@ namespace Branch.Controllers
 
         private bool AddressExists(int id)
         {
-            return db.Addresses.Count(e => e.ID == id) > 0;
+            return db.Addresses.Count(e => e.Id == id) > 0;
         }
     }
 }

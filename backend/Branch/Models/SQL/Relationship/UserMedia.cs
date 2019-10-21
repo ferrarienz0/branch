@@ -9,17 +9,16 @@ namespace Branch.Models
 {
     public class UserMedia
     {
-        [Key]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
-        public virtual Media IDMedia { get; set; }
+        public virtual Media Media { get; set; }
 
         [Required]
-        public virtual TypeMedia IDTypeMedia { get; set; }
+        public virtual TypeMedia TypeMedia { get; set; }
 
         [Required]
-        public virtual User IDUser { get; set; }
+        public virtual User User { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }

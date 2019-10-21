@@ -9,8 +9,7 @@ namespace Branch.Models
 {
     public class TypeMedia
     {
-        [Key]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string Name { get; set; }

@@ -9,8 +9,7 @@ namespace Branch.Models
 {
     public class Subject
     {
-        [Key]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string Hashtag { get; set; }

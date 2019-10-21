@@ -9,8 +9,7 @@ namespace Branch.Models
 {
     public class Cart
     {
-        [Key]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public bool Finished { get; set; }
@@ -19,10 +18,10 @@ namespace Branch.Models
         public float Total { get; set; }
 
         [Required]
-        public Marketplace IDMarketplace { get; set; }
+        public Marketplace Marketplace { get; set; }
 
         [Required]
-        public virtual User IDUser { get; set; }
+        public virtual User User { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }
