@@ -9,17 +9,16 @@ namespace Branch.Models
 {
     public class UserSubject
     {
-        [Key]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public int Affinity { get; set; }
 
         [Required]
-        public virtual User IDUser { get; set; }
+        public virtual User User { get; set; }
 
         [Required]
-        public virtual Subject IDSubject { get; set; }
+        public virtual Subject Subject { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }

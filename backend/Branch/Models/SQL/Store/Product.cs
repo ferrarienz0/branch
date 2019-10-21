@@ -9,8 +9,7 @@ namespace Branch.Models
 {
     public class Product
     {
-        [Key]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string Name { get; set; }
@@ -31,10 +30,10 @@ namespace Branch.Models
         public float MaxDiscount { get; set; }
 
         [Required]
-        public virtual TypeProduct IDTypeProduct { get; set; }
+        public virtual TypeProduct TypeProduct { get; set; }
 
         [Required]
-        public virtual Marketplace IDMarketplace { get; set; }
+        public virtual Marketplace Marketplace { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }

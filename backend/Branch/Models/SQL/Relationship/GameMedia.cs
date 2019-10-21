@@ -9,17 +9,16 @@ namespace Branch.Models
 {
     public class GameMedia
     {
-        [Key]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
-        public Media IDMedia { get; set; }
+        public Media Media { get; set; }
 
         [Required]
-        public virtual TypeMedia IDTypeMedia { get; set; }
+        public virtual TypeMedia TypeMedia { get; set; }
 
         [Required]
-        public virtual Game IDGame { get; set; }
+        public virtual Game Game { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }

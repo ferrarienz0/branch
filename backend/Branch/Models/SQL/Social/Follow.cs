@@ -9,17 +9,16 @@ namespace Branch.Models
 {
     public class Follow
     {
-        [Key]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public int Affinity { get; set; }
 
         [Required]
-        public virtual User IDFollower { get; set; }
+        public virtual User Follower { get; set; }
 
         [Required]
-        public virtual User IDFollowed { get; set; }
+        public virtual User Followed { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }

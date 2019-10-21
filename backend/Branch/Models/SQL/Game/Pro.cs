@@ -9,17 +9,16 @@ namespace Branch.Models
 {
     public class Pro
     {
-        [Key]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required][Index(IsUnique = true)]
         public string EmailContact { get; set; }
 
         [Required]
-        public virtual User IDUser { get; set; }
+        public virtual User User { get; set; }
 
         [Required]
-        public virtual Team IDTeam { get; set; }
+        public virtual Team Team { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }
