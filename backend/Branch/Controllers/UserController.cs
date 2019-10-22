@@ -88,7 +88,7 @@ namespace Branch.Controllers
             db.Users.Add(user);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = user.Id }, user);
+            return Ok(User);
         }
 
         [HttpDelete]

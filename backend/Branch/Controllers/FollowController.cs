@@ -88,7 +88,7 @@ namespace Branch.Controllers
             db.Follows.Add(follow);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = follow.Id }, follow);
+            return Ok(follow);
         }
 
         [HttpDelete]

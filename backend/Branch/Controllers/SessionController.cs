@@ -22,9 +22,14 @@ namespace Branch.Controllers
             public int ValidTime { get; set; }
         }
 
+        public class TokenResponse
+        {
+            public string Token { get; set; }
+        }
+
         [HttpGet]
         [Route("session")]
-        [ResponseType(typeof(string))]
+        [ResponseType(typeof(TokenResponse))]
         public async Task<IHttpActionResult> GetToken([FromBody] UserAuth UserAuth)
         {
             User User = await db.Users.FindAsync(UserAuth.Id);
@@ -42,7 +47,12 @@ namespace Branch.Controllers
             );
 
             NewToken.SetExpiration(UserAuth.ValidTime);
-            var Response = NewToken.CreateToken(UserAuth.ValidTime);
+            var Token = NewToken.CreateToken(UserAuth.ValidTime);
+
+            var Response = new TokenResponse
+            {
+                Token = Token
+            };
 
             return Ok(Response);
         }
