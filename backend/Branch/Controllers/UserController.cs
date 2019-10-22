@@ -10,7 +10,9 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
+using Branch.JWTProvider;
 using Branch.Models;
+using Newtonsoft.Json;
 
 namespace Branch.Controllers
 {
@@ -31,6 +33,26 @@ namespace Branch.Controllers
         public async Task<IHttpActionResult> GetUser(int id)
         {
             User user = await db.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
+        }
+
+        [HttpGet]
+        [Route("user")]
+        [ResponseType(typeof(User))]
+        public async Task<IHttpActionResult> GetUser([FromUri] string AccessToken)
+        {
+            var TokenContent = TokenValidator.VerifyToken(AccessToken);
+            dynamic Deserialized = JsonConvert.DeserializeObject(TokenContent);
+            
+            var UserId = (int) Deserialized.id;
+
+            User user = await db.Users.FindAsync(UserId);
+
             if (user == null)
             {
                 return NotFound();
