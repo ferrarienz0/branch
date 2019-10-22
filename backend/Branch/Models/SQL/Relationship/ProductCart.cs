@@ -14,10 +14,14 @@ namespace Branch.Models
         [Required]
         public int Amount { get; set; }
 
-        [Required]
+        [ForeignKey("Product")]
+        public int ProductId { get; set; }
+
         public virtual Product Product { get; set; }
 
-        [Required]
+        [ForeignKey("Cart")]
+        public int CartId { get; set; }
+
         public virtual Cart Cart { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]

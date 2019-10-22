@@ -14,10 +14,14 @@ namespace Branch.Models
         [Required]
         public int Affinity { get; set; }
 
-        [Required]
+        [ForeignKey("Subject")]
+        public int SubjectId { get; set; }
+
         public virtual Subject Subject { get; set; }
 
-        [Required]
+        [ForeignKey("Game")]
+        public int GameId { get; set; }
+
         public virtual Game Game { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]

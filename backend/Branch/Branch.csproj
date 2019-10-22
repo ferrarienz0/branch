@@ -254,6 +254,14 @@
     <Compile Include="Migrations\201910220112047_UpdateAddress.Designer.cs">
       <DependentUpon>201910220112047_UpdateAddress.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910221806441_FixRelationsFK.cs" />
+    <Compile Include="Migrations\201910221806441_FixRelationsFK.Designer.cs">
+      <DependentUpon>201910221806441_FixRelationsFK.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910221843339_FixAll1_1.cs" />
+    <Compile Include="Migrations\201910221843339_FixAll1_1.Designer.cs">
+      <DependentUpon>201910221843339_FixAll1_1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\NoSQL\DataAcess.cs" />
     <Compile Include="Models\NoSQL\Post.cs" />
@@ -396,6 +404,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910220112047_UpdateAddress.resx">
       <DependentUpon>201910220112047_UpdateAddress.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910221806441_FixRelationsFK.resx">
+      <DependentUpon>201910221806441_FixRelationsFK.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910221843339_FixAll1_1.resx">
+      <DependentUpon>201910221843339_FixAll1_1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

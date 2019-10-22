@@ -17,7 +17,10 @@ namespace Branch.Models
         [Required]
         public string Description { get; set; }
 
-        [Required]
+        
+        [ForeignKey("Pro")]
+        public int ProId { get; set; }
+
         public virtual Pro Pro { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]

@@ -14,10 +14,14 @@ namespace Branch.Models
         [Required][Index(IsUnique = true)]
         public string EmailContact { get; set; }
 
-        [Required]
+        [ForeignKey("User")]
+        public int UserId { get; set; }
+
         public virtual User User { get; set; }
 
-        [Required]
+        [ForeignKey("Team")]
+        public int TeamId { get; set; }
+
         public virtual Team Team { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
