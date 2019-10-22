@@ -1,146 +1,163 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import './Start.css';
+import { Link, Redirect } from 'react-router-dom';
+import md5 from 'md5';
+import './Register.css';
+import viacep from '../services/viacep';
 import api from '../services/api';
 import logo from '../assets/logo.svg';
-const axios = require('axios');
 
 export default class Register extends Component {
     state = {
-        name: '',
-        lastname: '',
+        user: {
+            Firstname: '',
+            Lastname: '',
+            Nickname: '',
+            Password: '',
+            Email: '',
+            BirthDate: '',
+        },
         CEP: '',
-        logradouro: '',
+        Logradouro: '',
         complemento: '',
         bairro: '',
         cidade: '',
         estado: '',
-        datebirth: '',
-        email: '',
-        username: '',
-        password: '',
-        next: 0,
+        token: '',
+        isSession: false,
     };
-    handleSubmit = e => {
+    handleSubmit = async e => {
         e.preventDefault();
-        console.log(this.state.datebirth);
+        console.log(this.state.user);
+        await api.post('/user', this.state.user);
+        console.log(this.state.user);
+        const sessionobj = {
+            Nickname: this.state.user.Nickname,
+            PasswordHash: this.state.user.Password,
+            ValidTime: 200,
+        };
+        console.log(sessionobj);
+        let { data: token } = await api.post('/session', sessionobj);
+        this.setState({ token: token.Token, isSession: true });
+        console.log(token.Token);
     };
-    async handleAddress(e){
-        const address = await axios.get(`viacep.com.br/ws/${e.target.value}/json/`)
-        this.setState({CEP: e.target.value,
-                       logradouro: address.logradouro,
-                       complemento: address.complemento,
-                       bairro: address.bairro,
-                       cidade: address.localidade,
-                       estado: address.uf});
-    }
+    handleAddress = async e => {
+        const { data: address } = await viacep.get(
+            `/ws/${e.target.value}/json/`
+        );
+        console.log(address);
+        this.setState({
+            CEP: address.cep,
+            logradouro: address.logradouro,
+            complemento: address.complemento,
+            bairro: address.bairro,
+            cidade: address.localidade,
+            estado: address.uf,
+        });
+    };
+    handlePassword = e => {
+        this.setState({
+            user: {
+                ...this.state.user,
+                Password: md5(e.target.value),
+            },
+        });
+    };
     render() {
-        const { next } = this.state;
-        switch (next) {
-            case 0:
-                return (
-                    <div className="start-container">
-                        <form onSubmit={this.handleSubmit}>
-                            <img src={logo} alt="Branch" />
-                            <input
-                                placeholder="Nome"
-                                onChange={e =>
-                                    this.setState({ name: e.target.value })
-                                }
-                            />
-                            <input
-                                placeholder="Sobrenome"
-                                onChange={e =>
-                                    this.setState({
-                                        lastname: e.target.value,
-                                    })
-                                }
-                            />
-                            <input
-                                placeholder="CEP"
-                                type="CEP"
-                                onChange={e => this.handleAddress(e)}
-                            />
-                            <input
-                                min="1900-01-01"
-                                type="date"
-                                onChange={e =>
-                                    this.setState({
-                                        datebirth: new Date(e.target.value),
-                                    })
-                                }
-                            />
-                            <button
-                                id="proximo"
-                                className="orange"
-                                onClick={e =>
-                                    this.setState({
-                                        next: 1,
-                                    })
-                                }
-                            >
-                                Próximo
-                            </button>
-                        </form>
-                    </div>
-                );
-            case 1:
-                return (
-                    <div className="start-container">
-                        <form onSubmit={this.handleSubmit}>
-                            <img src={logo} alt="Branch" />
-                            <input
-                                placeholder="E-mail"
-                                onChange={e =>
-                                    this.setState({
-                                        email: e.target.value,
-                                    })
-                                }
-                            />
-                            <input
-                                placeholder="Nome de usuário"
-                                onChange={e =>
-                                    this.setState({
-                                        email: e.target.value,
-                                    })
-                                }
-                            />
-                            <input
-                                placeholder="Senha"
-                                onChange={e =>
-                                    this.setState({
-                                        email: e.target.value,
-                                    })
-                                }
-                            />
-                            <input
-                                placeholder="Confirme a senha"
-                                onChange={e =>
-                                    this.setState({
-                                        email: e.target.value,
-                                    })
-                                }
-                            />
-                            <div className="row">
-                                <button
-                                    className="orange"
-                                    onClick={e =>
-                                        this.setState({
-                                            next: 0,
-                                        })
-                                    }
-                                >
-                                    Voltar
-                                </button>
-                                <Link className="red" to="/wait" type="submit">
-                                    Registrar
-                                </Link>
-                            </div>
-                        </form>
-                    </div>
-                );
-            default:
-                break;
+        if (this.state.isSession) {
+            return <Redirect to={`/home/${this.state.token}`} />;
         }
+        return (
+            <div id="register-container">
+                <form id="form">
+                    <img id="logo" src={logo} alt="Branch" />
+                    <input
+                        id="name-input"
+                        placeholder="Nome"
+                        onChange={e => {
+                            this.setState({
+                                user: {
+                                    ...this.state.user,
+                                    Firstname: encodeURIComponent(
+                                        e.target.value
+                                    ),
+                                },
+                            });
+                        }}
+                    />
+                    <input
+                        id="lastname-input"
+                        placeholder="Sobrenome"
+                        onChange={e =>
+                            this.setState({
+                                user: {
+                                    ...this.state.user,
+                                    Lastname: encodeURIComponent(
+                                        e.target.value
+                                    ),
+                                },
+                            })
+                        }
+                    />
+                    <input
+                        id="cep-input"
+                        placeholder="CEP"
+                        type="CEP"
+                        onChange={this.handleAddress}
+                    />
+                    <input
+                        id="date-input"
+                        min="1900-01-01"
+                        type="date"
+                        onChange={e =>
+                            this.setState({
+                                user: {
+                                    ...this.state.user,
+                                    BirthDate: e.target.value,
+                                },
+                            })
+                        }
+                    />
+                    <input
+                        id="email-input"
+                        placeholder="E-mail"
+                        onChange={e =>
+                            this.setState({
+                                user: {
+                                    ...this.state.user,
+                                    Email: e.target.value,
+                                },
+                            })
+                        }
+                    />
+                    <input
+                        id="user-input"
+                        placeholder="Nome de usuário"
+                        onChange={e =>
+                            this.setState({
+                                user: {
+                                    ...this.state.user,
+                                    Nickname: encodeURIComponent(
+                                        e.target.value
+                                    ),
+                                },
+                            })
+                        }
+                    />
+                    <input
+                        id="password-input"
+                        placeholder="Senha"
+                        type="password"
+                        onChange={this.handlePassword}
+                    />
+                    <Link
+                        id="register-button"
+                        to={`/home/${this.state.token}`}
+                        onClick={this.handleSubmit}
+                    >
+                        Registrar
+                    </Link>
+                </form>
+            </div>
+        );
     }
 }

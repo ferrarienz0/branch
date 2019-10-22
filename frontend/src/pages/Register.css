@@ -1,0 +1,99 @@
+#register-container {
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#register-container #form #logo {
+    margin-bottom: 15px;
+}
+
+#register-container #form #next-button,
+#back-button,
+#register-button {
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+
+    border: 0;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #eee;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+}
+
+#register-container #form {
+    width: 100%;
+    max-width: 300px;
+
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+#register-container #form input {
+    height: 40px;
+    margin: 5px 0 5px 0;
+    padding: 0 20px;
+
+    text-align: center;
+
+    border: 1px solid #555;
+    background: #eee;
+    border-radius: 10px;
+    font-size: 16px;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+    color: #555;
+    text-align: center;
+}
+
+#register-container #form #date-input {
+    background: #eee
+        url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png)
+        90% 50% no-repeat;
+}
+
+#register-container #form #date-input::-webkit-inner-spin-button {
+    display: none;
+}
+
+#register-container #form #date-input::-webkit-calendar-picker-indicator {
+    opacity: 0;
+}
+
+#register-container form a,
+button {
+    height: 48px;
+    margin: 10px 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+
+    border: 0;
+    border-radius: 30px;
+    font-size: 16px;
+    color: #eee;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+}
+
+#register-container #form #register-button {
+    background: #bc132b;
+}
+
+#register-container #form #register-button:hover {
+    background: rgb(143, 10, 30);
+    transition: 0.1s;
+}

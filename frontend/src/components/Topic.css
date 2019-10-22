@@ -1,0 +1,70 @@
+#topic-container {
+    height: 200px;
+    margin: 5px;
+
+    border: 1px solid #6e5b63;
+    border-radius: 5px;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+}
+
+#topic-container #gradient {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+
+    border-radius: 5px;
+    background-image: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.9),
+        rgba(0, 0, 0, 0) 70%
+    );
+}
+
+#topic-container #gradient:hover {
+    background-image: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 1),
+        rgba(0, 0, 0, 0) 100%
+    );
+}
+
+#topic-container #gradient #hashtag {
+    color: rgb(255, 255, 255);
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.6);
+}
+
+#topic-container #gradient #foot {
+    height: 40px;
+    width: 100%;
+    bottom: 0;
+    padding: 0 10px;
+
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    position: absolute;
+}
+
+#topic-container #gradient #foot #comment,
+#plus {
+    height: 100%;
+    width: 25px;
+    margin-left: 10px;
+
+    cursor: pointer;
+
+    color: rgb(255, 255, 255);
+}
+
+#topic-container #gradient #foot #comment:hover,
+#plus:hover {
+    height: 30px;
+    width: 30px;
+    margin-left: 5px;
+}

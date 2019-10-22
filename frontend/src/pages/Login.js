@@ -1,53 +1,55 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import './Start.css';
+import './Login.css';
+import md5 from 'md5';
 //import api from '../services/api';
 import logo from '../assets/logo.svg';
 
 export default class Login extends Component {
-    //export default function Login({ history }) {
-    //const [ username, setUsername ] = useState('');
     state = {
         username: '',
         password: '',
     };
-    //const [eUsername, eSetUsername] = useState();
-    //const [ePassword, eSetPassword] = useState();
     handleSubmit = e => {
         e.preventDefault();
-        console.log(this.state.username);
+        //console.log(this.state.username);
         //const response = await api.post('/algumacoisa');
-        //history.push('/home');
     };
 
     render() {
         return (
-            <div className="start-container">
-                <form onSubmit={this.handleSubmit}>
-                    <img src={logo} alt="Branch" />
+            <div id="login-container">
+                <form id="form" onSubmit={this.handleSubmit}>
+                    <img id="logo" src={logo} alt="Branch" />
                     <input
-                        placeholder="Nome de usuário ou e-mail"
+                        id="login-input"
+                        placeholder="Nome de usuário"
                         onChange={e =>
                             this.setState({ username: e.target.value })
                         }
                     />
                     <input
+                        id="password-input"
                         type="password"
                         placeholder="Senha"
                         onChange={e =>
-                            this.setState({ password: e.target.value })
+                            this.setState({ password: md5(e.target.value) })
                         }
                     />
-                    <Link className="red" to="/home" type="submit">
+                    <Link
+                        id="login-button"
+                        to={`/home/${this.state.password}`}
+                        type="submit"
+                    >
                         Login
                     </Link>
-                    <h1>Ainda não possui uma conta?</h1>
-                    <Link className="orange" to="/register" type="submit">
+                    <h1 id="phrase">Ainda não possui uma conta?</h1>
+                    <Link id="register-button" to="/register" type="submit">
                         Registre-se
                     </Link>
                 </form>
-                <h1 className="ou">ou</h1>
-                <button className="halfpugg">Entrar com HalfPugg</button>
+                <h1 id="ou">ou</h1>
+                <button id="halfpugg-button">Entrar com HalfPugg</button>
             </div>
         );
     }

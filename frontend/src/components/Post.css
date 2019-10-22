@@ -1,0 +1,154 @@
+#post-container {
+    margin: 5px;
+
+    display: flex;
+    flex-direction: column;
+
+    border: 1px solid #6e5b63;
+    border-radius: 5px;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+}
+
+#post-container #head {
+    height: 60px;
+    padding: 5px 20px 5px 5px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    background: none;
+    border: none;
+}
+
+#post-container #head #user-image {
+    position: relative;
+}
+
+#post-container #head #user-image #follow-icon {
+    height: 20px;
+    width: 20px;
+    right: -5px;
+    bottom: 0;
+
+    position: absolute;
+    cursor: pointer;
+
+    color: #ffffff;
+}
+
+#post-container #head #user-image #follow-icon:hover {
+    height: 25px;
+    width: 25px;
+    right: -7.5px;
+    bottom: -2.5px;
+
+    color: #ffffff;
+}
+
+#post-container #head #user-name {
+    margin-left: 10px;
+
+    color: #ff5e4f;
+}
+
+#post-container #head #name {
+    color: rgb(149, 149, 149);
+    font-size: 11px;
+}
+
+#post-container #head #comments {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    flex-direction: row-reverse;
+    cursor: pointer;
+}
+
+#post-container #head #comments #comments-icon {
+    height: 30px;
+    width: 30px;
+
+    cursor: pointer;
+
+    color: rgb(180, 180, 180);
+}
+
+#post-container #head #comments #comments-icon:hover {
+    color: #ffeff5;
+}
+
+#post-container #body {
+    width: 100%;
+    padding: 10px;
+
+    display: flex;
+
+    background: none;
+}
+
+#post-container #body #comment {
+    color: rgb(180, 180, 180);
+}
+
+#post-container #body #image {
+    max-width: 100%;
+    max-height: 350px;
+    padding: 10px;
+}
+
+#post-container #foot {
+    height: 40px;
+
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+}
+
+#post-container #foot #comment-icon,
+#cart-icon,
+#like-icon,
+#dislike-icon {
+    height: 25px;
+    width: 25px;
+    margin: 0 5px;
+
+    cursor: pointer;
+}
+
+#post-container #foot #cart-icon {
+    color: rgb(180, 180, 180);
+}
+
+#post-container #foot #cart-icon:hover {
+    color: #f5f5f5;
+}
+
+#post-container #foot #comment-icon {
+    height: 25px;
+    width: 25px;
+
+    cursor: pointer;
+
+    color: rgb(180, 180, 180);
+}
+
+#post-container #foot #comment-icon:hover {
+    color: #f5f5f5;
+}
+
+#post-container #foot #like-icon {
+    color: green;
+}
+
+#post-container #foot #like-icon:hover {
+    color: rgb(56, 211, 56);
+}
+
+#post-container #foot #dislike-icon {
+    color: rgb(221, 50, 50);
+}
+
+#post-container #foot #dislike-icon:hover {
+    color: rgb(248, 105, 105);
+}

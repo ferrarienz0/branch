@@ -1,54 +1,70 @@
-.home-container {
-    height: 100%;
+#home-container {
     display: flex;
     justify-content: left;
     align-items: center;
     flex-direction: column;
 }
 
-.head {
+#home-container #head {
     width: 100%;
     height: 50px;
+    padding: 10px 40px;
+
     display: flex;
     flex-direction: row;
-    padding: 10px 30px;
+
     border-bottom: 1px solid;
     border-color: #6e5b63;
     background: #252122;
 }
 
-.head div {
+#home-container #head #logo {
     width: 30px;
+
     flex-direction: row;
     cursor: pointer;
 }
 
-.home-container .head #space {
+#home-container #head #space {
     width: 100%;
 }
 
-.home-container .head #sair {
+#home-container #head #sair {
+    height: 100%;
+    width: 25px;
     cursor: pointer;
 
     color: #ee3a3a;
 }
 
-.body {
+#home-container #head #sair:hover {
+    color: #ff8888;
+}
+
+#home-container #body {
     width: 100%;
-    height: 100%;
+
     display: flex;
     flex-direction: row;
+
     background: #3a2c30;
 }
 
-.perfil {
-    height: 100%;
+#home-container #body #perfil {
     width: 150px;
-    padding: 25px;
+    padding: 25px 25px 0 25px;
+
     display: flex;
     align-items: center;
     flex-direction: column;
+
     background: #30272a;
+}
+
+#home-container #body #perfil #user-name {
+    margin-top: 10px;
+    font-size: 20px;
+    color: #ff5e4f;
 }
 
 .menuIcon {
@@ -68,9 +84,8 @@
     height: 75px;
 }
 
-.feed {
-    height: 100%;
-    width: 60%;
+#home-container #body #topics {
+    width: 50%;
     border-left: 1px solid;
     border-right: 1px solid;
     border-color: #6e5b63;
@@ -92,7 +107,7 @@
     border: 0;
     border-bottom: 1px solid;
     border-color: #6e5b63;
-    border-radius:4px;
+    border-radius: 4px;
     background: #cccccc;
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
     resize: none;
@@ -134,6 +149,6 @@
     color: #f5a69c;
 }
 
-.tips {
-    width: 40%;
+#home-container #body #posts {
+    width: 50%;
 }
