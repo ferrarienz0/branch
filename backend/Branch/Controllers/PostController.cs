@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
@@ -14,40 +15,35 @@ namespace Branch.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class PostController : ApiController
     {
+        private readonly DataAcess MongoContext = new DataAcess();
+
         [HttpPost]
         [Route("post")]
-        public IHttpActionResult PostPost([FromBody] Post NewPost)
-        {
-            var MongoContext = new DataAcess();
-           
-            try
+        public async Task<IHttpActionResult> PostPost([FromBody] Post NewPost)
+        {  
+            if(!ModelState.IsValid)
             {
-                MongoContext.PostCollection.InsertOne(NewPost);
-            }
-            catch
-            {
-                return InternalServerError();
+                return BadRequest(ModelState);
             }
 
-            return Ok(NewPost);
+            await MongoContext.PostCollection.InsertOneAsync(NewPost);
+
+            return CreatedAtRoute("DefaultApi", new { id = NewPost.ID }, NewPost);
         }
 
         [HttpGet]
         [Route("posts")]
         [ResponseType(typeof(Post))]
-        public IHttpActionResult GetPosts()
+        public async Task<IHttpActionResult> GetPosts()
         {
-            var MongoContext = new DataAcess();
+            var Posts = await MongoContext.PostCollection.FindAsync(_ => true);
+                
+            if(Posts == null)
+            {
+                return NotFound();
+            }
 
-            try
-            {
-                var response = MongoContext.PostCollection.Find(_ => true).ToList();
-                return Ok(response);
-            }
-            catch
-            {
-                return InternalServerError();
-            }
+            return Ok(Posts);
         }
     }
 }
