@@ -242,27 +242,13 @@
     </Compile>
     <Compile Include="JWTProvider\Token.cs" />
     <Compile Include="JWTProvider\TokenValidator.cs" />
-    <Compile Include="Migrations\201910212018233_HereWeGoAgain.cs" />
-    <Compile Include="Migrations\201910212018233_HereWeGoAgain.Designer.cs">
-      <DependentUpon>201910212018233_HereWeGoAgain.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910220057590_UpdateAddressAndRelations.cs" />
-    <Compile Include="Migrations\201910220057590_UpdateAddressAndRelations.Designer.cs">
-      <DependentUpon>201910220057590_UpdateAddressAndRelations.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910220112047_UpdateAddress.cs" />
-    <Compile Include="Migrations\201910220112047_UpdateAddress.Designer.cs">
-      <DependentUpon>201910220112047_UpdateAddress.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910221806441_FixRelationsFK.cs" />
-    <Compile Include="Migrations\201910221806441_FixRelationsFK.Designer.cs">
-      <DependentUpon>201910221806441_FixRelationsFK.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910221843339_FixAll1_1.cs" />
-    <Compile Include="Migrations\201910221843339_FixAll1_1.Designer.cs">
-      <DependentUpon>201910221843339_FixAll1_1.cs</DependentUpon>
+    <Compile Include="Migrations\201910222125323_AwShit.cs" />
+    <Compile Include="Migrations\201910222125323_AwShit.Designer.cs">
+      <DependentUpon>201910222125323_AwShit.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\SQL\Relationship\GameCategory.cs" />
+    <Compile Include="Models\SQL\Relationship\GameTeam.cs" />
     <Compile Include="Models\NoSQL\DataAcess.cs" />
     <Compile Include="Models\NoSQL\Post.cs" />
     <Compile Include="Models\SQL\Social\City.cs" />
@@ -396,20 +382,8 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201910212018233_HereWeGoAgain.resx">
-      <DependentUpon>201910212018233_HereWeGoAgain.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910220057590_UpdateAddressAndRelations.resx">
-      <DependentUpon>201910220057590_UpdateAddressAndRelations.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910220112047_UpdateAddress.resx">
-      <DependentUpon>201910220112047_UpdateAddress.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910221806441_FixRelationsFK.resx">
-      <DependentUpon>201910221806441_FixRelationsFK.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910221843339_FixAll1_1.resx">
-      <DependentUpon>201910221843339_FixAll1_1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201910222125323_AwShit.resx">
+      <DependentUpon>201910222125323_AwShit.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

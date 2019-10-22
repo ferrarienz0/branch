@@ -28,10 +28,10 @@ namespace Branch.Controllers
             public string Token { get; set; }
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("session")]
         [ResponseType(typeof(TokenResponse))]
-        public async Task<IHttpActionResult> GetToken([FromBody] UserAuth UserAuth)
+        public async Task<IHttpActionResult> PostToken([FromBody] UserAuth UserAuth)
         {
             User User = await db.Users.FirstOrDefaultAsync(u => u.Nickname == UserAuth.Nickname && u.Password == UserAuth.PasswordHash);
             

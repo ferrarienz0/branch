@@ -14,7 +14,7 @@ namespace Branch.Models
         [ForeignKey("Media")]
         public int MediaId { get; set; }
 
-        public Media Media { get; set; }
+        public virtual Media Media { get; set; }
 
         [ForeignKey("TypeMedia")]
         public int TypeMediaId { get; set; }
