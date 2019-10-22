@@ -28,7 +28,7 @@ namespace Branch.Controllers
 
             await MongoContext.PostCollection.InsertOneAsync(NewPost);
 
-            return CreatedAtRoute("DefaultApi", new { id = NewPost.ID }, NewPost);
+            return Ok(NewPost);
         }
 
         [HttpGet]
@@ -43,7 +43,7 @@ namespace Branch.Controllers
                 return NotFound();
             }
 
-            return Ok(Posts);
+            return Ok(Posts.ToList());
         }
     }
 }
