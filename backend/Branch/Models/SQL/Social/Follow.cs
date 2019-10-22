@@ -14,10 +14,14 @@ namespace Branch.Models
         [Required]
         public int Affinity { get; set; }
 
-        [Required]
+        [ForeignKey("Follower")]
+        public int FollowerId { get; set; }
+        
         public virtual User Follower { get; set; }
 
-        [Required]
+        [ForeignKey("Followed")]
+        public int FollowedId;
+
         public virtual User Followed { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]

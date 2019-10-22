@@ -11,13 +11,19 @@ namespace Branch.Models
     {
         public int Id { get; set; }
 
-        [Required]
+        [ForeignKey("Media")]
+        public int MediaId { get; set; }
+
         public virtual Media Media { get; set; }
 
-        [Required]
+        [ForeignKey("TypeMedia")]
+        public int TypeMediaId { get; set; }
+
         public virtual TypeMedia TypeMedia { get; set; }
 
-        [Required]
+        [ForeignKey("Marketplace")]
+        public int MarketplaceId { get; set; }
+
         public virtual Marketplace Marketplace { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]

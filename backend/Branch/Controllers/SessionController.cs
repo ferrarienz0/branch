@@ -8,6 +8,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Branch.JWTProvider;
 using Branch.Models;
+using System.Data.Entity;
 
 namespace Branch.Controllers
 {
@@ -17,7 +18,7 @@ namespace Branch.Controllers
 
         public class UserAuth
         {
-            public int Id { get; set; }
+            public string Nickname { get; set; }
             public string PasswordHash { get; set; }
             public int ValidTime { get; set; }
         }
@@ -32,9 +33,9 @@ namespace Branch.Controllers
         [ResponseType(typeof(TokenResponse))]
         public async Task<IHttpActionResult> GetToken([FromBody] UserAuth UserAuth)
         {
-            User User = await db.Users.FindAsync(UserAuth.Id);
+            User User = await db.Users.FirstOrDefaultAsync(u => u.Nickname == UserAuth.Nickname && u.Password == UserAuth.PasswordHash);
             
-            if (User == null || User.Password != UserAuth.PasswordHash)
+            if (User == default)
             {
                 return NotFound();
             }
@@ -42,7 +43,7 @@ namespace Branch.Controllers
             var NewToken = new Token(
                 new Dictionary<string, object>()
                 {
-                    {"id", UserAuth.Id}
+                    {"id", User.Id}
                 }
             );
 

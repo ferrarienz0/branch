@@ -23,7 +23,9 @@ namespace Branch.Models
         [Required]
         public string Bairro { get; set; }
 
-        [Required]
+        [ForeignKey("User")]
+        public int UserId { get; set; }
+
         public virtual User User { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]

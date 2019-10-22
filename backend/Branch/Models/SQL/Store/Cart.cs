@@ -17,10 +17,14 @@ namespace Branch.Models
         [Required]
         public float Total { get; set; }
 
-        [Required]
+        [ForeignKey("Marketplace")]
+        public int MarketplaceId { get; set; }
+
         public Marketplace Marketplace { get; set; }
 
-        [Required]
+        [ForeignKey("User")]
+        public int UserId { get; set; }
+
         public virtual User User { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
