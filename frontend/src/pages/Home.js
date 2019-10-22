@@ -9,6 +9,7 @@ import UserImage from '../components/UserImage';
 
 export default class Home extends Component {
     state = {
+        user: '',
         users: [
             {
                 name: 'Marcos',
@@ -78,6 +79,7 @@ export default class Home extends Component {
             },
         ],
     };
+    handleUser = () => {};
     handleUserPost = () => {};
     render() {
         return (
@@ -98,6 +100,7 @@ export default class Home extends Component {
                             size="100px"
                             image={this.state.users[0].image}
                         />
+                        <strong id="user-name">asca</strong>
                         <FaShoppingCart className="menuIcon" />
                     </div>
                     <div id="topics">

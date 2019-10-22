@@ -46,7 +46,7 @@ export default class Post extends Component {
                 </div>
                 <div id="body">
                     <p id="comment">{this.props.post.text}</p>
-                    <img id="image" src={this.props.post.image} />
+                    <img id="image" alt="" src={this.props.post.image} />
                 </div>
                 <div id="foot">
                     {this.state.dislike ? (

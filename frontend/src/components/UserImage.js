@@ -1,11 +1,10 @@
-import React, { setState } from 'react';
+import React from 'react';
 import { FaUserCircle } from 'react-icons/fa';
-import Perfil from './Perfil';
+//import Perfil from './Perfil';
 import './UserImage.css';
 
 //componente responsável por exibir o ícone do usuário
 export default function UserImage(props) {
-    const [perfil, setPerfil] = setState(<div />);
     return (
         <div id="userimage-container">
             {props.image == null ? (
@@ -17,15 +16,13 @@ export default function UserImage(props) {
                         height: `${props.size}`,
                         width: `${props.size}`,
                         background: `url('${props.image}')`,
-                        'background-position': 'center',
-                        'background-repeat': 'no-repeat',
-                        'background-size': 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundSize: 'cover',
                     }}
-                    onClick={() => setPerfil(Perfil)}
                 />
             )}
-            <Perfil />
-            {perfil}
+            {/*<Perfil />*/}
         </div>
     );
 }

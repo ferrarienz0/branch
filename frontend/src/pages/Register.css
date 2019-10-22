@@ -6,6 +6,10 @@
     justify-content: center;
 }
 
+#register-container #form #logo {
+    margin-bottom: 15px;
+}
+
 #register-container #form #next-button,
 #back-button,
 #register-button {
@@ -36,8 +40,8 @@
 }
 
 #register-container #form input {
-    height: 48px;
-    margin: 10px 0 10px 0;
+    height: 40px;
+    margin: 5px 0 5px 0;
     padding: 0 20px;
 
     text-align: center;
@@ -47,25 +51,22 @@
     border-radius: 10px;
     font-size: 16px;
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+    color: #555;
+    text-align: center;
 }
 
-#register-container #proximo {
-    height: 48px;
-    margin: 10px 0;
+#register-container #form #date-input {
+    background: #eee
+        url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png)
+        90% 50% no-repeat;
+}
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    cursor: pointer;
-    text-decoration: none;
+#register-container #form #date-input::-webkit-inner-spin-button {
+    display: none;
+}
 
-    border: 0;
-    border-radius: 30px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #eee;
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+#register-container #form #date-input::-webkit-calendar-picker-indicator {
+    opacity: 0;
 }
 
 #register-container form a,
@@ -86,18 +87,6 @@ button {
     font-size: 16px;
     color: #eee;
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
-}
-
-#register-container #form #next-button,
-#back-button {
-    width: 100%;
-    background: #ee3a3a;
-}
-
-#register-container #form #next-button:hover,
-#back-button:hover {
-    background: #b31e1e;
-    transition: 0.1s;
 }
 
 #register-container #form #register-button {

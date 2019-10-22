@@ -12,7 +12,7 @@ export default class Login extends Component {
     };
     handleSubmit = e => {
         e.preventDefault();
-        console.log(this.state.username);
+        //console.log(this.state.username);
         //const response = await api.post('/algumacoisa');
     };
 
@@ -23,7 +23,7 @@ export default class Login extends Component {
                     <img id="logo" src={logo} alt="Branch" />
                     <input
                         id="login-input"
-                        placeholder="Nome de usuário ou e-mail"
+                        placeholder="Nome de usuário"
                         onChange={e =>
                             this.setState({ username: e.target.value })
                         }
