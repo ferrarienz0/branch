@@ -1,26 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Branch.Models
 {
-    public class TeamGame
+    public class Estate
     {
         public int Id { get; set; }
 
         [Required]
-        public virtual Game Game { get; set; }
-
-        [Required]
-        public virtual Team Team { get; set; }
+        public string Name { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime UpdatedAt { get; set; }
+
+        public Estate()
+        {
+            City = new HashSet<City>();
+        }
+
+        [Required]
+        public virtual ICollection<City> City { get; set; }
     }
 }

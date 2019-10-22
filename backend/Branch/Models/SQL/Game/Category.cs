@@ -19,5 +19,13 @@ namespace Branch.Models
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime UpdatedAt { get; set; }
+
+        public Category()
+        {
+            Game = new HashSet<Game>();
+        }
+
+        [Required]
+        public virtual ICollection<Game> Game { get; set; }
     }
 }
