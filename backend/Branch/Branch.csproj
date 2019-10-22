@@ -263,6 +263,8 @@
       <DependentUpon>201910221843339_FixAll1_1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\SQL\Relationship\GameCategory.cs" />
+    <Compile Include="Models\SQL\Relationship\GameTeam.cs" />
     <Compile Include="Models\NoSQL\DataAcess.cs" />
     <Compile Include="Models\NoSQL\Post.cs" />
     <Compile Include="Models\SQL\Social\City.cs" />

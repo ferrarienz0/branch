@@ -7,21 +7,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Branch.Models
 {
-    public class City
+    public class GameTeam
     {
-        public int Id { get; set; }
+        [ForeignKey("Game")]
+        public int GameId { get; set; }
 
-        [Required]
-        public string Name { get; set; }
+        public Game Game { get; set; }
+
+        [ForeignKey("Team")]
+        public int TeamId { get; set; }
+
+        public virtual Team Team { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime UpdatedAt { get; set; }
-
-        [ForeignKey("Estate")]
-        public int EstateId { get; set; }
-        public virtual Estate Estate { get; set; }
     }
 }

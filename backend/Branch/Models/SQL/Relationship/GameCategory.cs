@@ -7,12 +7,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Branch.Models
 {
-    public class City
+    public class GameCategory
     {
         public int Id { get; set; }
 
-        [Required]
-        public string Name { get; set; }
+        [ForeignKey("Game")]
+        public int GameId { get; set; }
+
+        public Game Game { get; set; }
+
+        [ForeignKey("Category")]
+        public int CategoryId { get; set; }
+
+        public virtual Category Category { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }
@@ -20,8 +27,5 @@ namespace Branch.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime UpdatedAt { get; set; }
 
-        [ForeignKey("Estate")]
-        public int EstateId { get; set; }
-        public virtual Estate Estate { get; set; }
     }
 }

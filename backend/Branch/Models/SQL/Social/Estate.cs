@@ -20,12 +20,6 @@ namespace Branch.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime UpdatedAt { get; set; }
 
-        public Estate()
-        {
-            City = new HashSet<City>();
-        }
-
-        [Required]
-        public virtual ICollection<City> City { get; set; }
+        
     }
 }
