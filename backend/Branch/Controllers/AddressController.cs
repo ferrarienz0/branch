@@ -85,6 +85,9 @@ namespace Branch.Controllers
                 return BadRequest(ModelState);
             }
 
+            User User = await db.Users.FindAsync(address.UserId);
+            address.User = User;
+
             db.Addresses.Add(address);
             await db.SaveChangesAsync();
 

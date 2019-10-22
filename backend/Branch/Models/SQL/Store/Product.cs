@@ -29,10 +29,15 @@ namespace Branch.Models
         [Required]
         public float MaxDiscount { get; set; }
 
-        [Required]
+        
+        [ForeignKey("TypeProduct")]
+        public int TypeProductId { get; set; }
+
         public virtual TypeProduct TypeProduct { get; set; }
 
-        [Required]
+        [ForeignKey("Marketplace")]
+        public int MarketplaceId { get; set; }
+
         public virtual Marketplace Marketplace { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]

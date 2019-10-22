@@ -88,7 +88,7 @@ namespace Branch.Controllers
             db.Users.Add(user);
             await db.SaveChangesAsync();
 
-            return Ok(User);
+            return Ok(user);
         }
 
         [HttpDelete]

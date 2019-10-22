@@ -25,7 +25,6 @@ namespace Branch.Models
             Address = new HashSet<Address>();
         }
 
-        
         public virtual ICollection<Address> Address { get; set; }
     }
 }
