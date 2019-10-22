@@ -14,7 +14,6 @@ using Branch.Models;
 
 namespace Branch.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class FollowController : ApiController
     {
         private Context db = new Context();

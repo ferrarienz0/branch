@@ -62,6 +62,9 @@
     <Reference Include="EntityFramework6.Npgsql, Version=3.2.1.1, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework6.Npgsql.3.2.1.1\lib\net45\EntityFramework6.Npgsql.dll</HintPath>
     </Reference>
+    <Reference Include="JWT, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JWT.5.3.1\lib\net472\JWT.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -232,10 +235,13 @@
     <Compile Include="Controllers\FollowController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PostController.cs" />
+    <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="JWTProvider\Token.cs" />
+    <Compile Include="JWTProvider\TokenValidator.cs" />
     <Compile Include="Migrations\201910212018233_HereWeGoAgain.cs" />
     <Compile Include="Migrations\201910212018233_HereWeGoAgain.Designer.cs">
       <DependentUpon>201910212018233_HereWeGoAgain.cs</DependentUpon>

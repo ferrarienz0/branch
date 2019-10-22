@@ -12,7 +12,6 @@ using System.Web.Http.Description;
 
 namespace Branch.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class PostController : ApiController
     {
         private readonly DataAcess MongoContext = new DataAcess();
