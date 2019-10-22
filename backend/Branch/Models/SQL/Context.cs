@@ -52,6 +52,10 @@ namespace Branch.Models
 
         public DbSet<UserSubject> UserSubjects { get; set; }
 
+        public DbSet<GameCategory> GameCategories { get; set; }
+
+        public DbSet<GameTeam> GameTeams { get; set; }
+
         public DbSet<City> Cities { get; set; }
 
         public DbSet<Estate> States { get; set; }

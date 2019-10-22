@@ -7,13 +7,13 @@ namespace Branch.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class FixAll1_1 : IMigrationMetadata
+    public sealed partial class Update : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(FixAll1_1));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Update));
         
         string IMigrationMetadata.Id
         {
-            get { return "201910221843339_FixAll1_1"; }
+            get { return "201910222056272_Update"; }
         }
         
         string IMigrationMetadata.Source

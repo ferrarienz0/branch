@@ -20,11 +20,9 @@ namespace Branch.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime UpdatedAt { get; set; }
 
-        public City()
-        {
-            Address = new HashSet<Address>();
-        }
+        [ForeignKey("Estate")]
+        public int EstateId { get; set; }
 
-        public virtual ICollection<Address> Address { get; set; }
+        public virtual Estate Estate { get; set; }
     }
 }
