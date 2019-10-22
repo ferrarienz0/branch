@@ -9,8 +9,7 @@ namespace Branch.Models
 {
     public class Team
     {
-        [Key]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string Name { get; set; }
@@ -20,5 +19,13 @@ namespace Branch.Models
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime UpdatedAt { get; set; }
+
+        public Team()
+        {
+            Game = new HashSet<Game>();
+        }
+
+        [Required]
+        public virtual ICollection<Game> Game { get; set; }
     }
 }

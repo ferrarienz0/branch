@@ -9,8 +9,7 @@ namespace Branch.Models
 {
     public class Address
     {
-        [Key]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string CEP { get; set; }
@@ -25,10 +24,7 @@ namespace Branch.Models
         public string Bairro { get; set; }
 
         [Required]
-        public string Cidade { get; set; }
-
-        [Required]
-        public virtual User IDUser { get; set; }
+        public virtual User User { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }

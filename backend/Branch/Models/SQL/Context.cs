@@ -36,8 +36,6 @@ namespace Branch.Models
 
         public DbSet<TypeProduct> TypeProducts { get; set; }
 
-        public DbSet<GameCategory> GameCategories { get; set; }
-
         public DbSet<GameMedia> GameMedias { get; set; }
 
         public DbSet<MarketplaceMedia> MarketplaceMedias { get; set; }
@@ -48,18 +46,19 @@ namespace Branch.Models
 
         public DbSet<SubjectGame> SubjectGames { get; set; }
 
-        public DbSet<TeamGame> TeamGames { get; set; }
-
         public DbSet<UserGame> UserGames { get; set; }
 
         public DbSet<UserMedia> UserMedias { get; set; }
 
         public DbSet<UserSubject> UserSubjects { get; set; }
 
+        public DbSet<City> Cities { get; set; }
+
+        public DbSet<Estate> States { get; set; }
+
         public Context() : base("branchsql")
         {
 
         }
-
     }
 }

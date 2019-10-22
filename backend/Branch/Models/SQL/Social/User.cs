@@ -9,8 +9,7 @@ namespace Branch.Models
 {
     public class User
     {
-        [Key]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string Firstname { get; set; }
@@ -28,6 +27,7 @@ namespace Branch.Models
         public string Email { get; set; }
 
         [Required]
+        [Column(TypeName = "Date")]
         public DateTime BirthDate { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]

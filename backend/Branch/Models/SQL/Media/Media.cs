@@ -9,8 +9,7 @@ namespace Branch.Models
 {
     public class Media
     {
-        [Key]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [Index(IsUnique = true)]

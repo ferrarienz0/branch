@@ -7,7 +7,6 @@ using System.Web.Mvc;
 
 namespace Branch.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class HomeController : Controller
     {
         public ActionResult Index()

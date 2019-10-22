@@ -9,17 +9,16 @@ namespace Branch.Models
 {
     public class SubjectGame
     {
-        [Key]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public int Affinity { get; set; }
 
         [Required]
-        public Subject IDSubject { get; set; }
+        public virtual Subject Subject { get; set; }
 
         [Required]
-        public Game IDGame { get; set; }
+        public virtual Game Game { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }

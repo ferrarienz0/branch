@@ -1,57 +1,125 @@
-﻿using Branch.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using System.Web.Http.Description;
+using Branch.Models;
 
 namespace Branch.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class UserController : ApiController
     {
-        [HttpPost]
-        [Route("user")]
-        public IHttpActionResult Store([FromBody] User NewUser)
-        {
-            var SQLContext = new Context();
+        private Context db = new Context();
 
-            try
-            {
-                var Response = SQLContext.Users.Add(NewUser);
-                SQLContext.SaveChanges();
-                SQLContext.Dispose();
-                
-                return Ok(Response);
-            }
-            catch
-            {
-                SQLContext.Dispose();
-                return InternalServerError();
-            }
+        [HttpGet]
+        [Route("user")]
+        public IQueryable<User> GetUsers()
+        {
+            return db.Users;
         }
 
         [HttpGet]
         [Route("user")]
-        public IHttpActionResult Index([FromUri] int UserId)
+        [ResponseType(typeof(User))]
+        public async Task<IHttpActionResult> GetUser(int id)
         {
-            var SQLContext = new Context();
+            User user = await db.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
+        }
+
+        [HttpPut]
+        [Route("user")]
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> PutUser(int id, User user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (id != user.Id)
+            {
+                return BadRequest();
+            }
+
+            db.Entry(user).State = EntityState.Modified;
 
             try
             {
-                var Response = SQLContext.Users.Where(x => x.ID == UserId).ToList().First();
-                SQLContext.SaveChangesAsync();
-                SQLContext.Dispose();
-
-                return Ok(Response);
+                await db.SaveChangesAsync();
             }
-            catch
+            catch (DbUpdateConcurrencyException)
             {
-                SQLContext.Dispose();
-                return InternalServerError();
+                if (!UserExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        [HttpPost]
+        [Route("user")]
+        [ResponseType(typeof(User))]
+        public async Task<IHttpActionResult> PostUser(User user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            db.Users.Add(user);
+            await db.SaveChangesAsync();
+
+            return Ok(User);
+        }
+
+        [HttpDelete]
+        [Route("user")]
+        [ResponseType(typeof(User))]
+        public async Task<IHttpActionResult> DeleteUser(int id)
+        {
+            User user = await db.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            db.Users.Remove(user);
+            await db.SaveChangesAsync();
+
+            return Ok(user);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        private bool UserExists(int id)
+        {
+            return db.Users.Count(e => e.Id == id) > 0;
         }
     }
 }
