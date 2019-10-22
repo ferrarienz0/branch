@@ -9,10 +9,12 @@ namespace Branch.Models
 {
     public class GameTeam
     {
+        public int Id { get; set; }
+
         [ForeignKey("Game")]
         public int GameId { get; set; }
 
-        public Game Game { get; set; }
+        public virtual Game Game { get; set; }
 
         [ForeignKey("Team")]
         public int TeamId { get; set; }

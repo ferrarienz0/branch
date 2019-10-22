@@ -88,6 +88,16 @@ namespace Branch.Controllers
             User User = await db.Users.FindAsync(address.UserId);
             address.User = User;
 
+            City City = await db.Cities.FindAsync(address.CityId);
+            address.City = City;
+
+            Estate Estate = await db.States.FindAsync(City.EstateId);
+            
+            if(User == null || City == null || Estate == null)
+            {
+                return NotFound();
+            }
+
             db.Addresses.Add(address);
             await db.SaveChangesAsync();
 
@@ -100,6 +110,7 @@ namespace Branch.Controllers
         public async Task<IHttpActionResult> DeleteAddress(int id)
         {
             Address address = await db.Addresses.FindAsync(id);
+           
             if (address == null)
             {
                 return NotFound();

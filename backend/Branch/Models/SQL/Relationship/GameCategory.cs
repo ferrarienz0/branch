@@ -14,7 +14,7 @@ namespace Branch.Models
         [ForeignKey("Game")]
         public int GameId { get; set; }
 
-        public Game Game { get; set; }
+        public virtual Game Game { get; set; }
 
         [ForeignKey("Category")]
         public int CategoryId { get; set; }

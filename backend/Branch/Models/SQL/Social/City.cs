@@ -22,6 +22,7 @@ namespace Branch.Models
 
         [ForeignKey("Estate")]
         public int EstateId { get; set; }
+
         public virtual Estate Estate { get; set; }
     }
 }
