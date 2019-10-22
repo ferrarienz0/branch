@@ -24,9 +24,6 @@ namespace Branch.Models
         public string Bairro { get; set; }
 
         [Required]
-        public string Cidade { get; set; }
-
-        [Required]
         public virtual User User { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]

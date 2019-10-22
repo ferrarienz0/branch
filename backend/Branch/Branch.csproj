@@ -240,22 +240,30 @@
     <Compile Include="Migrations\201910212018233_HereWeGoAgain.Designer.cs">
       <DependentUpon>201910212018233_HereWeGoAgain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910220057590_UpdateAddressAndRelations.cs" />
+    <Compile Include="Migrations\201910220057590_UpdateAddressAndRelations.Designer.cs">
+      <DependentUpon>201910220057590_UpdateAddressAndRelations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910220112047_UpdateAddress.cs" />
+    <Compile Include="Migrations\201910220112047_UpdateAddress.Designer.cs">
+      <DependentUpon>201910220112047_UpdateAddress.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\NoSQL\DataAcess.cs" />
     <Compile Include="Models\NoSQL\Post.cs" />
+    <Compile Include="Models\SQL\Social\City.cs" />
     <Compile Include="Models\SQL\Context.cs" />
+    <Compile Include="Models\SQL\Social\Estate.cs" />
     <Compile Include="Models\SQL\Media\Media.cs" />
     <Compile Include="Models\SQL\Relationship\GameMedia.cs" />
     <Compile Include="Models\SQL\Relationship\MarketplaceMedia.cs" />
     <Compile Include="Models\SQL\Relationship\ProductMedia.cs" />
-    <Compile Include="Models\SQL\Relationship\TeamGame.cs" />
     <Compile Include="Models\SQL\Relationship\UserMedia.cs" />
     <Compile Include="Models\SQL\Social\Address.cs" />
     <Compile Include="Models\SQL\Store\Cart.cs" />
     <Compile Include="Models\SQL\Game\Category.cs" />
     <Compile Include="Models\SQL\Social\Follow.cs" />
     <Compile Include="Models\SQL\Game\Game.cs" />
-    <Compile Include="Models\SQL\Relationship\GameCategory.cs" />
     <Compile Include="Models\SQL\Store\Marketplace.cs" />
     <Compile Include="Models\SQL\Game\Pro.cs" />
     <Compile Include="Models\SQL\Store\Product.cs" />
@@ -376,6 +384,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201910212018233_HereWeGoAgain.resx">
       <DependentUpon>201910212018233_HereWeGoAgain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910220057590_UpdateAddressAndRelations.resx">
+      <DependentUpon>201910220057590_UpdateAddressAndRelations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910220112047_UpdateAddress.resx">
+      <DependentUpon>201910220112047_UpdateAddress.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
