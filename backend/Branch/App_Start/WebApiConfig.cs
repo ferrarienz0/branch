@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace Branch
 {
@@ -9,8 +10,9 @@ namespace Branch
     {
         public static void Register(HttpConfiguration config)
         {
+            var Cors = new EnableCorsAttribute("*", "*", "*");
             // Serviços e configuração da API da Web
-            config.EnableCors();
+            config.EnableCors(Cors);
 
             // Rotas da API da Web
             config.MapHttpAttributeRoutes();

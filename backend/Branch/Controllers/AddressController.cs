@@ -14,7 +14,6 @@ using Branch.Models;
 
 namespace Branch.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class AddressController : ApiController
     {
         private Context db = new Context();
@@ -89,7 +88,7 @@ namespace Branch.Controllers
             db.Addresses.Add(address);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = address.Id }, address);
+            return Ok(address);
         }
 
         [HttpDelete]
