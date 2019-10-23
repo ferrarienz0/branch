@@ -27,18 +27,13 @@ export default class Register extends Component {
     };
     handleSubmit = async e => {
         e.preventDefault();
-        console.log(this.state.user);
         await api.post('/user', this.state.user);
-        console.log(this.state.user);
-        const sessionobj = {
+        let { data: token } = await api.post('/session', {
             Nickname: this.state.user.Nickname,
             PasswordHash: this.state.user.Password,
             ValidTime: 200,
-        };
-        console.log(sessionobj);
-        let { data: token } = await api.post('/session', sessionobj);
+        });
         this.setState({ token: token.Token, isSession: true });
-        console.log(token.Token);
     };
     handleAddress = async e => {
         const { data: address } = await viacep.get(
