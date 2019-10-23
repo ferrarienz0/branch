@@ -8,7 +8,7 @@
 #home-container #head {
     width: 100%;
     height: 50px;
-    padding: 10px 40px;
+    padding: 10px 60px;
 
     display: flex;
     flex-direction: row;
@@ -23,6 +23,13 @@
 
     flex-direction: row;
     cursor: pointer;
+}
+
+#home-container #head #go-home {
+    width: 30px;
+    height: 30px;
+    left: 60px;
+    position: absolute;
 }
 
 #home-container #head #space {
@@ -67,6 +74,11 @@
     color: #ff5e4f;
 }
 
+#home-container #body #perfil {
+    color: rgb(149, 149, 149);
+    font-size: 11px;
+}
+
 .menuIcon {
     margin-top: 20px;
     width: 25px;
@@ -86,9 +98,6 @@
 
 #home-container #body #topics {
     width: 50%;
-    border-left: 1px solid;
-    border-right: 1px solid;
-    border-color: #6e5b63;
 }
 
 .myPost {
@@ -151,4 +160,7 @@
 
 #home-container #body #posts {
     width: 50%;
+    border-left: 1px solid;
+    border-right: 1px solid;
+    border-color: #6e5b63;
 }

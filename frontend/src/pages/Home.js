@@ -15,6 +15,7 @@ export default class Home extends Component {
             lastname: '',
             username: '',
             email: '',
+            image: '',
         },
         users: [
             {
@@ -89,7 +90,6 @@ export default class Home extends Component {
         const { data } = await api.get(
             `/user?AccessToken=${this.props.match.params.token}`
         );
-        console.log(data);
         this.setState({
             user: {
                 name: decodeURIComponent(data.Firstname),
@@ -105,7 +105,11 @@ export default class Home extends Component {
             <div id="home-container">
                 <div id="head">
                     <div id="logo">
-                        <img src={icone} alt="Branch" />
+                        <img src={icone} alt="Branch"></img>
+                        <Link
+                            id="go-home"
+                            to={`/home/${this.props.match.params.token}`}
+                        />
                     </div>
                     <div id="space" />
                     <Link to="/">
@@ -117,22 +121,15 @@ export default class Home extends Component {
                         <UserImage
                             id="user-image"
                             size="100px"
-                            image={this.state.users[0].image}
+                            image={this.state.user.image}
                         />
                         <strong id="user-name">
-                            {this.state.user.username}
+                            @{this.state.user.username}
                         </strong>
+                        <p id="name">
+                            {this.state.user.name} {this.state.user.lastname}
+                        </p>
                         <FaShoppingCart className="menuIcon" />
-                    </div>
-                    <div id="topics">
-                        <Topic
-                            hashtag="LeagueOfLegends"
-                            wallpaper="https://lolstatic-a.akamaihd.net/frontpage/apps/prod/LolGameInfo-Harbinger/pt_BR/b49c208c106c3566ac66bc70dc62993c84c0511e/assets/assets/images/gi-landing-top.jpg"
-                        />
-                        <Topic
-                            hashtag="Overwatch"
-                            wallpaper="https://observatoriodegames.bol.uol.com.br/wp-content/uploads/2019/09/overwatch.jpg"
-                        />
                     </div>
                     <div id="posts">
                         <Post
@@ -142,15 +139,33 @@ export default class Home extends Component {
                         />
                         <Post
                             post={this.state.posts[2]}
+                            type="#"
                             user={this.state.users[2]}
                         />
                         <Post
+                            type="@"
                             post={this.state.posts[0]}
                             user={this.state.users[0]}
                         />
                         <Post
                             post={this.state.posts[3]}
+                            type="$"
                             user={this.state.users[3]}
+                        />
+                        <Post
+                            post={this.state.posts[1]}
+                            type=">"
+                            user={this.state.users[3]}
+                        />
+                    </div>
+                    <div id="topics">
+                        <Topic
+                            hashtag="LeagueOfLegends"
+                            wallpaper="https://lolstatic-a.akamaihd.net/frontpage/apps/prod/LolGameInfo-Harbinger/pt_BR/b49c208c106c3566ac66bc70dc62993c84c0511e/assets/assets/images/gi-landing-top.jpg"
+                        />
+                        <Topic
+                            hashtag="Overwatch"
+                            wallpaper="https://observatoriodegames.bol.uol.com.br/wp-content/uploads/2019/09/overwatch.jpg"
                         />
                     </div>
                 </div>

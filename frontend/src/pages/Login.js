@@ -11,16 +11,22 @@ export default class Login extends Component {
         password: '',
         isSession: false,
         token: '',
+        warning: '',
     };
     handleSubmit = async e => {
         e.preventDefault();
-        let { data: token } = await api.post('/session', {
-            Nickname: this.state.username,
-            PasswordHash: this.state.password,
-            ValidTime: 200,
-        });
-        this.setState({ token: token.Token, isSession: true });
-        console.log(token.Token);
+        await api
+            .post('/session', {
+                Nickname: this.state.username,
+                PasswordHash: this.state.password,
+                ValidTime: 200,
+            })
+            .then(res => {
+                this.setState({ token: res.data.Token, isSession: true });
+            })
+            .catch(err => {
+                this.setState({ warning: 'Usuário ou senha incorretos' });
+            });
     };
 
     render() {
@@ -46,6 +52,7 @@ export default class Login extends Component {
                             this.setState({ password: md5(e.target.value) })
                         }
                     />
+                    <p id="warning">{this.state.warning}</p>
                     <Link
                         id="login-button"
                         to={`/home/${this.state.password}`}

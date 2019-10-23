@@ -36,11 +36,19 @@
 
     display: flex;
     justify-content: space-between;
+    align-items: center;
     flex-direction: column;
+}
+
+#register-container #form #warning {
+    margin-top: 5px;
+
+    color: #ee3a3a;
 }
 
 #register-container #form input {
     height: 40px;
+    width: 100%;
     margin: 5px 0 5px 0;
     padding: 0 20px;
 
@@ -51,11 +59,11 @@
     border-radius: 10px;
     font-size: 16px;
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
-    color: #555;
     text-align: center;
 }
 
 #register-container #form #date-input {
+    color: #777;
     background: #eee
         url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png)
         90% 50% no-repeat;
@@ -76,8 +84,8 @@ button {
 
     display: flex;
     align-items: center;
-    justify-content: center;
     text-align: center;
+    justify-content: center;
     font-weight: bold;
     cursor: pointer;
     text-decoration: none;
@@ -90,6 +98,8 @@ button {
 }
 
 #register-container #form #register-button {
+    width: 100%;
+
     background: #bc132b;
 }
 

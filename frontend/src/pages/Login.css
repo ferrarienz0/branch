@@ -1,25 +1,28 @@
 #login-container {
     height: 100%;
+
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 }
 
 #login-container #form #login-button,
 #register-button,
 #halfpugg-button {
-    display: flex;
-    margin: 10px 0;
-    border: 0;
-    border-radius: 30px;
     height: 48px;
-    font-size: 16px;
-    text-align: center;
+    margin: 10px 0;
+
+    display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    cursor: pointer;
+
+    border: 0;
+    border-radius: 30px;
+    font-size: 16px;
     font-weight: bold;
     color: #eee;
-    cursor: pointer;
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
     text-decoration: none;
 }
@@ -27,18 +30,26 @@
 #login-container #form {
     width: 100%;
     max-width: 300px;
+
     display: flex;
+    align-items: center;
     justify-content: space-between;
     flex-direction: column;
 }
 
+#login-container #form #warning {
+    color: #ee3a3a;
+}
+
 #login-container #form #login-input,
 #password-input {
+    height: 48px;
+    width: 100%;
     margin: 10px 0 10px 0;
+
     border: 1px solid #555;
     background: #eee;
     border-radius: 10px;
-    height: 48px;
     padding: 0 20px;
     font-size: 16px;
     text-align: center;
@@ -46,6 +57,8 @@
 }
 
 #login-container #form #login-button {
+    width: 100%;
+
     background: #bc132b;
 }
 
@@ -55,6 +68,8 @@
 }
 
 #login-container #form #register-button {
+    width: 100%;
+
     background: #ee3a3a;
 }
 
@@ -65,6 +80,7 @@
 
 #login-container #phrase {
     text-align: center;
+
     font-size: 16px;
     color: #777;
     margin-top: 40px;
@@ -77,17 +93,19 @@
 }
 
 #login-container #halfpugg-button {
+    height: 80px;
+    width: 250px;
+    padding: 30px;
+
+    text-align: center;
+    cursor: pointer;
+
     border: 0;
     border-radius: 40px;
-    width: 250px;
-    height: 80px;
     font-size: 16px;
-    text-align: center;
     font-weight: bold;
     background: #22d69a;
     color: #21302a;
-    padding: 30px;
-    cursor: pointer;
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
 }
 
