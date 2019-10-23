@@ -46,10 +46,7 @@ namespace Branch.Controllers
         [ResponseType(typeof(User))]
         public async Task<IHttpActionResult> GetUser([FromUri] string AccessToken)
         {
-            var TokenContent = TokenValidator.VerifyToken(AccessToken);
-            dynamic Deserialized = JsonConvert.DeserializeObject(TokenContent);
-            
-            var UserId = (int) Deserialized.id;
+            var UserId = TokenValidator.VerifyToken(AccessToken);
 
             User user = await db.Users.FindAsync(UserId);
 
