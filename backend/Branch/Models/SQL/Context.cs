@@ -8,7 +8,6 @@ namespace Branch.Models
 {
     public class Context : DbContext
     {
-        public DbSet<Category> Categories { get; set; }
 
         public DbSet<Game> Games { get; set; }
 
@@ -52,13 +51,13 @@ namespace Branch.Models
 
         public DbSet<UserSubject> UserSubjects { get; set; }
 
-        public DbSet<GameCategory> GameCategories { get; set; }
-
         public DbSet<GameTeam> GameTeams { get; set; }
 
         public DbSet<City> Cities { get; set; }
 
         public DbSet<Estate> States { get; set; }
+
+        public DbSet<UserMarketplace> UserMarketplaces { get; set; }
 
         public Context() : base("branchsql")
         {

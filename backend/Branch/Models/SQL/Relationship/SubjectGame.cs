@@ -11,9 +11,6 @@ namespace Branch.Models
     {
         public int Id { get; set; }
 
-        [Required]
-        public int Affinity { get; set; }
-
         [ForeignKey("Subject")]
         public int SubjectId { get; set; }
 

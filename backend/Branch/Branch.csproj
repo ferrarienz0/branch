@@ -246,8 +246,11 @@
     <Compile Include="Migrations\201910222125323_AwShit.Designer.cs">
       <DependentUpon>201910222125323_AwShit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910231918579_DeleteCategory.cs" />
+    <Compile Include="Migrations\201910231918579_DeleteCategory.Designer.cs">
+      <DependentUpon>201910231918579_DeleteCategory.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\SQL\Relationship\GameCategory.cs" />
     <Compile Include="Models\SQL\Relationship\GameTeam.cs" />
     <Compile Include="Models\NoSQL\DataAcess.cs" />
     <Compile Include="Models\NoSQL\Post.cs" />
@@ -261,7 +264,6 @@
     <Compile Include="Models\SQL\Relationship\UserMedia.cs" />
     <Compile Include="Models\SQL\Social\Address.cs" />
     <Compile Include="Models\SQL\Store\Cart.cs" />
-    <Compile Include="Models\SQL\Game\Category.cs" />
     <Compile Include="Models\SQL\Social\Follow.cs" />
     <Compile Include="Models\SQL\Game\Game.cs" />
     <Compile Include="Models\SQL\Store\Marketplace.cs" />
@@ -276,6 +278,7 @@
     <Compile Include="Models\SQL\Relationship\UserSubject.cs" />
     <Compile Include="Models\SQL\Relationship\UserGame.cs" />
     <Compile Include="Models\SQL\Media\TypeMedia.cs" />
+    <Compile Include="Models\SQL\Relationship\UserMarketplace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -384,6 +387,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201910222125323_AwShit.resx">
       <DependentUpon>201910222125323_AwShit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910231918579_DeleteCategory.resx">
+      <DependentUpon>201910231918579_DeleteCategory.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

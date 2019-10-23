@@ -7,25 +7,27 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Branch.Models
 {
-    public class GameCategory
+    public class UserMarketplace
     {
         public int Id { get; set; }
 
-        [ForeignKey("Game")]
-        public int GameId { get; set; }
+        [Required]
+        public int Affinity { get; set; }
 
-        public virtual Game Game { get; set; }
+        [ForeignKey("User")]
+        public int UserId { get; set; }
 
-        [ForeignKey("Category")]
-        public int CategoryId { get; set; }
+        public virtual User User { get; set; }
 
-        public virtual Category Category { get; set; }
+        [ForeignKey("Marketplace")]
+        public int MarketplaceId { get; set; }
+
+        public virtual Marketplace Marketplace { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime UpdatedAt { get; set; }
-
     }
 }
