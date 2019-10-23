@@ -1,5 +1,6 @@
 ﻿using JWT;
 using JWT.Serializers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Branch.JWTProvider
     {
         private static readonly string Secret = "RumoAos50K";
 
-        public static string VerifyToken(string Token)
+        public static int VerifyToken(string AccessToken)
         {
             IJsonSerializer JSONSerializer = new JsonNetSerializer();
             IDateTimeProvider TimeProvider = new UtcDateTimeProvider();
@@ -19,9 +20,12 @@ namespace Branch.JWTProvider
             IJwtValidator Validator = new JwtValidator(JSONSerializer, TimeProvider);
             IJwtDecoder Decoder = new JwtDecoder(JSONSerializer, Validator, URLEncoder);
             
-            var JSON = Decoder.Decode(Token, Secret, verify: true);
+            var JSON = Decoder.Decode(AccessToken, Secret, verify: true);
+            dynamic Deserialized = JsonConvert.DeserializeObject(JSON);
 
-            return JSON;
+            var UserId = (int) Deserialized.id;
+
+            return UserId;
         }
     }
 }
