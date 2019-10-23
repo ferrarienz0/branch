@@ -3,13 +3,19 @@ import { Link } from 'react-router-dom';
 import { FaShoppingCart, FaPowerOff } from 'react-icons/fa';
 import './Home.css';
 import icone from '../assets/icone.svg';
+import api from '../services/api';
 import Topic from '../components/Topic';
 import Post from '../components/Post';
 import UserImage from '../components/UserImage';
 
 export default class Home extends Component {
     state = {
-        user: '',
+        user: {
+            name: '',
+            lastname: '',
+            username: '',
+            email: '',
+        },
         users: [
             {
                 name: 'Marcos',
@@ -79,7 +85,20 @@ export default class Home extends Component {
             },
         ],
     };
-    handleUser = () => {};
+    componentDidMount = async () => {
+        const { data } = await api.get(
+            `/user?AccessToken=${this.props.match.params.token}`
+        );
+        console.log(data);
+        this.setState({
+            user: {
+                name: decodeURIComponent(data.Firstname),
+                lastname: decodeURIComponent(data.Lastname),
+                username: decodeURIComponent(data.Nickname),
+                email: data.Email,
+            },
+        });
+    };
     handleUserPost = () => {};
     render() {
         return (
@@ -100,7 +119,9 @@ export default class Home extends Component {
                             size="100px"
                             image={this.state.users[0].image}
                         />
-                        <strong id="user-name">asca</strong>
+                        <strong id="user-name">
+                            {this.state.user.username}
+                        </strong>
                         <FaShoppingCart className="menuIcon" />
                     </div>
                     <div id="topics">

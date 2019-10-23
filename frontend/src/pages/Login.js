@@ -1,25 +1,35 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import './Login.css';
 import md5 from 'md5';
-//import api from '../services/api';
+import api from '../services/api';
 import logo from '../assets/logo.svg';
 
 export default class Login extends Component {
     state = {
         username: '',
         password: '',
+        isSession: false,
+        token: '',
     };
-    handleSubmit = e => {
+    handleSubmit = async e => {
         e.preventDefault();
-        //console.log(this.state.username);
-        //const response = await api.post('/algumacoisa');
+        let { data: token } = await api.post('/session', {
+            Nickname: this.state.username,
+            PasswordHash: this.state.password,
+            ValidTime: 200,
+        });
+        this.setState({ token: token.Token, isSession: true });
+        console.log(token.Token);
     };
 
     render() {
+        if (this.state.isSession) {
+            return <Redirect to={`/home/${this.state.token}`} />;
+        }
         return (
             <div id="login-container">
-                <form id="form" onSubmit={this.handleSubmit}>
+                <form id="form">
                     <img id="logo" src={logo} alt="Branch" />
                     <input
                         id="login-input"
@@ -40,6 +50,7 @@ export default class Login extends Component {
                         id="login-button"
                         to={`/home/${this.state.password}`}
                         type="submit"
+                        onClick={this.handleSubmit}
                     >
                         Login
                     </Link>
