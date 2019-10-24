@@ -11,15 +11,15 @@ namespace Branch.Models.NoSQL
     {
         [BsonId]
         [BsonElement("id")]
-        [BsonRequired()]
-        public ObjectId ID { get; set; }
+        public ObjectId Id { get; set; }
 
-        [BsonElement("user_id")][BsonRequired()]
-        public int IDUser { get; set; }
-
-        [BsonElement("is_product")]
+        [BsonElement("user_id")]
         [BsonRequired()]
-        public bool IsProduct { get; set; }
+        public int UserId { get; set; }
+
+        [BsonElement("type")]
+        [BsonRequired()]
+        public string Type { get; set; }
 
         [BsonElement("text")]
         [BsonRequired()]
@@ -29,30 +29,24 @@ namespace Branch.Models.NoSQL
         public List<int> Medias { get; set; }
 
         [BsonElement("hashtags")]
-        [BsonRequired()]
-        public List<string> Hashtags { get; set; }
+        public List<int> Hashtags { get; set; }
+
+        [BsonElement("mentions")]
+        public List<int> Mentions { get; set; }
+
+        [BsonElement("products")]
+        public List<int> Products { get; set; }
 
         [BsonElement("likes")]
-        [BsonRequired()]
         public List<int> Likes { get; set; }
 
         [BsonElement("dislikes")]
-        [BsonRequired()]
         public List<int> Dislikes { get; set; }
 
-        [BsonElement("mentions")]
-        [BsonRequired()]
-        public List<int> Mentions { get; set; }
-
         [BsonElement("comments")]
-        [BsonRequired()]
         public List<ObjectId> Comments { get; set; }
 
         [BsonElement("parent")]
-        [BsonIgnoreIfNull]
         public ObjectId Parent { get; set; }
-
-        [BsonElement("childrens")]
-        public List<ObjectId> Childrens { get; set; }
     }
 }
