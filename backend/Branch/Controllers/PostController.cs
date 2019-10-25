@@ -1,6 +1,7 @@
 ﻿using Branch.JWTProvider;
 using Branch.Models;
 using Branch.Models.NoSQL;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -20,11 +21,14 @@ namespace Branch.Controllers
         private readonly DataAcess MongoContext = new DataAcess();
         private readonly Context DB = new Context();
 
+        //TODO: Get Products!!
+
         [HttpPost]
         [Route("post")]
+        [ResponseType(typeof(Post))]
         public async Task<IHttpActionResult> PostPost([FromBody] Post NewPost, [FromUri] string AccessToken)
-        {  
-            if(!ModelState.IsValid)
+        {
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
@@ -32,23 +36,21 @@ namespace Branch.Controllers
             var UserId = TokenValidator.VerifyToken(AccessToken);
             NewPost.UserId = UserId;
 
-            var Hashtags = FindTag(NewPost.Text, "#");
-            var Mentions = FindTag(NewPost.Text, "@");
-            var Products = FindTag(NewPost.Text, "$");
+            NewPost = await TreatPostAddons(NewPost);
 
-            var HashtagObjects = await CheckHashtagsExistence(Hashtags);
-            var MentionObjects = await CheckMentionsExistence(Mentions);
-            var ProductsObjects = await CheckProductExistence(Products);
-
-            NewPost.Hashtags = HashtagObjects.Select(x => x.Id).ToList();
-            NewPost.Mentions = MentionObjects.Select(x => x.Id).ToList();
-            NewPost.Products = ProductsObjects.Select(x => x.Id).ToList();
- 
             await MongoContext.PostCollection.InsertOneAsync(NewPost);
 
-            dynamic Response = new { NewPost, HashtagObjects, MentionObjects, ProductsObjects };
+            if (NewPost.Parent != ObjectId.Empty)
+            {
+                var Parent = await FindParent(NewPost);
 
-            return Ok(Response);
+                if (Parent != default)
+                {
+                    await UpdateParent(Parent, NewPost.Id);
+                }
+            }
+
+            return Ok(NewPost);
         }
 
         [HttpGet]
@@ -59,23 +61,68 @@ namespace Branch.Controllers
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
             var UserFollowings = DB.Follows.Where(x => x.FollowerId == UserId).Select(x => x.Id);
+            var FollowingsPosts = MongoContext.PostCollection.Find(x => UserFollowings.Contains(x.UserId)).ToList();
+
             var UserInterests = DB.UserSubjects.Where(x => x.UserId == UserId).Select(x => x.Id);
-            
-            var RecommendedPosts = await MongoContext.PostCollection.FindAsync(x =>
-                  x.UserId == UserId
-                 || UserFollowings.Contains(x.UserId)
-                 || x.Mentions.Exists(y => UserFollowings.Contains(y))
-                 || x.Hashtags.Exists(z => UserInterests.Contains(z))
-            );
-                
-            if(RecommendedPosts == null)
+            var InterestsPosts = MongoContext.PostCollection.Find(x => x.Hashtags.Exists(y => UserInterests.Contains(y.Id))).ToList();
+
+            var MentionsPosts = MongoContext.PostCollection.Find(x => x.Mentions.Exists(y => y.Id == UserId)).ToList();
+
+            var UserPosts = MongoContext.PostCollection.Find(x => x.UserId == UserId).ToList();
+            var UserPostsComments = new List<Post>();
+
+            foreach (Post Post in UserPosts)
             {
-                return NotFound();
+                var Comments = await MongoContext.PostCollection.FindAsync(x => x.Parent == Post.Id);
+                UserPostsComments = UserPostsComments.Union(Comments.ToList()).ToList();
             }
 
-            return Ok(RecommendedPosts.ToList());
+            var RecommendedPosts = FollowingsPosts.Union(InterestsPosts)
+                                                  .Union(MentionsPosts)
+                                                  .Union(UserPosts)
+                                                  .Union(UserPostsComments).ToList();
+
+            return Ok(RecommendedPosts);
         }
 
+        [HttpPut]
+        [Route("posts/like")]
+        [ResponseType(typeof(int))]
+        public async Task<IHttpActionResult> Like([FromUri] string AccessToken, ObjectId PostId)
+        {
+            var UserId = TokenValidator.VerifyToken(AccessToken);
+
+            var PostLiked = MongoContext.PostCollection.Find(x => x.Id == PostId).FirstOrDefault();
+            PostLiked.Likes.Add(UserId);
+
+            int TotalLikes = PostLiked.Likes.Count;
+
+            await MongoContext.PostCollection.UpdateOneAsync(x => x.Id == PostId,
+                                                             Builders<Post>.Update.Set(Post => Post, PostLiked));
+
+            return Ok(TotalLikes);
+        }
+
+        [HttpPut]
+        [Route("posts/dislike")]
+        [ResponseType(typeof(int))]
+        public async Task<IHttpActionResult> Dislike([FromUri] string AccessToken, ObjectId PostId)
+        {
+            var UserId = TokenValidator.VerifyToken(AccessToken);
+
+            var PostLiked = MongoContext.PostCollection.Find(x => x.Id == PostId).FirstOrDefault();
+            PostLiked.Dislikes.Add(UserId);
+
+            int TotalDislikes = PostLiked.Dislikes.Count;
+
+            await MongoContext.PostCollection.UpdateOneAsync(x => x.Id == PostId,
+                                                             Builders<Post>.Update.Set(Post => Post, PostLiked));
+
+            return Ok(TotalDislikes);
+        }
+
+
+        // Treatment Functions
         private List<string> FindTag(string Text, string Tag)
         {
             int TagIndex;
@@ -162,6 +209,38 @@ namespace Branch.Controllers
             }
 
             return UsersList;
+        }
+
+        private async Task<Post> TreatPostAddons(Post NewPost)
+        {
+            var Hashtags = FindTag(NewPost.Text, "#");
+            var Mentions = FindTag(NewPost.Text, "@");
+            var Products = FindTag(NewPost.Text, "$");
+
+            var HashtagObjects = await CheckHashtagsExistence(Hashtags);
+            var MentionObjects = await CheckMentionsExistence(Mentions);
+            var ProductsObjects = await CheckProductExistence(Products);
+
+            NewPost.Hashtags = HashtagObjects;
+            NewPost.Mentions = MentionObjects;
+            NewPost.Products = ProductsObjects;
+
+            return NewPost;
+        }
+
+        private async Task<Post> FindParent(Post NewPost)
+        {
+            var ParentPost = await MongoContext.PostCollection.FindAsync(x => x.Id == NewPost.Parent);
+            var Result = await ParentPost.FirstOrDefaultAsync();
+            
+            return Result;
+        }
+
+        private async Task UpdateParent(Post Parent, ObjectId CommentId)
+        {
+            Parent.Comments.Add(CommentId);
+            await MongoContext.PostCollection.UpdateOneAsync(x => x.Id == Parent.Id,
+                                                             Builders<Post>.Update.Set(Post => Post, Parent));
         }
     }
 }
