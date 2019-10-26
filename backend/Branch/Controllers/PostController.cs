@@ -36,6 +36,9 @@ namespace Branch.Controllers
             var UserId = TokenValidator.VerifyToken(AccessToken);
             NewPost.UserId = UserId;
 
+            var Owner = DB.Users.Find(UserId);
+            NewPost.Owner = Owner;
+
             NewPost = await TreatPostAddons(NewPost);
 
             await MongoContext.PostCollection.InsertOneAsync(NewPost);
