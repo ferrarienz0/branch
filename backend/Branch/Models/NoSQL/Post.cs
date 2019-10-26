@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data.Entity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Branch.Models.NoSQL
 {
@@ -29,13 +31,13 @@ namespace Branch.Models.NoSQL
         public List<int> Medias { get; set; }
 
         [BsonElement("hashtags")]
-        public List<int> Hashtags { get; set; }
+        public List<Subject> Hashtags { get; set; }
 
         [BsonElement("mentions")]
-        public List<int> Mentions { get; set; }
+        public List<User> Mentions { get; set; }
 
         [BsonElement("products")]
-        public List<int> Products { get; set; }
+        public List<Product> Products { get; set; }
 
         [BsonElement("likes")]
         public List<int> Likes { get; set; }
