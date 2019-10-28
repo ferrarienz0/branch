@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { IoMdPerson, IoMdMenu } from 'react-icons/io';
-import { FaPaperPlane, FaPaperclip, FaShoppingCart } from 'react-icons/fa';
+import { FaPaperPlane, FaPaperclip, FaArrowLeft } from 'react-icons/fa';
 import './Posting.css';
 import api from '../services/api';
 
@@ -22,7 +22,10 @@ export default class Posting extends Component {
     };
     render() {
         return (
-            <div id="posting-container" onClick={this.props.onClose}>
+            <div id="posting-container">
+                <div id="head">
+                    <FaArrowLeft id="back-icon" onClick={this.props.onClose} />
+                </div>
                 <textarea
                     id="text-area"
                     type="text"

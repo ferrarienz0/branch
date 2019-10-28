@@ -57,7 +57,7 @@ export default class Home extends Component {
         posts: [
             {
                 user: 0,
-                text: 'ola, como vai?',
+                text: '.',
                 image: null,
                 likes: [],
                 dislikes: [],
@@ -200,9 +200,9 @@ export default class Home extends Component {
                 </div>
                 {this.state.posting ? (
                     <Posting
-                        onClose={e => this.setState({ posting: false })}
                         user={this.state.user.username}
                         token={this.props.match.params.token}
+                        onClose={() => this.setState({ posting: false })}
                     />
                 ) : null}
             </div>

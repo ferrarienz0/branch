@@ -11,6 +11,27 @@
     background: rgba(0, 0, 0, 0.5);
 }
 
+#posting-container #head {
+    width: 400px;
+    padding: 5px;
+
+    background: none;
+    border: none;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+}
+
+#posting-container #head #back-icon {
+    height: 100%;
+    width: 25px;
+    margin: 10px;
+
+    cursor: pointer;
+
+    color: #f8e5ed;
+}
+
 #posting-container #text-area {
     width: 400px;
     height: 200px;
