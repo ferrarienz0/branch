@@ -24,7 +24,7 @@ namespace Branch.Controllers
         [HttpPost]
         [Route("media")]
         [ResponseType(typeof(List<Media>))]
-        public async Task<IHttpActionResult> PostMedia([FromUri] string AccessToken)
+        public async Task<IHttpActionResult> PostMedia([FromUri] string AccessToken, bool IsUserMedia)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
@@ -43,7 +43,7 @@ namespace Branch.Controllers
                     var Name = (string) FileData.Name;
                     var FileExtension = (string) FileData.FileExtension;
 
-                    var NewMedia = await TreatMediaCreation(Root, Name, FileExtension, UserId);
+                    var NewMedia = await TreatMediaCreation(Root, Name, FileExtension, UserId, IsUserMedia);
 
                     Medias.Add(NewMedia);
                 }
@@ -96,7 +96,7 @@ namespace Branch.Controllers
             return FileData; 
         }
 
-        private async Task<Media> TreatMediaCreation(string Root, string Name, string FileExtension, int UserId)
+        private async Task<Media> TreatMediaCreation(string Root, string Name, string FileExtension, int UserId, bool IsUserMedia)
         {
             var MediaType = DB.TypeMedias.Where(x => x.Name == FileExtension).FirstOrDefault();
 
@@ -112,7 +112,10 @@ namespace Branch.Controllers
             DB.Medias.Add(NewMedia);
             await DB.SaveChangesAsync();
 
-            DB.UserMedias.Add(new UserMedia { MediaId = NewMedia.Id, UserId = UserId, TypeMediaId = MediaType.Id });
+            if(IsUserMedia)
+            {
+                DB.UserMedias.Add(new UserMedia { MediaId = NewMedia.Id, UserId = UserId, TypeMediaId = MediaType.Id });
+            }
 
             var NewMediaCopy = new Media
             {
@@ -121,6 +124,8 @@ namespace Branch.Controllers
                 CreatedAt = NewMedia.CreatedAt,
                 UpdatedAt = NewMedia.UpdatedAt
             };
+
+            await DB.SaveChangesAsync();
 
             return NewMediaCopy;
         }
