@@ -41,13 +41,13 @@ namespace Branch.Controllers
         [HttpPost]
         [Route("subject")]
         [ResponseType(typeof(Subject))]
-        public async Task<IHttpActionResult> PostSubject(string Hashtag)
+        public async Task<IHttpActionResult> PostSubject([FromBody] Subject Subject)
         {
-            var Subject = new Subject()
+            if (!ModelState.IsValid)
             {
-                Hashtag = Hashtag
-            };
-            
+                return BadRequest(ModelState);
+            }
+
             DB.Subjects.Add(Subject);
             await DB.SaveChangesAsync();
 
