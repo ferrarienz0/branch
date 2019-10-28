@@ -17,13 +17,16 @@ namespace Branch.Models
         [Required]
         public string Lastname{ get; set; }
 
-        [Required][Index(IsUnique = true)]
+        [Required]
+        [Index(IsUnique = true)]
         public string Nickname { get; set; }
 
         [Required]
         public string Password { get; set; }
 
-        [Required][Index(IsUnique = true)]
+        [Required]
+        [Index(IsUnique = true)]
+        [EmailAddress]
         public string Email { get; set; }
 
         [Required]

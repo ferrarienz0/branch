@@ -11,7 +11,9 @@ namespace Branch.Models
     {
         public int Id { get; set; }
 
-        [Required][Index(IsUnique = true)]
+        [Required]
+        [Index(IsUnique = true)]
+        [EmailAddress]
         public string EmailContact { get; set; }
 
         [ForeignKey("User")]
