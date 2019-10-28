@@ -26,7 +26,5 @@ namespace Branch.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime UpdatedAt { get; set; }
 
-        
-
     }
 }

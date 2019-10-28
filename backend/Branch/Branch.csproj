@@ -259,7 +259,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\SQL\Relationship\GameTeam.cs" />
-    <Compile Include="Models\NoSQL\DataAcess.cs" />
+    <Compile Include="Models\NoSQL\DataAccess.cs" />
     <Compile Include="Models\NoSQL\Post.cs" />
     <Compile Include="Models\SQL\Social\City.cs" />
     <Compile Include="Models\SQL\Context.cs" />

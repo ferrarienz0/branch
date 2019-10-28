@@ -35,6 +35,11 @@ namespace Branch.Controllers
             var UserId = TokenValidator.VerifyToken(AccessToken);
             var Subject = await DB.Subjects.FindAsync(SubjectId);
 
+            if(Subject == null)
+            {
+                return NotFound();
+            }
+
             var UserInterest = new UserSubject()
             {
                 UserId = UserId,
