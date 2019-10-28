@@ -79,7 +79,7 @@
     font-size: 11px;
 }
 
-.menuIcon {
+#home-container #body #perfil #comment-icon {
     margin-top: 20px;
     width: 25px;
     height: 25px;
@@ -87,7 +87,25 @@
     cursor: pointer;
 }
 
-.menuIcon:hover {
+#home-container #body #perfil #comment-icon:hover {
+    margin-top: 17.5px;
+    width: 30px;
+    height: 30px;
+    color: #f1d0de;
+}
+
+#home-container #body #perfil #cart-icon {
+    margin-top: 20px;
+    width: 25px;
+    height: 25px;
+    color: #be9aa9;
+    cursor: pointer;
+}
+
+#home-container #body #perfil #cart-icon:hover {
+    margin-top: 17.5px;
+    width: 30px;
+    height: 30px;
     color: #f1d0de;
 }
 

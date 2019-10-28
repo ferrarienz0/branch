@@ -106,7 +106,7 @@
     font-weight: bold;
     background: #22d69a;
     color: #21302a;
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
 }
 
 #login-container #halfpugg-button:hover {

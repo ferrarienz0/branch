@@ -1,15 +1,23 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { FaShoppingCart, FaPowerOff } from 'react-icons/fa';
+import {
+    FaPaperPlane,
+    FaPaperclip,
+    FaShoppingCart,
+    FaPowerOff,
+    FaComment,
+} from 'react-icons/fa';
 import './Home.css';
 import icone from '../assets/icone.svg';
 import api from '../services/api';
 import Topic from '../components/Topic';
 import Post from '../components/Post';
+import Posting from '../components/Posting';
 import UserImage from '../components/UserImage';
 
 export default class Home extends Component {
     state = {
+        posting: false,
         user: {
             name: '',
             lastname: '',
@@ -49,7 +57,7 @@ export default class Home extends Component {
         posts: [
             {
                 user: 0,
-                text: 'tem q ser na base do odio',
+                text: 'ola, como vai?',
                 image: null,
                 likes: [],
                 dislikes: [],
@@ -58,7 +66,7 @@ export default class Home extends Component {
             },
             {
                 user: 1,
-                text: 'n gosto de harem, sao so coincidencias',
+                text: 'Ola, meu povo',
                 image: null,
                 likes: [],
                 dislikes: [],
@@ -67,7 +75,7 @@ export default class Home extends Component {
             },
             {
                 user: 2,
-                text: 'poha bote fe',
+                text: 'oe',
                 image: null,
                 likes: [],
                 dislikes: [],
@@ -99,6 +107,19 @@ export default class Home extends Component {
             },
         });
     };
+    showPosting = () => {
+        return (
+            <div id="posting-container">
+                <textarea type="text" />
+                <div className="optionsPost">
+                    <button className="send">
+                        <FaPaperPlane className="sendIcon" />
+                    </button>
+                    <FaPaperclip className="clipIcon" />
+                </div>
+            </div>
+        );
+    };
     handleUserPost = () => {};
     render() {
         return (
@@ -129,7 +150,15 @@ export default class Home extends Component {
                         <p id="name">
                             {this.state.user.name} {this.state.user.lastname}
                         </p>
-                        <FaShoppingCart className="menuIcon" />
+                        <FaComment
+                            id="comment-icon"
+                            onClick={e =>
+                                this.state.posting
+                                    ? this.setState({ posting: false })
+                                    : this.setState({ posting: true })
+                            }
+                        />
+                        <FaShoppingCart id="cart-icon" />
                     </div>
                     <div id="posts">
                         <Post
@@ -169,6 +198,13 @@ export default class Home extends Component {
                         />
                     </div>
                 </div>
+                {this.state.posting ? (
+                    <Posting
+                        onClose={e => this.setState({ posting: false })}
+                        user={this.state.user.username}
+                        token={this.props.match.params.token}
+                    />
+                ) : null}
             </div>
         );
     }

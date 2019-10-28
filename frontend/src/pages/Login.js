@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
+import { FaCircleNotch } from 'react-icons/fa';
 import './Login.css';
 import md5 from 'md5';
 import api from '../services/api';
@@ -12,9 +13,11 @@ export default class Login extends Component {
         isSession: false,
         token: '',
         warning: '',
+        loading: false,
     };
     handleSubmit = async e => {
         e.preventDefault();
+        this.setState({ loading: true });
         await api
             .post('/session', {
                 Nickname: this.state.username,
@@ -27,6 +30,7 @@ export default class Login extends Component {
             .catch(err => {
                 this.setState({ warning: 'Usuário ou senha incorretos' });
             });
+        this.setState({ loading: false });
     };
 
     render() {
@@ -59,7 +63,11 @@ export default class Login extends Component {
                         type="submit"
                         onClick={this.handleSubmit}
                     >
-                        Login
+                        {this.state.loading ? (
+                            <p>Carregando...</p>
+                        ) : (
+                            <p>Login</p>
+                        )}
                     </Link>
                     <h1 id="phrase">Ainda não possui uma conta?</h1>
                     <Link id="register-button" to="/register" type="submit">
