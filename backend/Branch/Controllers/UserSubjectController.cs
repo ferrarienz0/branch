@@ -20,11 +20,12 @@ namespace Branch.Controllers
 
         [HttpGet]
         [Route("userInterests")]
-        public IQueryable<Subject> GetUserInterests([FromUri] string AccessToken)
+        [ResponseType(typeof(List<Subject>))]
+        public List<Subject> GetUserInterests([FromUri] string AccessToken)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            return DB.UserSubjects.Where(x => x.UserId == UserId).Select(x => x.Subject);
+            return DB.UserSubjects.Where(x => x.UserId == UserId).Select(x => x.Subject).ToList();
         }
 
         [HttpPost]
