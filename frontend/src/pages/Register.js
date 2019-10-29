@@ -23,17 +23,24 @@ export default class Register extends Component {
         cidade: '',
         estado: '',
         token: '',
+        warning: '',
         isSession: false,
     };
     handleSubmit = async e => {
         e.preventDefault();
-        await api.post('/user', this.state.user);
-        let { data: token } = await api.post('/session', {
-            Nickname: this.state.user.Nickname,
-            PasswordHash: this.state.user.Password,
-            ValidTime: 200,
-        });
-        this.setState({ token: token.Token, isSession: true });
+        await api
+            .post('/user', this.state.user)
+            .then(async () => {
+                let { data: token } = await api.post('/session', {
+                    Nickname: this.state.user.Nickname,
+                    PasswordHash: this.state.user.Password,
+                    ValidTime: 200,
+                });
+                this.setState({ token: token.Token, isSession: true });
+            })
+            .catch(() => {
+                this.setState({ warning: 'Ocorreu um erro' });
+            });
     };
     handleAddress = async e => {
         const { data: address } = await viacep.get(
@@ -102,7 +109,9 @@ export default class Register extends Component {
                     <input
                         id="date-input"
                         min="1900-01-01"
+                        max={new Date().toISOString().split('T')[0]}
                         type="date"
+                        required="required"
                         onChange={e =>
                             this.setState({
                                 user: {
@@ -144,6 +153,7 @@ export default class Register extends Component {
                         type="password"
                         onChange={this.handlePassword}
                     />
+                    <p id="warning">{this.state.warning}</p>
                     <Link
                         id="register-button"
                         to={`/home/${this.state.token}`}

@@ -1,20 +1,30 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { FaShoppingCart, FaPowerOff } from 'react-icons/fa';
+import {
+    FaPaperPlane,
+    FaPaperclip,
+    FaShoppingCart,
+    FaPowerOff,
+    FaComment,
+} from 'react-icons/fa';
 import './Home.css';
 import icone from '../assets/icone.svg';
 import api from '../services/api';
 import Topic from '../components/Topic';
 import Post from '../components/Post';
+import Posting from '../components/Posting';
 import UserImage from '../components/UserImage';
 
 export default class Home extends Component {
     state = {
+        posting: false,
         user: {
             name: '',
             lastname: '',
             username: '',
             email: '',
+            image: '',
+            topics: [{ hashtag: '', wallpaper: '' }],
         },
         users: [
             {
@@ -48,7 +58,7 @@ export default class Home extends Component {
         posts: [
             {
                 user: 0,
-                text: 'tem q ser na base do odio',
+                text: '.',
                 image: null,
                 likes: [],
                 dislikes: [],
@@ -57,7 +67,7 @@ export default class Home extends Component {
             },
             {
                 user: 1,
-                text: 'n gosto de harem, sao so coincidencias',
+                text: 'Ola, meu povo',
                 image: null,
                 likes: [],
                 dislikes: [],
@@ -66,7 +76,7 @@ export default class Home extends Component {
             },
             {
                 user: 2,
-                text: 'poha bote fe',
+                text: 'oe',
                 image: null,
                 likes: [],
                 dislikes: [],
@@ -84,20 +94,78 @@ export default class Home extends Component {
                 children: [],
             },
         ],
+        topics: [
+            {},
+            {},
+            {},
+            {},
+            //{
+            //  hashtag: 'LeagueOfLegends',
+            // wallpaper:
+            //    'https://www.leak.pt/wp-content/uploads/2019/09/league-of-legends-1-e1568812715634.jpg',
+            //},
+            //{
+            //    hashtag: 'Overwatch',
+            //    wallpaper:
+            //        'https://observatoriodegames.bol.uol.com.br/wp-content/uploads/2019/09/overwatch.jpg',
+            //},
+            // {
+            //    hashtag: 'Dota2',
+            //    wallpaper:
+            //        'https://external-preview.redd.it/L-269XDCtpNmS9KaO6oq-N3BcmV1Okn4gmfTbWD_qwk.jpg?auto=webp&s=47ac4a7b1de3cff1bed359873ab5df087250e1d2',
+            // },
+            // {
+            //     hashtag: 'CounterStrikeGO',
+            //     wallpaper: 'https://wallpaperaccess.com/full/147194.jpg',
+            // },
+        ],
     };
     componentDidMount = async () => {
-        const { data } = await api.get(
+        const { data: data1 } = await api.get(
             `/user?AccessToken=${this.props.match.params.token}`
         );
-        console.log(data);
+        const { data: topics } = await api.get(
+            `/userInterests?AccessToken=${this.props.match.params.token}`
+        );
         this.setState({
             user: {
-                name: decodeURIComponent(data.Firstname),
-                lastname: decodeURIComponent(data.Lastname),
-                username: decodeURIComponent(data.Nickname),
-                email: data.Email,
+                name: decodeURIComponent(data1.Firstname),
+                lastname: decodeURIComponent(data1.Lastname),
+                username: decodeURIComponent(data1.Nickname),
+                email: data1.Email,
+                topics,
             },
         });
+        if (this.state.user.topics.length === 0) {
+            let aux = [];
+            await api.get(`/subject?id=${1}`).then(res => {
+                console.log(res.data);
+                //aux.push(res);
+            });
+            await api.get(`/subject?id=${2}`).then(res => {
+                aux.push(res.data);
+            });
+            await api.get(`/subject?id=${3}`).then(res => {
+                aux.push(res.data);
+            });
+            await api.get(`/subject?id=${4}`).then(res => {
+                aux.push(res.data);
+            });
+            this.setState({ topics: aux });
+        }
+    };
+    showPosting = () => {
+        return (
+            <div id="posting-container">
+                <textarea type="text" />
+                <div className="optionsPost">
+                    <button className="send">
+                        <FaPaperPlane className="sendIcon" />
+                    </button>
+                    <FaPaperclip className="clipIcon" />
+                </div>
+            </div>
+        );
     };
     handleUserPost = () => {};
     render() {
@@ -105,7 +173,11 @@ export default class Home extends Component {
             <div id="home-container">
                 <div id="head">
                     <div id="logo">
-                        <img src={icone} alt="Branch" />
+                        <img src={icone} alt="Branch"></img>
+                        <Link
+                            id="go-home"
+                            to={`/home/${this.props.match.params.token}`}
+                        />
                     </div>
                     <div id="space" />
                     <Link to="/">
@@ -117,22 +189,23 @@ export default class Home extends Component {
                         <UserImage
                             id="user-image"
                             size="100px"
-                            image={this.state.users[0].image}
+                            image={this.state.user.image}
                         />
                         <strong id="user-name">
-                            {this.state.user.username}
+                            @{this.state.user.username}
                         </strong>
-                        <FaShoppingCart className="menuIcon" />
-                    </div>
-                    <div id="topics">
-                        <Topic
-                            hashtag="LeagueOfLegends"
-                            wallpaper="https://lolstatic-a.akamaihd.net/frontpage/apps/prod/LolGameInfo-Harbinger/pt_BR/b49c208c106c3566ac66bc70dc62993c84c0511e/assets/assets/images/gi-landing-top.jpg"
+                        <p id="name">
+                            {this.state.user.name} {this.state.user.lastname}
+                        </p>
+                        <FaComment
+                            id="comment-icon"
+                            onClick={e =>
+                                this.state.posting
+                                    ? this.setState({ posting: false })
+                                    : this.setState({ posting: true })
+                            }
                         />
-                        <Topic
-                            hashtag="Overwatch"
-                            wallpaper="https://observatoriodegames.bol.uol.com.br/wp-content/uploads/2019/09/overwatch.jpg"
-                        />
+                        <FaShoppingCart id="cart-icon" />
                     </div>
                     <div id="posts">
                         <Post
@@ -142,18 +215,41 @@ export default class Home extends Component {
                         />
                         <Post
                             post={this.state.posts[2]}
+                            type="#"
                             user={this.state.users[2]}
                         />
                         <Post
+                            type="@"
                             post={this.state.posts[0]}
                             user={this.state.users[0]}
                         />
                         <Post
                             post={this.state.posts[3]}
+                            type="$"
+                            user={this.state.users[3]}
+                        />
+                        <Post
+                            post={this.state.posts[1]}
+                            type=">"
                             user={this.state.users[3]}
                         />
                     </div>
+                    <div id="topics">
+                        {this.state.topics.map(topic => (
+                            <Topic
+                                hashtag={topic.hashtag}
+                                wallpaper={topic.wallpaper}
+                            />
+                        ))}
+                    </div>
                 </div>
+                {this.state.posting ? (
+                    <Posting
+                        user={this.state.user.username}
+                        token={this.props.match.params.token}
+                        onClose={() => this.setState({ posting: false })}
+                    />
+                ) : null}
             </div>
         );
     }
