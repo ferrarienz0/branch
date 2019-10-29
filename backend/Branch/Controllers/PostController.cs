@@ -62,7 +62,7 @@ namespace Branch.Controllers
         public async Task<IHttpActionResult> GetPosts([FromUri] string AccessToken)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
-            var UserFollowings = DB.Follows.Where(x => x.FollowerId == UserId).Select(x => x.Id);
+            var UserFollowings = DB.Follows.ToList().Where(x => x.FollowerId == UserId).Select(x => x.FollowedId);
             var UserSubjects = DB.UserSubjects.Where(x => x.UserId == UserId).ToList();
 
             var Posts = await MongoContext.PostCollection.Find(_ => true).ToListAsync();

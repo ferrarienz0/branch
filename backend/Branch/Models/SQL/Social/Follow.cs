@@ -20,7 +20,7 @@ namespace Branch.Models
         public virtual User Follower { get; set; }
 
         [ForeignKey("Followed")]
-        public int FollowedId;
+        public int FollowedId { get; set; }
 
         public virtual User Followed { get; set; }
 
