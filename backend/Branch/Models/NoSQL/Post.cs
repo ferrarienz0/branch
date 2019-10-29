@@ -33,6 +33,9 @@ namespace Branch.Models.NoSQL
         [BsonElement("medias")]
         public List<int> Medias { get; set; }
 
+        [BsonElement("medias_urls")]
+        public List<Media> MediaObjects { get; set; }
+
         [BsonElement("hashtags")]
         public List<Subject> Hashtags { get; set; }
 

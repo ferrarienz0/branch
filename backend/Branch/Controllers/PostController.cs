@@ -53,6 +53,12 @@ namespace Branch.Controllers
                 }
             }
 
+            foreach(var Id in NewPost.Medias)
+            {
+                var Media = DB.Medias.Find(Id);
+                NewPost.MediaObjects.Add(Media);
+            }
+
             return Ok(NewPost);
         }
 
