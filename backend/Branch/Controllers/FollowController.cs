@@ -49,7 +49,7 @@ namespace Branch.Controllers
 
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            var AlreadyExists = DB.Follows.Where(x => x.FollowedId == RequestedUserId && x.FollowerId == UserId).Count() > 0;
+            var AlreadyExists = DB.Follows.ToList().Where(x => x.FollowedId == RequestedUserId && x.FollowerId == UserId).Count() > 0;
 
             if (AlreadyExists)
             {
