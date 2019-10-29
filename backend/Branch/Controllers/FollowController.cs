@@ -22,10 +22,10 @@ namespace Branch.Controllers
         [HttpGet]
         [Route("follow")]
         [ResponseType(typeof(List<User>))]
-        public List<User> GetUserFollows([FromUri] string AccessToken)
+        public IHttpActionResult GetUserFollows([FromUri] string AccessToken)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
-            return DB.Follows.Where(x => x.FollowerId == UserId).Select(x => x.Followed).ToList();
+            return Ok(DB.Follows.Where(x => x.FollowerId == UserId).Select(x => new { x.Followed, FollowId = x.Id }).ToList());
         }
 
         [HttpGet]
@@ -48,14 +48,21 @@ namespace Branch.Controllers
             }
 
             var UserId = TokenValidator.VerifyToken(AccessToken);
-            
+
+            var AlreadyExists = DB.Follows.Where(x => x.FollowedId == RequestedUserId && x.FollowerId == UserId).Count() > 0;
+
+            if (AlreadyExists)
+            {
+                return Ok("Already Exists");
+            }
+
             var Follow = new Follow()
             {
                 FollowerId = UserId,
                 FollowedId = RequestedUserId,
                 Follower = DB.Users.Find(UserId),
                 Followed = DB.Users.Find(RequestedUserId)
-            };
+            };  
 
             DB.Follows.Add(Follow);
 
