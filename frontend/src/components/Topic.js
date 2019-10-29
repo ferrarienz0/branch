@@ -1,10 +1,21 @@
 import React, { Component } from 'react';
-import { FaComment, FaPlus } from 'react-icons/fa';
+import { FaComment, FaPlus, FaTimes } from 'react-icons/fa';
 import './Topic.css';
+import api from '../services/api';
 
 export default class Topic extends Component {
     state = {
-        ID: this.props.postID,
+        topicID: 0,
+        followed: false,
+    };
+    handleFollow = async () => {
+        await api
+            .post(
+                `/userInterests?AccessToken=${this.props.match.params.token}&SubjectId={this.state.topicID}`
+            )
+            .then(res => {
+                this.setState({ followed: true });
+            });
     };
     render() {
         return (
@@ -21,7 +32,11 @@ export default class Topic extends Component {
                     <h2 id="hashtag">#{this.props.hashtag}</h2>
                     <div id="foot">
                         <FaComment id="comment" />
-                        <FaPlus id="plus" />
+                        {this.state.followed ? (
+                            <FaTimes id="plus" onClick={this.handleFollow} />
+                        ) : (
+                            <FaPlus id="plus" onClick={this.handleFollow} />
+                        )}
                     </div>
                 </div>
             </div>

@@ -24,6 +24,7 @@ export default class Home extends Component {
             username: '',
             email: '',
             image: '',
+            topics: [{ hashtag: '', wallpaper: '' }],
         },
         users: [
             {
@@ -93,19 +94,65 @@ export default class Home extends Component {
                 children: [],
             },
         ],
+        topics: [
+            {},
+            {},
+            {},
+            {},
+            //{
+            //  hashtag: 'LeagueOfLegends',
+            // wallpaper:
+            //    'https://www.leak.pt/wp-content/uploads/2019/09/league-of-legends-1-e1568812715634.jpg',
+            //},
+            //{
+            //    hashtag: 'Overwatch',
+            //    wallpaper:
+            //        'https://observatoriodegames.bol.uol.com.br/wp-content/uploads/2019/09/overwatch.jpg',
+            //},
+            // {
+            //    hashtag: 'Dota2',
+            //    wallpaper:
+            //        'https://external-preview.redd.it/L-269XDCtpNmS9KaO6oq-N3BcmV1Okn4gmfTbWD_qwk.jpg?auto=webp&s=47ac4a7b1de3cff1bed359873ab5df087250e1d2',
+            // },
+            // {
+            //     hashtag: 'CounterStrikeGO',
+            //     wallpaper: 'https://wallpaperaccess.com/full/147194.jpg',
+            // },
+        ],
     };
     componentDidMount = async () => {
-        const { data } = await api.get(
+        const { data: data1 } = await api.get(
             `/user?AccessToken=${this.props.match.params.token}`
+        );
+        const { data: topics } = await api.get(
+            `/userInterests?AccessToken=${this.props.match.params.token}`
         );
         this.setState({
             user: {
-                name: decodeURIComponent(data.Firstname),
-                lastname: decodeURIComponent(data.Lastname),
-                username: decodeURIComponent(data.Nickname),
-                email: data.Email,
+                name: decodeURIComponent(data1.Firstname),
+                lastname: decodeURIComponent(data1.Lastname),
+                username: decodeURIComponent(data1.Nickname),
+                email: data1.Email,
+                topics,
             },
         });
+        if (this.state.user.topics.length === 0) {
+            let aux = [];
+            await api.get(`/subject?id=${1}`).then(res => {
+                console.log(res.data);
+                //aux.push(res);
+            });
+            await api.get(`/subject?id=${2}`).then(res => {
+                aux.push(res.data);
+            });
+            await api.get(`/subject?id=${3}`).then(res => {
+                aux.push(res.data);
+            });
+            await api.get(`/subject?id=${4}`).then(res => {
+                aux.push(res.data);
+            });
+            this.setState({ topics: aux });
+        }
     };
     showPosting = () => {
         return (
@@ -188,14 +235,12 @@ export default class Home extends Component {
                         />
                     </div>
                     <div id="topics">
-                        <Topic
-                            hashtag="LeagueOfLegends"
-                            wallpaper="https://lolstatic-a.akamaihd.net/frontpage/apps/prod/LolGameInfo-Harbinger/pt_BR/b49c208c106c3566ac66bc70dc62993c84c0511e/assets/assets/images/gi-landing-top.jpg"
-                        />
-                        <Topic
-                            hashtag="Overwatch"
-                            wallpaper="https://observatoriodegames.bol.uol.com.br/wp-content/uploads/2019/09/overwatch.jpg"
-                        />
+                        {this.state.topics.map(topic => (
+                            <Topic
+                                hashtag={topic.hashtag}
+                                wallpaper={topic.wallpaper}
+                            />
+                        ))}
                     </div>
                 </div>
                 {this.state.posting ? (
