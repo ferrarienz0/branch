@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using Branch.JWTProvider;
 using Branch.Models;
 
 namespace Branch.Controllers
@@ -23,6 +24,18 @@ namespace Branch.Controllers
         public List<Subject> GetSubjects()
         {
             var Subjects = DB.Subjects.ToList();
+
+            return Subjects;
+        }
+
+        [HttpGet]
+        [Route("subject")]
+        [ResponseType(typeof(List<Subject>))]
+        public List<Subject> GetUnfollowedSubjects([FromUri] string AccessToken)
+        {
+            var UserId = TokenValidator.VerifyToken(AccessToken);
+
+            var Subjects = DB.Subjects.Where(x => DB.UserSubjects.Where(y => y.SubjectId == x.Id && y.UserId == UserId).Count() == 0).ToList();
 
             return Subjects;
         }
