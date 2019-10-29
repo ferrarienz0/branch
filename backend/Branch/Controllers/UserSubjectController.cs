@@ -21,11 +21,11 @@ namespace Branch.Controllers
         [HttpGet]
         [Route("userInterests")]
         [ResponseType(typeof(List<Subject>))]
-        public List<Subject> GetUserInterests([FromUri] string AccessToken)
+        public IHttpActionResult GetUserInterests([FromUri] string AccessToken)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            return DB.UserSubjects.Where(x => x.UserId == UserId).Select(x => x.Subject).ToList();
+            return Ok(DB.UserSubjects.Where(x => x.UserId == UserId).Select(x => new { x.Subject, UserInterestId = x.Id }).ToList());
         }
 
         [HttpPost]
