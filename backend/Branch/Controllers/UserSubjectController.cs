@@ -41,6 +41,13 @@ namespace Branch.Controllers
                 return NotFound();
             }
 
+            var AlreadyExists = DB.UserSubjects.Where(x => x.UserId == UserId && x.SubjectId == SubjectId).Count() > 0;
+
+            if(AlreadyExists)
+            {
+                return Ok("Already Exists");
+            }
+
             var UserInterest = new UserSubject()
             {
                 UserId = UserId,
