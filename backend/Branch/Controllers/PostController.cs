@@ -18,7 +18,7 @@ namespace Branch.Controllers
 {
     public class PostController : ApiController
     {
-        private readonly DataAcess MongoContext = new DataAcess();
+        private readonly DataAccess MongoContext = new DataAccess();
         private readonly Context DB = new Context();
 
         //TODO: Get Products!!
@@ -83,7 +83,8 @@ namespace Branch.Controllers
             var RecommendedPosts = FollowingsPosts.Union(InterestsPosts)
                                                   .Union(MentionsPosts)
                                                   .Union(UserPosts)
-                                                  .Union(UserPostsComments).ToList();
+                                                  .Union(UserPostsComments)
+                                                  .ToList();
 
             return Ok(RecommendedPosts);
         }
