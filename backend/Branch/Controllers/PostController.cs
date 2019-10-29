@@ -62,29 +62,26 @@ namespace Branch.Controllers
         public async Task<IHttpActionResult> GetPosts([FromUri] string AccessToken)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
-
             var UserFollowings = DB.Follows.Where(x => x.FollowerId == UserId).Select(x => x.Id);
-            var FollowingsPosts = MongoContext.PostCollection.Find(x => UserFollowings.Contains(x.UserId)).ToList();
+            var UserSubjects = DB.UserSubjects.Where(x => x.UserId == UserId).ToList();
 
-            var UserInterests = DB.UserSubjects.Where(x => x.UserId == UserId).Select(x => x.Id);
-            var InterestsPosts = MongoContext.PostCollection.Find(x => x.Hashtags.Exists(y => UserInterests.Contains(y.Id))).ToList();
+            var Posts = await MongoContext.PostCollection.Find(_ => true).ToListAsync();
 
-            var MentionsPosts = MongoContext.PostCollection.Find(x => x.Mentions.Exists(y => y.Id == UserId)).ToList();
-
-            var UserPosts = MongoContext.PostCollection.Find(x => x.UserId == UserId).ToList();
-            var UserPostsComments = new List<Post>();
-
-            foreach (Post Post in UserPosts)
+            var FollowerPosts = Posts.Where(x => UserFollowings.Contains(x.UserId) || x.UserId == UserId).ToList();
+            
+            List<Post> UserSubjectPosts = new List<Post>();
+            foreach(var UserSubject in UserSubjects)
             {
-                var Comments = await MongoContext.PostCollection.FindAsync(x => x.Parent == Post.Id);
-                UserPostsComments = UserPostsComments.Union(Comments.ToList()).ToList();
+                var SubjectPost = Posts.Where(x => x.Hashtags.Contains(UserSubject.Subject)).ToList();
+                UserSubjectPosts.AddRange(SubjectPost);
             }
 
-            var RecommendedPosts = FollowingsPosts.Union(InterestsPosts)
-                                                  .Union(MentionsPosts)
-                                                  .Union(UserPosts)
-                                                  .Union(UserPostsComments)
-                                                  .ToList();
+            var MentionPosts = Posts.Where(x => x.Mentions.Exists(y => UserFollowings.Contains(y.Id) || y.Id == UserId)).ToList();
+
+            var RecommendedPosts = FollowerPosts
+                                                .Union(UserSubjectPosts)
+                                                .Union(MentionPosts)
+                                                .ToList();
 
             return Ok(RecommendedPosts);
         }
