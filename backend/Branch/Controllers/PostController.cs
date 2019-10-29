@@ -235,6 +235,9 @@ namespace Branch.Controllers
             }
 
             NewPost.MediaObjects = Medias;
+            NewPost.Likes = new List<int>();
+            NewPost.Dislikes = new List<int>();
+            NewPost.Comments = new List<ObjectId>();
 
             return NewPost;
         }
