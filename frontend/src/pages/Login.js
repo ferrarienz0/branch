@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { FaCircleNotch } from 'react-icons/fa';
 import './Login.css';
 import md5 from 'md5';
 import api from '../services/api';

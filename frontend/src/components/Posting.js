@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { IoMdPerson, IoMdMenu } from 'react-icons/io';
 import { FaPaperPlane, FaPaperclip, FaArrowLeft } from 'react-icons/fa';
 import './Posting.css';
 import api from '../services/api';

@@ -94,39 +94,18 @@ export default class Home extends Component {
                 children: [],
             },
         ],
-        topics: [
-            {},
-            {},
-            {},
-            {},
-            //{
-            //  hashtag: 'LeagueOfLegends',
-            // wallpaper:
-            //    'https://www.leak.pt/wp-content/uploads/2019/09/league-of-legends-1-e1568812715634.jpg',
-            //},
-            //{
-            //    hashtag: 'Overwatch',
-            //    wallpaper:
-            //        'https://observatoriodegames.bol.uol.com.br/wp-content/uploads/2019/09/overwatch.jpg',
-            //},
-            // {
-            //    hashtag: 'Dota2',
-            //    wallpaper:
-            //        'https://external-preview.redd.it/L-269XDCtpNmS9KaO6oq-N3BcmV1Okn4gmfTbWD_qwk.jpg?auto=webp&s=47ac4a7b1de3cff1bed359873ab5df087250e1d2',
-            // },
-            // {
-            //     hashtag: 'CounterStrikeGO',
-            //     wallpaper: 'https://wallpaperaccess.com/full/147194.jpg',
-            // },
-        ],
+        topics: [],
     };
+
     componentDidMount = async () => {
         const { data: data1 } = await api.get(
             `/user?AccessToken=${this.props.match.params.token}`
         );
+
         const { data: topics } = await api.get(
             `/userInterests?AccessToken=${this.props.match.params.token}`
         );
+
         this.setState({
             user: {
                 name: decodeURIComponent(data1.Firstname),
@@ -136,37 +115,14 @@ export default class Home extends Component {
                 topics,
             },
         });
+
         if (this.state.user.topics.length === 0) {
-            let aux = [];
-            await api.get(`/subject?id=${1}`).then(res => {
-                console.log(res.data);
-                //aux.push(res);
-            });
-            await api.get(`/subject?id=${2}`).then(res => {
-                aux.push(res.data);
-            });
-            await api.get(`/subject?id=${3}`).then(res => {
-                aux.push(res.data);
-            });
-            await api.get(`/subject?id=${4}`).then(res => {
-                aux.push(res.data);
-            });
+            const { data: topics } = await api.get('/subject');
 
-            for (var i = 0; i < aux.length; i++) {
-                aux[i].wpp = (
-                    <img
-                        src={
-                            (await api.get(`/media?Id=${aux[i].MediaId}`)).data
-                        }
-                    />
-                );
-            }
-
-            console.log(aux);
-
-            this.setState({ topics: aux });
+            this.setState({ topics });
         }
     };
+
     showPosting = () => {
         return (
             <div id="posting-container">
@@ -180,6 +136,7 @@ export default class Home extends Component {
             </div>
         );
     };
+
     handleUserPost = () => {};
     render() {
         return (
@@ -252,7 +209,7 @@ export default class Home extends Component {
                             <Topic
                                 key={index}
                                 hashtag={topic.Hashtag}
-                                wallpaper={topic.wpp}
+                                wallpaper={topic.Media.URL}
                             />
                         ))}
                     </div>

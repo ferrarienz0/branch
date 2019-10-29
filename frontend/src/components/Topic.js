@@ -29,7 +29,7 @@ export default class Topic extends Component {
                 }}
             >
                 <div className="gradient">
-                    <h2 className="hashtag">#{this.props.hashtag}</h2>
+                    <h2 className="hashtag">{this.props.hashtag}</h2>
                     <div className="foot">
                         <FaComment className="comment" />
                         {this.state.followed ? (

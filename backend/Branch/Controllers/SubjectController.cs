@@ -19,9 +19,12 @@ namespace Branch.Controllers
 
         [HttpGet]
         [Route("subject")]
-        public IQueryable<Subject> GetSubjects()
+        [ResponseType(typeof(List<Subject>))]
+        public List<Subject> GetSubjects()
         {
-            return DB.Subjects;
+            var Subjects = DB.Subjects.ToList();
+
+            return Subjects;
         }
 
         [HttpGet]
