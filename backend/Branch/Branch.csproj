@@ -379,6 +379,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Media_Data\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -79,10 +79,5 @@ namespace Branch.Controllers
             }
             base.Dispose(disposing);
         }
-
-        private bool SubjectExists(int id)
-        {
-            return DB.Subjects.Count(e => e.Id == id) > 0;
-        }
     }
 }
