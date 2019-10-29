@@ -39,7 +39,7 @@ namespace Branch.Controllers
                 foreach (var _File in Provider.FileData)
                 {
 
-                    var FileData = HandleFile(_File, Root);
+                    var FileData = HandleFile(_File);
                     var Name = (string) FileData.Name;
                     var FileExtension = (string) FileData.FileExtension;
 
@@ -66,7 +66,7 @@ namespace Branch.Controllers
             return Ok(Media);
         }
 
-        private dynamic HandleFile(MultipartFileData _File, string Root)
+        private dynamic HandleFile(MultipartFileData _File)
         {
             var Name = Guid.NewGuid().ToString();
             var LocalFileName = _File.LocalFileName;
