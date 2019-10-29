@@ -53,12 +53,6 @@ namespace Branch.Controllers
                 }
             }
 
-            foreach(var Id in NewPost.Medias)
-            {
-                var Media = DB.Medias.Find(Id);
-                NewPost.MediaObjects.Add(Media);
-            }
-
             return Ok(NewPost);
         }
 
@@ -231,6 +225,15 @@ namespace Branch.Controllers
             NewPost.Hashtags = HashtagObjects;
             NewPost.Mentions = MentionObjects;
             NewPost.Products = ProductsObjects;
+
+            var Medias = new List<Media>();
+            foreach (var Id in NewPost.Medias)
+            {
+                var Media = DB.Medias.Find(Id);
+                Medias.Add(Media);
+            }
+
+            NewPost.MediaObjects = Medias;
 
             return NewPost;
         }
