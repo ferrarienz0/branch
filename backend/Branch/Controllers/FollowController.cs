@@ -21,18 +21,20 @@ namespace Branch.Controllers
 
         [HttpGet]
         [Route("follow")]
-        public IQueryable<User> GetUserFollows([FromUri] string AccessToken)
+        [ResponseType(typeof(List<User>))]
+        public List<User> GetUserFollows([FromUri] string AccessToken)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
-            return DB.Follows.Where(x => x.FollowerId == UserId).Select(x => x.Followed);
+            return DB.Follows.Where(x => x.FollowerId == UserId).Select(x => x.Followed).ToList();
         }
 
         [HttpGet]
         [Route("followers")]
-        public IQueryable<User> GetUserFollowers([FromUri] string AccessToken)
+        [ResponseType(typeof(List<User>))]
+        public List<User> GetUserFollowers([FromUri] string AccessToken)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
-            return DB.Follows.Where(x => x.FollowedId == UserId).Select(x => x.Follower);
+            return DB.Follows.Where(x => x.FollowedId == UserId).Select(x => x.Follower).ToList();
         }
 
         [HttpPost]
