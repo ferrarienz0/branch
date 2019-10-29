@@ -94,7 +94,20 @@ namespace Branch.Controllers
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
             var PostLiked = MongoContext.PostCollection.Find(x => x.Id == PostId).FirstOrDefault();
-            PostLiked.Likes.Add(UserId);
+
+            if (PostLiked.Likes.Contains(UserId))
+            {
+                PostLiked.Likes.Remove(UserId);
+            }
+            else
+            {
+                PostLiked.Likes.Add(UserId);
+            }
+
+            if (PostLiked.Dislikes.Contains(UserId))
+            {
+                PostLiked.Dislikes.Remove(UserId);
+            }
 
             int TotalLikes = PostLiked.Likes.Count;
 
@@ -112,7 +125,20 @@ namespace Branch.Controllers
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
             var PostLiked = MongoContext.PostCollection.Find(x => x.Id == PostId).FirstOrDefault();
-            PostLiked.Dislikes.Add(UserId);
+
+            if(PostLiked.Dislikes.Contains(UserId))
+            {
+                PostLiked.Dislikes.Remove(UserId);
+            }
+            else
+            {
+                PostLiked.Dislikes.Add(UserId);
+            }
+
+            if(PostLiked.Likes.Contains(UserId))
+            {
+                PostLiked.Likes.Remove(UserId);
+            }
 
             int TotalDislikes = PostLiked.Dislikes.Count;
 
