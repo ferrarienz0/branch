@@ -151,6 +151,19 @@ export default class Home extends Component {
             await api.get(`/subject?id=${4}`).then(res => {
                 aux.push(res.data);
             });
+
+            for (var i = 0; i < aux.length; i++) {
+                aux[i].wpp = (
+                    <img
+                        src={
+                            (await api.get(`/media?Id=${aux[i].MediaId}`)).data
+                        }
+                    />
+                );
+            }
+
+            console.log(aux);
+
             this.setState({ topics: aux });
         }
     };
@@ -235,10 +248,11 @@ export default class Home extends Component {
                         />
                     </div>
                     <div id="topics">
-                        {this.state.topics.map(topic => (
+                        {this.state.topics.map((topic, index) => (
                             <Topic
-                                hashtag={topic.hashtag}
-                                wallpaper={topic.wallpaper}
+                                key={index}
+                                hashtag={topic.Hashtag}
+                                wallpaper={topic.wpp}
                             />
                         ))}
                     </div>
