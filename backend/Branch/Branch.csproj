@@ -257,6 +257,10 @@
     <Compile Include="Migrations\201910282043281_SubjectMedia.Designer.cs">
       <DependentUpon>201910282043281_SubjectMedia.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910292226427_Fix-Follow.cs" />
+    <Compile Include="Migrations\201910292226427_Fix-Follow.Designer.cs">
+      <DependentUpon>201910292226427_Fix-Follow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\SQL\Relationship\GameTeam.cs" />
     <Compile Include="Models\NoSQL\DataAccess.cs" />
@@ -401,6 +405,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910282043281_SubjectMedia.resx">
       <DependentUpon>201910282043281_SubjectMedia.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910292226427_Fix-Follow.resx">
+      <DependentUpon>201910292226427_Fix-Follow.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -59,9 +59,7 @@ namespace Branch.Controllers
             var Follow = new Follow()
             {
                 FollowerId = UserId,
-                FollowedId = RequestedUserId,
-                Follower = DB.Users.Find(UserId),
-                Followed = DB.Users.Find(RequestedUserId)
+                FollowedId = RequestedUserId
             };  
 
             DB.Follows.Add(Follow);
