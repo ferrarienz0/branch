@@ -72,7 +72,7 @@ namespace Branch.Controllers
             List<Post> UserSubjectPosts = new List<Post>();
             foreach(var UserSubject in UserSubjects)
             {
-                var SubjectPost = Posts.Where(x => x.Hashtags.Contains(UserSubject.Subject)).ToList();
+                var SubjectPost = Posts.Where(x => x.Hashtags.Contains(UserSubject.SubjectId)).ToList();
                 UserSubjectPosts.AddRange(SubjectPost);
             }
 
@@ -155,9 +155,9 @@ namespace Branch.Controllers
             return Tags;
         }
 
-        private async Task<List<Subject>> CheckHashtagsExistence(List<string> Hashtags)
+        private async Task<List<int>> CheckHashtagsExistence(List<string> Hashtags)
         {
-            List<Subject> Subjects = new List<Subject>();
+            List<int> Subjects = new List<int>();
 
             foreach (var Hashtag in Hashtags)
             {
@@ -166,12 +166,13 @@ namespace Branch.Controllers
                 if (Exists == default)
                 {
                     var Added = DB.Subjects.Add(new Subject() { Hashtag = Hashtag });
-                    Subjects.Add(Added);
+                    await DB.SaveChangesAsync();
+                    Subjects.Add(Added.Id);
                 }
 
                 else
                 {
-                    Subjects.Add(Exists);
+                    Subjects.Add(Exists.Id);
                 }
             }
 
