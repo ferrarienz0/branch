@@ -11,6 +11,7 @@ namespace Branch
         public static void Register(HttpConfiguration config)
         {
             var Cors = new EnableCorsAttribute("*", "*", "*");
+
             // Serviços e configuração da API da Web
             config.EnableCors(Cors);
 

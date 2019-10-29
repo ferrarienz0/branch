@@ -1,4 +1,4 @@
-#topic-container {
+.topic-container {
     height: 100px;
     margin: 5px;
 
@@ -7,7 +7,7 @@
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
 }
 
-#topic-container #gradient {
+.topic-container .gradient {
     height: 100%;
     width: 100%;
 
@@ -26,7 +26,7 @@
     );
 }
 
-#topic-container #gradient:hover {
+.topic-container .gradient:hover {
     background-image: linear-gradient(
         to top,
         rgba(0, 0, 0, 1),
@@ -34,12 +34,12 @@
     );
 }
 
-#topic-container #gradient #hashtag {
+.topic-container .gradient .hashtag {
     color: rgb(255, 255, 255);
     text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.6);
 }
 
-#topic-container #gradient #foot {
+.topic-container .gradient .foot {
     height: 40px;
     width: 100%;
     bottom: 0;
@@ -51,8 +51,8 @@
     position: absolute;
 }
 
-#topic-container #gradient #foot #comment,
-#plus {
+.topic-container .gradient .foot .comment,
+.plus {
     height: 100%;
     width: 25px;
     margin-left: 10px;
@@ -62,8 +62,8 @@
     color: rgb(255, 255, 255);
 }
 
-#topic-container #gradient #foot #comment:hover,
-#plus:hover {
+.topic-container .gradient .foot .comment:hover,
+.plus:hover {
     height: 30px;
     width: 30px;
     margin-left: 5px;

@@ -19,7 +19,7 @@ namespace Branch.Controllers
     public class MediaController : ApiController
     {
         private readonly Context DB = new Context();
-        private readonly string Root = HttpContext.Current.Server.MapPath("~/App_Data");
+        private readonly string Root = HttpContext.Current.Server.MapPath("~/Media_Data");
 
         [HttpPost]
         [Route("media")]
@@ -43,7 +43,7 @@ namespace Branch.Controllers
                     var Name = (string) FileData.Name;
                     var FileExtension = (string) FileData.FileExtension;
 
-                    var NewMedia = await TreatMediaCreation(Root, Name, FileExtension, UserId, IsUserMedia);
+                    var NewMedia = await TreatMediaCreation(Name, FileExtension, UserId, IsUserMedia);
 
                     Medias.Add(NewMedia);
                 }
@@ -59,22 +59,11 @@ namespace Branch.Controllers
 
         [HttpGet]
         [Route("media")]
-        public HttpResponseMessage GetMedia([FromUri] int Id)
+        public IHttpActionResult GetMedia([FromUri] int id)
         {
-            var Media = DB.Medias.Find(Id);
+            var Media = DB.Medias.Find(id);
 
-            var Result = new HttpResponseMessage(HttpStatusCode.OK);
-
-            var FileStream = new FileStream(Path.Combine(Root, Media.URL), FileMode.Open);
-            var _Image = Image.FromStream(FileStream);
-            var MemoryStream = new MemoryStream();
-
-            _Image.Save(MemoryStream, ImageFormat.Png);
-
-            Result.Content = new ByteArrayContent(MemoryStream.ToArray());
-            Result.Content.Headers.ContentType = new MediaTypeHeaderValue("image/png");
-
-            return Result;
+            return Ok(Media);
         }
 
         private dynamic HandleFile(MultipartFileData _File, string Root)
@@ -96,7 +85,7 @@ namespace Branch.Controllers
             return FileData; 
         }
 
-        private async Task<Media> TreatMediaCreation(string Root, string Name, string FileExtension, int UserId, bool IsUserMedia)
+        private async Task<Media> TreatMediaCreation(string Name, string FileExtension, int UserId, bool IsUserMedia)
         {
             var MediaType = DB.TypeMedias.Where(x => x.Name == FileExtension).FirstOrDefault();
 
@@ -107,7 +96,7 @@ namespace Branch.Controllers
                 await DB.SaveChangesAsync();
             }
 
-            var NewMedia = new Media { URL = Name };
+            var NewMedia = new Media { URL = Url.Content(Path.Combine("~/Media_Data", Name)) };
 
             DB.Medias.Add(NewMedia);
             await DB.SaveChangesAsync();
@@ -117,17 +106,9 @@ namespace Branch.Controllers
                 DB.UserMedias.Add(new UserMedia { MediaId = NewMedia.Id, UserId = UserId, TypeMediaId = MediaType.Id });
             }
 
-            var NewMediaCopy = new Media
-            {
-                Id = NewMedia.Id,
-                URL = Path.Combine(Root, NewMedia.URL),
-                CreatedAt = NewMedia.CreatedAt,
-                UpdatedAt = NewMedia.UpdatedAt
-            };
-
             await DB.SaveChangesAsync();
 
-            return NewMediaCopy;
+            return NewMedia;
         }
 
         protected override void Dispose(bool disposing)

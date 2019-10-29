@@ -20,22 +20,28 @@ export default class Topic extends Component {
     render() {
         return (
             <div
-                id="topic-container"
+                className="topic-container"
                 style={{
-                    background: `url('${this.props.wallpaper}')`,
+                    backgroundImage: `url(${this.props.wallpaper})`,
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: 'cover',
                 }}
             >
-                <div id="gradient">
-                    <h2 id="hashtag">#{this.props.hashtag}</h2>
-                    <div id="foot">
-                        <FaComment id="comment" />
+                <div className="gradient">
+                    <h2 className="hashtag">{this.props.hashtag}</h2>
+                    <div className="foot">
+                        <FaComment className="comment" />
                         {this.state.followed ? (
-                            <FaTimes id="plus" onClick={this.handleFollow} />
+                            <FaTimes
+                                className="plus"
+                                onClick={this.handleFollow}
+                            />
                         ) : (
-                            <FaPlus id="plus" onClick={this.handleFollow} />
+                            <FaPlus
+                                className="plus"
+                                onClick={this.handleFollow}
+                            />
                         )}
                     </div>
                 </div>
