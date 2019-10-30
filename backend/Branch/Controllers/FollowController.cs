@@ -48,6 +48,7 @@ namespace Branch.Controllers
 
             }
 
+            await Connection.CloseAsync();
             return Ok(Responses);
         }
 

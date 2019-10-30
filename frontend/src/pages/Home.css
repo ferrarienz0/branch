@@ -1,9 +1,9 @@
 #home-container {
+    height: 100%;
     display: flex;
     justify-content: left;
     align-items: center;
     flex-direction: column;
-    height: 100vh;
 }
 
 #home-container #head {
@@ -118,64 +118,6 @@
 
 #home-container #body #topics {
     width: 50%;
-}
-
-.myPost {
-    height: 200px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    padding: 15px;
-    border-bottom: 1px solid;
-    border-color: #6e5b63;
-}
-
-.myPost textarea {
-    height: 100%;
-    width: 100%;
-    border: 0;
-    border-bottom: 1px solid;
-    border-color: #6e5b63;
-    border-radius: 4px;
-    background: #cccccc;
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
-    resize: none;
-}
-
-.myPost .optionsPost {
-    padding: 0;
-    height: 100%;
-    width: 100px;
-    margin-left: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column-reverse;
-}
-
-.myPost .send {
-    margin-top: 10px;
-    height: 50px;
-    width: 60px;
-    justify-content: center;
-    background: #ee3a3a;
-}
-
-.myPost svg {
-    width: 100%;
-    height: 25px;
-    color: #ee3a3a;
-    cursor: pointer;
-    justify-content: center;
-    align-items: center;
-}
-
-.clipIcon {
-    margin-bottom: 20px;
-}
-
-.sendIcon path {
-    color: #f5a69c;
 }
 
 #home-container #body #posts {

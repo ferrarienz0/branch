@@ -5,7 +5,9 @@
     box-sizing: border-box;
 }
 
-html, body, #root {
+html,
+body,
+#root {
     height: 100%;
 }
 
@@ -13,6 +15,8 @@ body {
     background: #181516;
 }
 
-body, input, button {
+body,
+input,
+button {
     font-family: Arial, Helvetica, sans-serif;
 }

@@ -5,19 +5,31 @@ import api from '../services/api';
 
 export default class Posting extends Component {
     state = {
-        image: null,
-        type: this.props.type,
+        image: { id: -1, URL: '' },
         text: '',
     };
     handlePost = async () => {
-        await api
-            .post(`/post?AccessToken=${this.props.token}`, {
-                text: this.props.user + ' ' + this.state.text,
-            })
-            .then(res => {
-                this.setState({ type: '' });
-                console.log(res.data);
-            });
+        await api.post(`/post?AccessToken=${this.props.token}`, {
+            Text: this.state.text,
+            Medias: this.state.image.id === -1 ? [] : [this.state.image.id],
+        });
+        this.props.onClose();
+    };
+    handleFile = async e => {
+        let config = {
+            headers: {
+                Accept: '',
+                'Content-Type': 'multipart/form-data',
+            },
+        };
+        let formData = new FormData();
+        formData.append('image', e.target.files[0]);
+        const { data } = await api.post(
+            `/media?AccessToken=${this.props.token}&IsUserMedia=false`,
+            formData,
+            config
+        );
+        this.setState({ image: { id: data[0].Id, URL: data[0].URL } });
     };
     render() {
         return (
@@ -31,14 +43,32 @@ export default class Posting extends Component {
                     onChange={e => this.setState({ text: e.target.value })}
                 />
                 <div id="options-post">
-                    <button id="send" onClick={this.handlePost}>
-                        <FaPaperPlane id="send-icon" />
-                    </button>
-                    <button id="media">
-                        <FaPaperclip id="clip-icon" />
-                    </button>
+                    <div id="buttons">
+                        <label id="media" htmlFor="selecao-arquivo">
+                            <FaPaperclip id="clip-icon" />
+                        </label>
+                        <button id="send" onClick={this.handlePost}>
+                            <FaPaperPlane id="send-icon" />
+                        </button>
+                    </div>
+                    <div id="not-flex">
+                        <img
+                            id="preview"
+                            src={
+                                this.state.image === null
+                                    ? ''
+                                    : this.state.image.URL
+                            }
+                            alt=""
+                        />
+                    </div>
                 </div>
-                <input id="media" type="file" name="pic" accept=".png"></input>
+                <input
+                    id="selecao-arquivo"
+                    type="file"
+                    name="pic"
+                    onChange={this.handleFile}
+                ></input>
             </div>
         );
     }
