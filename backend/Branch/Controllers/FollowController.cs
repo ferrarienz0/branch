@@ -72,9 +72,12 @@ namespace Branch.Controllers
         [HttpDelete]
         [Route("follow")]
         [ResponseType(typeof(Follow))]
-        public async Task<IHttpActionResult> DeleteFollow(int id)
+        public async Task<IHttpActionResult> DeleteFollow([FromUri] string AcessToken, [FromUri] int FollowedId)
         {
-            Follow follow = await DB.Follows.FindAsync(id);
+            var UserId = TokenValidator.VerifyToken(AcessToken);
+
+            Follow follow = DB.Follows.Where(x => x.FollowerId == UserId && x.FollowedId == FollowedId).FirstOrDefault();
+
             if (follow == null)
             {
                 return NotFound();
