@@ -88,7 +88,6 @@ namespace Branch.Controllers
 
         [HttpPut]
         [Route("posts/like")]
-        [ResponseType(typeof(int))]
         public async Task<IHttpActionResult> Like([FromUri] string AccessToken, ObjectId PostId)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
@@ -109,12 +108,14 @@ namespace Branch.Controllers
                 PostLiked.Dislikes.Remove(UserId);
             }
 
-            int TotalLikes = PostLiked.Likes.Count;
-
             await MongoContext.PostCollection.UpdateOneAsync(x => x.Id == PostId,
                                                              Builders<Post>.Update.Set(Post => Post, PostLiked));
 
-            return Ok(TotalLikes);
+            int TotalLikes = PostLiked.Likes.Count;
+            int TotalDeslikes = PostLiked.Dislikes.Count;
+            dynamic Response = new { TotalLikes, TotalDeslikes };
+
+            return Ok(Response);
         }
 
         [HttpPut]
@@ -145,7 +146,11 @@ namespace Branch.Controllers
             await MongoContext.PostCollection.UpdateOneAsync(x => x.Id == PostId,
                                                              Builders<Post>.Update.Set(Post => Post, PostLiked));
 
-            return Ok(TotalDislikes);
+            int TotalLikes = PostLiked.Likes.Count;
+            int TotalDeslikes = PostLiked.Dislikes.Count;
+            dynamic Response = new { TotalLikes, TotalDeslikes };
+
+            return Ok(Response);
         }
 
 
