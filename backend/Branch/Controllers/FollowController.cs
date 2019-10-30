@@ -71,10 +71,9 @@ namespace Branch.Controllers
 
         [HttpDelete]
         [Route("follow")]
-        [ResponseType(typeof(Follow))]
-        public async Task<IHttpActionResult> DeleteFollow([FromUri] string AcessToken, [FromUri] int FollowedId)
+        public async Task<IHttpActionResult> DeleteFollow([FromUri] string AccessToken, [FromUri] int FollowedId)
         {
-            var UserId = TokenValidator.VerifyToken(AcessToken);
+            var UserId = TokenValidator.VerifyToken(AccessToken);
 
             Follow follow = DB.Follows.Where(x => x.FollowerId == UserId && x.FollowedId == FollowedId).FirstOrDefault();
 
@@ -86,7 +85,7 @@ namespace Branch.Controllers
             DB.Follows.Remove(follow);
             await DB.SaveChangesAsync();
 
-            return Ok(follow);
+            return Ok();
         }
 
         protected override void Dispose(bool disposing)
