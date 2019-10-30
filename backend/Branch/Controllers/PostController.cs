@@ -88,7 +88,7 @@ namespace Branch.Controllers
 
         [HttpPut]
         [Route("posts/like")]
-        public async Task<IHttpActionResult> Like([FromUri] string AccessToken, ObjectId PostId)
+        public async Task<IHttpActionResult> Like([FromUri] string AccessToken, [FromUri] ObjectId PostId)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
@@ -121,7 +121,7 @@ namespace Branch.Controllers
         [HttpPut]
         [Route("posts/dislike")]
         [ResponseType(typeof(int))]
-        public async Task<IHttpActionResult> Dislike([FromUri] string AccessToken, ObjectId PostId)
+        public async Task<IHttpActionResult> Dislike([FromUri] string AccessToken, [FromUri] ObjectId PostId)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
