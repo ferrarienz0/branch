@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Dynamic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -12,20 +13,42 @@ using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using Branch.JWTProvider;
 using Branch.Models;
+using Npgsql;
 
 namespace Branch.Controllers
 {
     public class FollowController : ApiController
     {
         private readonly Context DB = new Context();
+        private readonly string ConnectionString = "server=tuffi.db.elephantsql.com;User Id=vlvhqsdd;Database=vlvhqsdd;Port=5432;Password=0pBsOXETTteJOJt6Ysf0jq_135BK--N3";
 
         [HttpGet]
         [Route("follow")]
-        [ResponseType(typeof(List<User>))]
-        public IHttpActionResult GetUserFollows([FromUri] string AccessToken)
+        [ResponseType(typeof(List<dynamic>))]
+        public async Task<IHttpActionResult> GetUserFollows([FromUri] string AccessToken)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
-            return Ok(DB.Follows.Where(x => x.FollowerId == UserId).Select(x => new { x.Followed, FollowId = x.Id }).ToList());
+
+            var Connection = new NpgsqlConnection(ConnectionString);
+            await Connection.OpenAsync();
+
+            List<dynamic> Responses = new List<dynamic>();
+
+            using (var SQLCommand = new NpgsqlCommand($"SELECT * FROM FollowerPerson({UserId})", Connection))
+            using (var Reader = await SQLCommand.ExecuteReaderAsync()) {
+
+                while(await Reader.ReadAsync())
+                {
+                    dynamic Response = new ExpandoObject();
+                    Response.UserId = Reader.GetValue(0);
+                    Response.FollowId = Reader.GetValue(1);
+
+                    Responses.Add(Response);
+                }
+
+            }
+
+            return Ok(Responses);
         }
 
         [HttpGet]
