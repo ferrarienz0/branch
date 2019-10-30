@@ -88,12 +88,13 @@ namespace Branch.Controllers
 
         [HttpPut]
         [Route("posts/like")]
-        public async Task<IHttpActionResult> Like([FromUri] string AccessToken, [FromUri] ObjectId PostId)
+        public async Task<IHttpActionResult> Like([FromUri] string AccessToken, [FromUri] string PostId)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            var PostLiked = MongoContext.PostCollection.Find(x => x.Id == PostId).FirstOrDefault();
-
+            var filter = Builders<Post>.Filter.Eq("Id", ObjectId.Parse(PostId));
+            var PostLiked = MongoContext.PostCollection.Find(filter).FirstOrDefault();
+         
             if (PostLiked.Likes.Contains(UserId))
             {
                 PostLiked.Likes.Remove(UserId);
@@ -108,8 +109,7 @@ namespace Branch.Controllers
                 PostLiked.Dislikes.Remove(UserId);
             }
 
-            await MongoContext.PostCollection.UpdateOneAsync(x => x.Id == PostId,
-                                                             Builders<Post>.Update.Set(Post => Post, PostLiked));
+            await MongoContext.PostCollection.FindOneAndReplaceAsync(filter, PostLiked);
 
             int TotalLikes = PostLiked.Likes.Count;
             int TotalDeslikes = PostLiked.Dislikes.Count;
@@ -121,13 +121,14 @@ namespace Branch.Controllers
         [HttpPut]
         [Route("posts/dislike")]
         [ResponseType(typeof(int))]
-        public async Task<IHttpActionResult> Dislike([FromUri] string AccessToken, [FromUri] ObjectId PostId)
+        public async Task<IHttpActionResult> Dislike([FromUri] string AccessToken, [FromUri] string PostId)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            var PostLiked = MongoContext.PostCollection.Find(x => x.Id == PostId).FirstOrDefault();
+            var filter = Builders<Post>.Filter.Eq("Id", ObjectId.Parse(PostId));
+            var PostLiked = MongoContext.PostCollection.Find(filter).FirstOrDefault();
 
-            if(PostLiked.Dislikes.Contains(UserId))
+            if (PostLiked.Dislikes.Contains(UserId))
             {
                 PostLiked.Dislikes.Remove(UserId);
             }
@@ -143,8 +144,7 @@ namespace Branch.Controllers
 
             int TotalDislikes = PostLiked.Dislikes.Count;
 
-            await MongoContext.PostCollection.UpdateOneAsync(x => x.Id == PostId,
-                                                             Builders<Post>.Update.Set(Post => Post, PostLiked));
+            await MongoContext.PostCollection.FindOneAndReplaceAsync(filter, PostLiked);
 
             int TotalLikes = PostLiked.Likes.Count;
             int TotalDeslikes = PostLiked.Dislikes.Count;

@@ -12,7 +12,8 @@ namespace Branch.Models.NoSQL
     public class Post
     {
         [BsonId]
-        [BsonElement("id")]
+        [BsonElement("_id")]
+        [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId Id { get; set; }
 
         [BsonElement("user_id")]
