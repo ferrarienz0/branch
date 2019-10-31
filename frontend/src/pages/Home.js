@@ -32,10 +32,25 @@ export default class Home extends Component {
         posts: [],
         topics: [],
         head: '@',
-        refresh: 0,
     };
 
-    componentDidMount = async () => {
+    componentDidMount = () => {
+        this.refresh();
+    };
+
+    head = () => {
+        return (
+            <Head
+                type={this.state.head}
+                me={this.state.user}
+                head={this.props.match.params.head}
+                refresh={this.refresh}
+            />
+        );
+    };
+
+    refresh = async () => {
+        // window.location.reload();
         const { data: userData } = await api.get(
             `/user?AccessToken=${this.props.match.params.token}`
         );
@@ -63,22 +78,7 @@ export default class Home extends Component {
             `/subject?AccessToken=${this.props.match.params.token}`
         );
         topics2.followed = false;
-        this.setState({ topics: topics2 });
-    };
-
-    head = () => {
-        return (
-            <Head
-                type={this.state.head}
-                me={this.state.user}
-                head={this.props.match.params.head}
-                refresh={this.refresh}
-            />
-        );
-    };
-
-    refresh = () => {
-        window.location.reload();
+        this.setState({ topics: topics2, posting: false });
     };
 
     showPosting = () => {
