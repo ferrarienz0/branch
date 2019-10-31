@@ -1,0 +1,33 @@
+#head-container {
+    margin: 0 5px;
+}
+
+#head-container #me {
+    width: 100%;
+    padding: 10px;
+
+    display: flex;
+    align-items: center;
+    box-shadow: var(--shadow);
+
+    border: 2px solid var(--dark-magenta);
+}
+
+#head-container #me:hover {
+    border: 2px solid var(--magenta);
+    transition: 0.1s;
+}
+
+#head-container #me #text {
+    margin-left: 10px;
+}
+
+#head-container #me #text #username {
+    color: var(--magenta);
+    font-size: 20px;
+}
+
+#head-container #me #text #name {
+    color: var(--gray-4);
+    font-size: 14px;
+}

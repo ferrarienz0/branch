@@ -11,7 +11,6 @@
 }
 
 #register-container #form #next-button,
-#back-button,
 #register-button {
     height: 48px;
 
@@ -26,8 +25,8 @@
     border-radius: 30px;
     font-size: 16px;
     font-weight: bold;
-    color: #eee;
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+    color: var(--white);
+    box-shadow: var(--shadow);
 }
 
 #register-container #form {
@@ -50,7 +49,7 @@
 #register-container #form #warning {
     margin-top: 5px;
 
-    color: #ee3a3a;
+    color: var(--orange);
 }
 
 #register-container #form input {
@@ -61,17 +60,17 @@
 
     text-align: center;
 
-    border: 1px solid #555;
-    background: #eee;
+    border: none;
+    background: var(--white);
     border-radius: 10px;
     font-size: 16px;
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+    box-shadow: var(--shadow);
     text-align: center;
 }
 
 #register-container #form #date-input {
-    color: #777;
-    background: #eee
+    color: var(--gray-4);
+    background: var(--white)
         url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png)
         90% 50% no-repeat;
 }
@@ -84,33 +83,13 @@
     opacity: 0;
 }
 
-#register-container form a,
-button {
-    height: 48px;
-    margin: 0;
-
-    display: flex;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    font-weight: bold;
-    cursor: pointer;
-    text-decoration: none;
-
-    border: 0;
-    border-radius: 30px;
-    font-size: 16px;
-    color: #eee;
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
-}
-
 #register-container #form #register-button {
     width: 100%;
 
-    background: #bc132b;
+    background: var(--red);
 }
 
 #register-container #form #register-button:hover {
-    background: rgb(143, 10, 30);
+    background: var(--dark-red);
     transition: 0.1s;
 }

@@ -22,9 +22,15 @@
     border-radius: 30px;
     font-size: 16px;
     font-weight: bold;
-    color: #eee;
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+
+    color: var(--white);
+
+    box-shadow: var(--shadow);
     text-decoration: none;
+}
+
+::-webkit-input-placeholder {
+    color: var(--gray-4);
 }
 
 #login-container #form {
@@ -38,7 +44,7 @@
 }
 
 #login-container #form #warning {
-    color: #ee3a3a;
+    color: var(--orange);
 }
 
 #login-container #form #login-input,
@@ -47,34 +53,34 @@
     width: 100%;
     margin: 10px 0 10px 0;
 
-    border: 1px solid #555;
-    background: #eee;
+    border: none;
+    background: var(--white);
     border-radius: 10px;
     padding: 0 20px;
     font-size: 16px;
     text-align: center;
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.401);
+    box-shadow: var(--shadow);
 }
 
 #login-container #form #login-button {
     width: 100%;
 
-    background: #bc132b;
+    background: var(--red);
 }
 
 #login-container #form #login-button:hover {
-    background: rgb(143, 10, 30);
+    background: var(--dark-red);
     transition: 0.1s;
 }
 
 #login-container #form #register-button {
     width: 100%;
 
-    background: #ee3a3a;
+    background: var(--orange);
 }
 
 #login-container #form #register-button:hover {
-    background: #b31e1e;
+    background: var(--dark-orange);
     transition: 0.1s;
 }
 
@@ -82,14 +88,14 @@
     text-align: center;
 
     font-size: 16px;
-    color: #777;
+    color: var(--gray-4);
     margin-top: 40px;
 }
 
 #login-container #ou {
     margin: 50px;
     font-size: 24px;
-    color: #777;
+    color: var(--gray-4);
 }
 
 #login-container #halfpugg-button {
@@ -106,7 +112,7 @@
     font-weight: bold;
     background: #22d69a;
     color: #21302a;
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--shadow);
 }
 
 #login-container #halfpugg-button:hover {

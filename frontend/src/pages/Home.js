@@ -12,6 +12,8 @@ import icone from '../assets/icone.svg';
 import api from '../services/api';
 import Topic from '../components/Topic';
 import Post from '../components/Post';
+import Comment from '../components/Comment';
+import Head from '../components/Head';
 import Posting from '../components/Posting';
 import UserImage from '../components/UserImage';
 
@@ -29,6 +31,8 @@ export default class Home extends Component {
         },
         posts: [],
         topics: [],
+        head: '@',
+        refresh: 0,
     };
 
     componentDidMount = async () => {
@@ -62,6 +66,21 @@ export default class Home extends Component {
         this.setState({ topics: topics2 });
     };
 
+    head = () => {
+        return (
+            <Head
+                type={this.state.head}
+                me={this.state.user}
+                head={this.props.match.params.head}
+                refresh={this.refresh}
+            />
+        );
+    };
+
+    refresh = () => {
+        window.location.reload();
+    };
+
     showPosting = () => {
         return (
             <div id="posting-container">
@@ -80,7 +99,7 @@ export default class Home extends Component {
     render() {
         return (
             <div id="home-container">
-                <div id="head">
+                <div id="home-head">
                     <div id="logo">
                         <img src={icone} alt="Branch"></img>
                         <Link
@@ -90,10 +109,10 @@ export default class Home extends Component {
                     </div>
                     <div id="space" />
                     <Link to="/">
-                        <FaPowerOff id="sair" />
+                        <FaPowerOff id="logoff" />
                     </Link>
                 </div>
-                <div id="body">
+                <div id="home-body">
                     <div id="perfil">
                         <UserImage
                             id="user-image"
@@ -116,47 +135,59 @@ export default class Home extends Component {
                         />
                         <FaShoppingCart id="cart-icon" />
                     </div>
-                    <div id="posts">
-                        {this.state.posting ? (
-                            <Posting
-                                user={this.state.user.username}
-                                token={this.props.match.params.token}
-                                onClose={() =>
-                                    this.setState({ posting: false })
-                                }
-                            />
-                        ) : null}
-                        {this.state.posts.map((post, index) => (
-                            <Post
-                                key={index}
-                                post={post}
-                                user={this.state.user}
-                                token={this.props.match.params.token}
-                            />
-                        ))}
-                    </div>
-                    <div id="topics">
-                        {this.state.user.topics.map((topic, index) => (
-                            <Topic
-                                key={index}
-                                token={this.props.match.params.token}
-                                hashtag={topic.Subject.Hashtag}
-                                topicId={topic.Subject.Id}
-                                followId={topic.UserInterestId}
-                                followed={true}
-                                wallpaper={topic.Subject.Media.URL}
-                            />
-                        ))}
-                        {this.state.topics.map((topic, index) => (
-                            <Topic
-                                key={index}
-                                token={this.props.match.params.token}
-                                hashtag={topic.Hashtag}
-                                topicId={topic.Id}
-                                followed={false}
-                                wallpaper={topic.Media.URL}
-                            />
-                        ))}
+                    <div id="feed">
+                        <div id="posts">
+                            {this.head()}
+                            {this.state.posting ? (
+                                <Posting
+                                    user={this.state.user.username}
+                                    token={this.props.match.params.token}
+                                    onClose={() =>
+                                        this.setState({ posting: false })
+                                    }
+                                />
+                            ) : null}
+                            {this.state.posts.map((comment, index) => (
+                                <Comment
+                                    key={index}
+                                    me={this.state.user}
+                                    comment={comment}
+                                    token={this.props.match.params.token}
+                                    refresh={this.refresh}
+                                />
+                            ))}
+                            {/*this.state.posts.map((post, index) => (
+                                <Post
+                                    key={index}
+                                    post={post}
+                                    user={this.state.user}
+                                    token={this.props.match.params.token}
+                                />
+                            ))*/}
+                        </div>
+                        <div id="topics">
+                            {this.state.user.topics.map((topic, index) => (
+                                <Topic
+                                    key={index}
+                                    token={this.props.match.params.token}
+                                    hashtag={topic.Subject.Hashtag}
+                                    topicId={topic.Subject.Id}
+                                    followId={topic.UserInterestId}
+                                    followed={true}
+                                    wallpaper={topic.Subject.Media.URL}
+                                />
+                            ))}
+                            {this.state.topics.map((topic, index) => (
+                                <Topic
+                                    key={index}
+                                    token={this.props.match.params.token}
+                                    hashtag={topic.Hashtag}
+                                    topicId={topic.Id}
+                                    followed={false}
+                                    wallpaper={topic.Media.URL}
+                                />
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
