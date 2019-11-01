@@ -1,0 +1,30 @@
+#userhead-container {
+    width: 100%;
+    padding: 10px;
+
+    display: flex;
+    align-items: center;
+
+    border-bottom: 1px solid var(--dark-magenta);
+}
+
+#userhead-container:hover {
+    background: var(--gray-1);
+    border-bottom: 1px solid var(--magenta);
+    transition: 0.1s;
+}
+
+#userhead-container #text {
+    margin-left: 10px;
+}
+
+#userhead-container #text #username {
+    color: var(--magenta);
+    font-size: 20px;
+}
+
+#userhead-container #text #name {
+    color: var(--gray-4);
+    margin-top: 5px;
+    font-size: 14px;
+}

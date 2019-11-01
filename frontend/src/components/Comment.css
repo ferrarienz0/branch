@@ -1,12 +1,13 @@
 #comment-container {
-    margin: 10px 5px 10px 40px;
+    margin: 5px 5px 5px 40px;
 
-    border: 2px solid var(--dark-blue);
-    box-shadow: var(--shadow);
+    border-bottom: 1px solid var(--dark-blue);
 }
 
 #comment-container:hover {
-    border: 2px solid var(--blue);
+    background: var(--gray-1);
+    border-bottom: 1px solid var(--blue);
+    transform: translateX(-5px);
     transition: 0.1s;
 }
 
@@ -36,12 +37,12 @@
     cursor: pointer;
 
     border-radius: 50%;
-    color: var(--gray-4);
+    color: var(--white);
     background: var(--black);
 }
 
 #comment-container #head #user-image #follow-icon:hover {
-    color: var(--white);
+    color: var(--light-white);
     transition: 0.1s;
 }
 
@@ -56,7 +57,7 @@
     font-size: 11px;
 }
 
-#comment-container #head #comments {
+#comment-container #head #go-ahead {
     display: flex;
     flex: 1;
     align-items: center;
@@ -64,17 +65,17 @@
     cursor: pointer;
 }
 
-#comment-container #head #comments #comments-icon {
-    height: 30px;
-    width: 30px;
+#comment-container #head #go-ahead #go-ahead-icon {
+    height: 25px;
+    width: 25px;
 
     cursor: pointer;
 
-    color: var(--blue);
+    color: var(--white);
 }
 
-#comment-container #head #comments #comments-icon:hover {
-    color: var(--white);
+#comment-container #head #go-ahead #go-ahead-icon:hover {
+    color: var(--light-white);
     transition: 0.1s;
 }
 
@@ -138,11 +139,11 @@
 
     cursor: pointer;
 
-    color: var(--blue);
+    color: var(--white);
 }
 
 #comment-container #foot #comment-icon:hover {
-    color: var(--white);
+    color: var(--light-white);
     transition: 0.1s;
 }
 

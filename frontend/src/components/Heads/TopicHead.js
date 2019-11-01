@@ -1,46 +1,35 @@
 import React, { Component } from 'react';
+import './TopicHead.css';
 import { FaComment, FaPlus, FaTimes } from 'react-icons/fa';
-import './Topic.css';
-import api from '../services/api';
-import Posting from '../components/Posting';
+import api from '../../services/api';
 
-export default class Topic extends Component {
+export default class TopicHead extends Component {
     state = {
-        topicID: this.props.topicId,
-        followId: this.props.followId,
-        followed: this.props.followed,
-        posting: false,
+        topic: {},
+        wallpaper: '',
     };
-    handleFollow = () => {
-        if (!this.state.followed) {
-            api.post(
-                `/userInterests?AccessToken=${this.props.token}&SubjectId=${this.state.topicID}`
-            ).then(res => {
-                this.setState({ followId: res.data.Id, followed: true });
-            });
-        } else {
-            api.delete(`/userInterests?id=${this.state.followId}`).then(res => {
-                this.setState({ followed: false });
-            });
-        }
+    componentWillMount = async () => {
+        const { data: topic } = await api.get(
+            `/subject?id=${this.props.topicID}`
+        );
+        this.setState({ topic, wallpaper: topic.Media.URL });
     };
-    handleComment = async () => {};
     render() {
         return (
             <div
-                id="topic-container"
+                id="topichead-container"
                 style={{
                     backgroundImage: `linear-gradient(
                     135deg,
                     var(--black) 25%,
                     transparent 110%
-                ),  url(${this.props.wallpaper})`,
+                ),  url(${this.state.wallpaper})`,
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: 'cover',
                 }}
             >
-                <h2 id="hashtag">{this.props.hashtag}</h2>
+                <h2 id="hashtag">{this.state.topic.Hashtag}</h2>
                 <div id="foot">
                     <FaComment
                         id="comment"
@@ -56,12 +45,6 @@ export default class Topic extends Component {
                         <FaPlus id="follow-icon" onClick={this.handleFollow} />
                     )}
                 </div>
-                {this.state.posting ? (
-                    <Posting
-                        token={this.props.token}
-                        onClose={() => this.setState({ posting: false })}
-                    />
-                ) : null}
             </div>
         );
     }

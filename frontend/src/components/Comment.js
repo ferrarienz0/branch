@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import {
     FaThumbsUp,
     FaThumbsDown,
@@ -18,6 +19,7 @@ export default class Comment extends Component {
     state = {
         iLiked: false,
         iDisliked: false,
+        goAhead: false,
     };
     componentDidMount = async () => {
         const { data: iFollow } = await api.get(
@@ -40,6 +42,10 @@ export default class Comment extends Component {
         }
     };
 
+    handleGoahead = () => {
+        this.setState({ goAhead: true });
+    };
+
     handleLike = async () => {
         await api.put(
             `/posts/like?AccessToken=${this.props.token}&PostId=${this.props.comment.Id}`
@@ -55,6 +61,13 @@ export default class Comment extends Component {
     };
 
     render() {
+        if (this.state.goAhead) {
+            return (
+                <Redirect
+                    to={`/home/${this.props.token}/c/${this.props.comment.Id}`}
+                />
+            );
+        }
         return (
             <div id="comment-container">
                 <div id="head">
@@ -73,8 +86,11 @@ export default class Comment extends Component {
                             {this.props.comment.Owner.Lastname}
                         </p>
                     </div>
-                    <div id="comments">
-                        <FaArrowUp id="comments-icon" />
+                    <div id="go-ahead">
+                        <FaArrowUp
+                            id="go-ahead-icon"
+                            onClick={this.handleGoahead}
+                        />
                     </div>
                 </div>
                 <div id="body">

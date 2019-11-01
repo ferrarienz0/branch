@@ -1,28 +1,26 @@
-#topic-container {
-    height: 70px;
+#topichead-container {
+    height: 90px;
     margin: 0 0 5px 5px;
     padding: 5px 10px;
 
     display: flex;
     align-items: center;
-    cursor: pointer;
 
     border-bottom: 1px solid var(--dark-green);
 }
 
-#topic-container:hover {
+#topichead-container:hover {
     border-bottom: 1px solid var(--green);
     background: var(--gray-1);
-    transform: translateX(5px);
     transition: 0.1s;
 }
 
-#topic-container #hashtag {
+#topichead-container #hashtag {
     color: var(--green);
     text-shadow: var(--shadow);
 }
 
-#topic-container #foot {
+#topichead-container #foot {
     height: 30px;
     width: 100%;
     padding-right: 10px;
@@ -32,7 +30,7 @@
     align-items: center;
 }
 
-#topic-container #foot #comment,
+#topichead-container #foot #comment,
 #follow-icon {
     height: 100%;
     width: 25px;
@@ -43,7 +41,7 @@
     color: var(--white);
 }
 
-#topic-container #foot #comment:hover,
+#topichead-container #foot #comment:hover,
 #follow-icon:hover {
     color: var(--light-white);
     transition: 0.1s;

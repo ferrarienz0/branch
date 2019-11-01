@@ -13,6 +13,7 @@
     --gray-3: #6b5158;
     --gray-4: #8e7079;
     --white: #e5cad3;
+    --light-white: white;
     --magenta: #ff4ebb;
     --dark-magenta: #e41a97;
     --blue: #5979ec;
@@ -24,8 +25,13 @@
     --shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
     --border: 1px solid var(--gray-3);
 }
+
+a {
+    text-decoration: none;
+}
+
 div {
-    border-radius: 10px;
+    border-radius: 0px;
 }
 html,
 body,
