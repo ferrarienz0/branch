@@ -86,6 +86,16 @@ namespace Branch.Controllers
             return Ok(RecommendedPosts);
         }
 
+        [HttpGet]
+        [Route("posts")]
+        public IHttpActionResult GetPostById([FromUri] string PostId)
+        { 
+            var Filter = Builders<Post>.Filter.Eq("Id", ObjectId.Parse(PostId));
+            var Post = MongoContext.PostCollection.Find(Filter).FirstOrDefault();
+
+            return Ok(Post);
+        }
+
         [HttpPut]
         [Route("posts/like")]
         public async Task<IHttpActionResult> Like([FromUri] string AccessToken, [FromUri] string PostId)
