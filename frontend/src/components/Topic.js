@@ -17,10 +17,12 @@ export default class Topic extends Component {
                 `/userInterests?AccessToken=${this.props.token}&SubjectId=${this.state.topicID}`
             ).then(res => {
                 this.setState({ followId: res.data.Id, followed: true });
+                this.props.refresh();
             });
         } else {
             api.delete(`/userInterests?id=${this.state.followId}`).then(res => {
                 this.setState({ followed: false });
+                this.props.refresh();
             });
         }
     };

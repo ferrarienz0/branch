@@ -79,6 +79,7 @@
     align-items: center;
     flex-direction: column;
 
+    background: var(--black);
     border-right: 1px solid var(--dark-orange);
 }
 
@@ -134,13 +135,13 @@
 }
 
 #home-body #feed #posts {
-    flex: 1;
+    flex: 5;
 
     border-right: 1px solid var(--gray-2);
 }
 
 #home-body #feed #follows {
-    flex: 1;
+    flex: 3;
 }
 
 #home-body #feed #follows #topics {

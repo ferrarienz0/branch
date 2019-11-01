@@ -33,6 +33,7 @@ export default class Home extends Component {
         posts: [],
         topics: [],
         posting: false,
+        reload: false,
         //type: '',
         //id: '',
         //goAhead: false,
@@ -153,6 +154,13 @@ export default class Home extends Component {
                         <FaPowerOff id="logoff" />
                     </Link>
                 </div>
+                {this.state.posting ? (
+                    <Posting
+                        user={this.state.user.username}
+                        token={this.props.match.params.token}
+                        onClose={() => this.setState({ posting: false })}
+                    />
+                ) : null}
                 <div id="home-body">
                     <div id="perfil">
                         <UserImage
@@ -179,15 +187,7 @@ export default class Home extends Component {
                     <div id="feed">
                         <div id="posts">
                             {this.head()}
-                            {this.state.posting ? (
-                                <Posting
-                                    user={this.state.user.username}
-                                    token={this.props.match.params.token}
-                                    onClose={() =>
-                                        this.setState({ posting: false })
-                                    }
-                                />
-                            ) : null}
+
                             {this.state.posts.map((comment, index) => (
                                 <Comment
                                     key={index}
@@ -220,6 +220,7 @@ export default class Home extends Component {
                                         followId={topic.UserInterestId}
                                         followed={true}
                                         wallpaper={topic.Subject.Media.URL}
+                                        refresh={this.refresh}
                                     />
                                 </Link>
                             ))}
@@ -236,6 +237,7 @@ export default class Home extends Component {
                                         topicId={topic.Id}
                                         followed={false}
                                         wallpaper={topic.Media.URL}
+                                        refresh={this.refresh}
                                     />
                                 </Link>
                             ))}
