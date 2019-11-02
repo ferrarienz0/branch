@@ -33,7 +33,8 @@
 }
 
 #topic-container #foot #comment,
-#follow-icon {
+#follow-icon,
+#go-ahead-icon {
     height: 100%;
     width: 25px;
     margin-left: 10px;
@@ -44,7 +45,8 @@
 }
 
 #topic-container #foot #comment:hover,
-#follow-icon:hover {
+#follow-icon:hover,
+#go-ahead-icon:hover {
     color: var(--light-white);
     transition: 0.1s;
 }

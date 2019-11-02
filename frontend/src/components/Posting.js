@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FaPaperPlane, FaPaperclip, FaArrowLeft } from 'react-icons/fa';
+import { FaPaperPlane, FaPaperclip } from 'react-icons/fa';
 import './Posting.css';
 import api from '../services/api';
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { FaComment, FaPlus, FaTimes } from 'react-icons/fa';
+import { Redirect } from 'react-router-dom';
+import { FaComment, FaPlus, FaTimes, FaArrowUp } from 'react-icons/fa';
 import './Topic.css';
 import api from '../services/api';
 import Posting from '../components/Posting';
@@ -10,6 +11,7 @@ export default class Topic extends Component {
         followId: this.props.followId,
         followed: this.props.followed,
         posting: false,
+        reload: false,
     };
     handleFollow = () => {
         if (!this.state.followed) {
@@ -28,6 +30,14 @@ export default class Topic extends Component {
     };
     handleComment = async () => {};
     render() {
+        if (this.state.reload) {
+            this.setState({ reload: false });
+            return (
+                <Redirect
+                    to={`/home/${this.props.token}/h/${this.state.topicID}`}
+                />
+            );
+        }
         return (
             <div
                 id="topic-container"
@@ -44,6 +54,14 @@ export default class Topic extends Component {
             >
                 <h2 id="hashtag">{this.props.hashtag}</h2>
                 <div id="foot">
+                    <FaArrowUp
+                        id="go-ahead-icon"
+                        onClick={() =>
+                            this.setState({
+                                reload: true,
+                            })
+                        }
+                    />
                     <FaComment
                         id="comment"
                         onClick={e =>

@@ -34,7 +34,7 @@ export default class Login extends Component {
 
     render() {
         if (this.state.isSession) {
-            return <Redirect to={`/home/${this.state.token}`} />;
+            return <Redirect to={`/home/${this.state.token}/u/8`} />;
         }
         return (
             <div id="login-container">

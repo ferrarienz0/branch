@@ -34,23 +34,24 @@ export default class Home extends Component {
         topics: [],
         posting: false,
         reload: false,
-        //type: '',
-        //id: '',
+        type: '',
+        id: '',
         //goAhead: false,
     };
 
-    componentWillMount = async () => {
+    componentDidMount = async () => {
+        const { params } = this.props.match;
         const { data: user } = await api.get(
-            `/user?AccessToken=${this.props.match.params.token}`
+            `/user?AccessToken=${params.token}`
         );
         const { data: posts } = await api.get(
-            `/posts?AccessToken=${this.props.match.params.token}`
+            `/posts?AccessToken=${params.token}`
         );
         const { data: myTopics } = await api.get(
-            `/userInterests?AccessToken=${this.props.match.params.token}`
+            `/userInterests?AccessToken=${params.token}`
         );
         const { data: topics } = await api.get(
-            `/subject?AccessToken=${this.props.match.params.token}`
+            `/subject?AccessToken=${params.token}`
         );
         myTopics.followed = true;
         topics.followed = false;
@@ -67,7 +68,7 @@ export default class Home extends Component {
             topics,
             posting: false,
         });
-        console.log(this.props.match.params); //!!!!!!!!!!!!!!!!!!!!!!!!!
+        console.log('entrei');
         //this.setState({
         //    type: this.props.match.params.type,
         //    id: this.props.match.params.id,
@@ -75,20 +76,21 @@ export default class Home extends Component {
     };
 
     head = () => {
-        switch (this.props.match.params.type) {
-            case '@':
+        const { params } = this.props.match;
+        switch (params.type) {
+            case 'u':
                 return (
                     <UserHead
                         me={this.state.user}
-                        userID={this.state.id}
+                        userID={params.id}
                         refresh={this.refresh}
                     />
                 );
-            case '#':
+            case 'h':
                 return (
                     <TopicHead
                         me={this.state.user}
-                        topicID={this.state.id}
+                        topicID={params.id}
                         refresh={this.refresh}
                     />
                 );
@@ -96,7 +98,7 @@ export default class Home extends Component {
                 return (
                     <CommentHead
                         me={this.state.user}
-                        commentID={this.state.id}
+                        commentID={params.id}
                         refresh={this.refresh}
                     />
                 );
@@ -104,18 +106,12 @@ export default class Home extends Component {
                 return (
                     <ProductHead
                         me={this.state.user}
-                        productID={this.state.id}
+                        productID={params.id}
                         refresh={this.refresh}
                     />
                 );
             default:
-                return (
-                    <TopicHead
-                        me={this.state.user}
-                        topicID={8}
-                        refresh={this.refresh}
-                    />
-                ); //<UserHead me={this.state.user} refresh={this.refresh} />;
+                return <UserHead me={this.state.user} refresh={this.refresh} />;
         }
     };
 
@@ -139,6 +135,15 @@ export default class Home extends Component {
 
     handleUserPost = () => {};
     render() {
+        const { params } = this.props.match;
+        //if (this.state.reload) {
+        //    this.setState({ reload: false });
+        //    return (
+        //        <Redirect
+        //            to={`/home/${params.token}/${this.state.type}/${this.state.id}`}
+        //        />
+        //    );
+        //}
         return (
             <div id="home-container">
                 <div id="home-head">
@@ -146,7 +151,7 @@ export default class Home extends Component {
                         <img src={icone} alt="Branch"></img>
                         <Link
                             id="go-home"
-                            to={`/home/${this.props.match.params.token}`}
+                            to={`/home/${params.token}/u/${this.state.user.ID}`}
                         />
                     </div>
                     <div id="space" />
@@ -157,7 +162,7 @@ export default class Home extends Component {
                 {this.state.posting ? (
                     <Posting
                         user={this.state.user.username}
-                        token={this.props.match.params.token}
+                        token={params.token}
                         onClose={() => this.setState({ posting: false })}
                     />
                 ) : null}
@@ -193,7 +198,7 @@ export default class Home extends Component {
                                     key={index}
                                     me={this.state.user}
                                     comment={comment}
-                                    token={this.props.match.params.token}
+                                    token={params.token}
                                     refresh={this.refresh}
                                 />
                             ))}
@@ -202,37 +207,33 @@ export default class Home extends Component {
                                     key={index}
                                     post={post}
                                     user={this.state.user}
-                                    token={this.props.match.params.token}
+                                    token={params.token}
                                 />
                             ))*/}
                         </div>
                         <div id="follows">
                             <div id="topics">Meus tópicos</div>
                             {this.state.user.topics.map((topic, index) => (
-                                <Link
-                                    to={`/home/${this.props.match.params.token}/#/${topic.Subject.Id}`}
+                                <Topic
                                     key={index}
-                                >
-                                    <Topic
-                                        token={this.props.match.params.token}
-                                        hashtag={topic.Subject.Hashtag}
-                                        topicId={topic.Subject.Id}
-                                        followId={topic.UserInterestId}
-                                        followed={true}
-                                        wallpaper={topic.Subject.Media.URL}
-                                        refresh={this.refresh}
-                                    />
-                                </Link>
+                                    token={params.token}
+                                    hashtag={topic.Subject.Hashtag}
+                                    topicId={topic.Subject.Id}
+                                    followId={topic.UserInterestId}
+                                    followed={true}
+                                    wallpaper={topic.Subject.Media.URL}
+                                    refresh={this.refresh}
+                                />
                             ))}
                             <div id="topics">Recomendado</div>
                             {this.state.topics.map((topic, index) => (
                                 <Link
-                                    to={`/home/${this.props.match.params.token}/#/${topic.Id}`}
+                                    to={`/home/${this.props.match.params.token}/h/${topic.Id}`}
                                     key={index}
                                 >
                                     <Topic
                                         key={index}
-                                        token={this.props.match.params.token}
+                                        token={params.token}
                                         hashtag={topic.Hashtag}
                                         topicId={topic.Id}
                                         followed={false}

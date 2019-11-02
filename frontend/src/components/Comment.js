@@ -18,7 +18,9 @@ import api from '../services/api';
 export default class Comment extends Component {
     state = {
         iLiked: false,
+        nLikes: this.props.comment.Likes.length,
         iDisliked: false,
+        nDislikes: this.props.comment.Dislikes.length,
         goAhead: false,
     };
     componentDidMount = async () => {
@@ -47,17 +49,27 @@ export default class Comment extends Component {
     };
 
     handleLike = async () => {
-        await api.put(
+        const { data } = await api.put(
             `/posts/like?AccessToken=${this.props.token}&PostId=${this.props.comment.Id}`
         );
-        this.props.refresh();
+        this.setState({
+            nLikes: data.TotalLikes,
+            nDislikes: data.TotalDeslikes,
+        });
+        if (this.state.iLiked) this.setState({ iLiked: false });
+        this.setState({ iLiked: true, iDisliked: false });
     };
 
     handleDislike = async () => {
-        await api.put(
+        const { data } = await api.put(
             `/posts/dislike?AccessToken=${this.props.token}&PostId=${this.props.comment.Id}`
         );
-        this.props.refresh();
+        this.setState({
+            nLikes: data.TotalLikes,
+            nDislikes: data.TotalDeslikes,
+        });
+        if (this.state.iDisliked) this.setState({ iDisliked: false });
+        this.setState({ iDisliked: true, iLiked: false });
     };
 
     render() {
@@ -107,7 +119,7 @@ export default class Comment extends Component {
                 </div>
                 <div id="foot">
                     <p id="number">
-                        <strong>{this.props.comment.Dislikes.length}</strong>
+                        <strong>{this.state.nDislikes}</strong>
                     </p>
                     {this.state.iDisliked ? (
                         <FaThumbsDown
@@ -121,7 +133,7 @@ export default class Comment extends Component {
                         />
                     )}
                     <p id="number">
-                        <strong>{this.props.comment.Likes.length}</strong>
+                        <strong>{this.state.nLikes}</strong>
                     </p>
                     {this.state.iLiked ? (
                         <FaThumbsUp onClick={this.handleLike} id="like-icon" />
