@@ -261,6 +261,10 @@
     <Compile Include="Migrations\201910292226427_Fix-Follow.Designer.cs">
       <DependentUpon>201910292226427_Fix-Follow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201911032142242_FixUserMedia.cs" />
+    <Compile Include="Migrations\201911032142242_FixUserMedia.Designer.cs">
+      <DependentUpon>201911032142242_FixUserMedia.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\SQL\Relationship\GameTeam.cs" />
     <Compile Include="Models\NoSQL\DataAccess.cs" />
@@ -272,7 +276,6 @@
     <Compile Include="Models\SQL\Relationship\GameMedia.cs" />
     <Compile Include="Models\SQL\Relationship\MarketplaceMedia.cs" />
     <Compile Include="Models\SQL\Relationship\ProductMedia.cs" />
-    <Compile Include="Models\SQL\Relationship\UserMedia.cs" />
     <Compile Include="Models\SQL\Social\Address.cs" />
     <Compile Include="Models\SQL\Store\Cart.cs" />
     <Compile Include="Models\SQL\Social\Follow.cs" />
@@ -408,6 +411,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910292226427_Fix-Follow.resx">
       <DependentUpon>201910292226427_Fix-Follow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911032142242_FixUserMedia.resx">
+      <DependentUpon>201911032142242_FixUserMedia.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

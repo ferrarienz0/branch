@@ -103,7 +103,9 @@ namespace Branch.Controllers
 
             if(IsUserMedia)
             {
-                DB.UserMedias.Add(new UserMedia { MediaId = NewMedia.Id, UserId = UserId, TypeMediaId = MediaType.Id });
+                var User = await DB.Users.FindAsync(UserId);
+                User.MediaId = NewMedia.Id;
+                DB.Entry(User).State = System.Data.Entity.EntityState.Modified;
             }
 
             await DB.SaveChangesAsync();
