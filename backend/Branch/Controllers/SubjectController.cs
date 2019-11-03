@@ -11,12 +11,16 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Branch.JWTProvider;
 using Branch.Models;
+using Branch.Models.NoSQL;
+using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace Branch.Controllers
 {
     public class SubjectController : ApiController
     {
         private readonly Context DB = new Context();
+        private readonly DataAccess MongoContext = new DataAccess();
 
         [HttpGet]
         [Route("subject")]
@@ -68,6 +72,16 @@ namespace Branch.Controllers
             await DB.SaveChangesAsync();
 
             return Ok(Subject);
+        }
+
+        [HttpGet]
+        [Route("subject/posts")]
+        [ResponseType(typeof(List<Post>))]
+        public IHttpActionResult GetSubjectPosts([FromUri] int SubjectId)
+        {
+            var Posts = MongoContext.PostCollection.Find(x => x.Hashtags.Contains(SubjectId)).ToList();
+
+            return Ok(Posts);
         }
 
         [HttpDelete]

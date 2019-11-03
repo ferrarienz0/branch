@@ -88,12 +88,27 @@ namespace Branch.Controllers
 
         [HttpGet]
         [Route("posts")]
+        [ResponseType(typeof(Post))]
         public IHttpActionResult GetPostById([FromUri] string PostId)
         { 
             var Filter = Builders<Post>.Filter.Eq("Id", ObjectId.Parse(PostId));
             var Post = MongoContext.PostCollection.Find(Filter).FirstOrDefault();
 
             return Ok(Post);
+        }
+
+        [HttpGet]
+        [Route("post/comments")]
+        [ResponseType(typeof(List<Post>))]
+        public IHttpActionResult GetComments([FromUri] string PostId)
+        {
+            var Filter = Builders<Post>.Filter.Eq("Id", ObjectId.Parse(PostId));
+            var Post = MongoContext.PostCollection.Find(Filter).FirstOrDefault();
+
+            var CommentFilter = Builders<Post>.Filter.In(x => x.Id, Post.Comments);
+            var Comments = MongoContext.PostCollection.Find(CommentFilter).ToList();
+
+            return Ok(Comments);
         }
 
         [HttpPut]
