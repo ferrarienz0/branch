@@ -47,8 +47,6 @@ namespace Branch.Models
 
         public DbSet<UserGame> UserGames { get; set; }
 
-        public DbSet<UserMedia> UserMedias { get; set; }
-
         public DbSet<UserSubject> UserSubjects { get; set; }
 
         public DbSet<GameTeam> GameTeams { get; set; }

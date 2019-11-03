@@ -12,6 +12,8 @@ using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using Branch.JWTProvider;
 using Branch.Models;
+using Branch.Models.NoSQL;
+using MongoDB.Driver;
 using Newtonsoft.Json;
 
 namespace Branch.Controllers
@@ -19,6 +21,7 @@ namespace Branch.Controllers
     public class UserController : ApiController
     {
         private Context db = new Context();
+        private readonly DataAccess MongoContext = new DataAccess();
 
         [HttpGet]
         [Route("user")]
@@ -33,6 +36,7 @@ namespace Branch.Controllers
         public async Task<IHttpActionResult> GetUser(int id)
         {
             User user = await db.Users.FindAsync(id);
+
             if (user == null)
             {
                 return NotFound();
@@ -108,6 +112,18 @@ namespace Branch.Controllers
             await db.SaveChangesAsync();
 
             return Ok(user);
+        }
+
+        [HttpGet]
+        [Route("user/posts")]
+        [ResponseType(typeof(List<Post>))]
+        public IHttpActionResult GetUserPosts([FromUri] int UserId)
+        {
+            var Posts = MongoContext.PostCollection.Find(_ => true).ToList();
+
+            var SelectedPosts = Posts.Where(x => x.Mentions.Exists(y => y.Id == UserId) || x.UserId == UserId);
+
+            return Ok(SelectedPosts);
         }
 
         [HttpDelete]
