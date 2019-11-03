@@ -33,6 +33,7 @@ namespace Branch.Controllers
         public async Task<IHttpActionResult> GetUser(int id)
         {
             User user = await db.Users.FindAsync(id);
+
             if (user == null)
             {
                 return NotFound();

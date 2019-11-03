@@ -21,6 +21,11 @@ namespace Branch.Models
         [Index(IsUnique = true)]
         public string Nickname { get; set; }
 
+        [ForeignKey("Media")]
+        public int? MediaId { get; set; }
+
+        public virtual Media Media { get; set; }
+
         [Required]
         public string Password { get; set; }
 
