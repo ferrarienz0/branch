@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import {
     FaPaperPlane,
     FaPaperclip,
@@ -10,14 +10,10 @@ import {
 import './Home.css';
 import icone from '../assets/icone.svg';
 import api from '../services/api';
-import Topic from '../components/Topic';
-import UserHead from '../components/Heads/UserHead';
-import TopicHead from '../components/Heads/TopicHead';
-import CommentHead from '../components/Heads/CommentHead';
-import ProductHead from '../components/Heads/ProductHead';
 import Posting from '../components/Posting';
 import UserImage from '../components/UserImage';
 import Feed from '../components/Feed';
+import Follows from '../components/Follows';
 
 export default class Home extends Component {
     state = {
@@ -33,25 +29,20 @@ export default class Home extends Component {
         posts: [],
         topics: [],
         posting: false,
-        reload: false,
         type: '',
         id: '',
+        redirect: false,
+        loaded: false,
     };
 
     componentDidMount = async () => {
-        const { params } = this.props.match;
-        const { data: user } = await api.get(
-            `/user?AccessToken=${params.token}`
-        );
-        const { data: posts } = await api.get(
-            `/posts?AccessToken=${params.token}`
-        );
+        const { token } = this.props.match.params;
+        const { data: user } = await api.get(`/user?AccessToken=${token}`);
+        const { data: posts } = await api.get(`/posts?AccessToken=${token}`);
         const { data: myTopics } = await api.get(
-            `/userInterests?AccessToken=${params.token}`
+            `/userInterests?AccessToken=${token}`
         );
-        const { data: topics } = await api.get(
-            `/subject?AccessToken=${params.token}`
-        );
+        const { data: topics } = await api.get(`/subject?AccessToken=${token}`);
         myTopics.followed = true;
         topics.followed = false;
         this.setState({
@@ -61,63 +52,14 @@ export default class Home extends Component {
                 lastname: decodeURIComponent(user.Lastname),
                 username: decodeURIComponent(user.Nickname),
                 email: user.Email,
+                image: user.Media,
                 topics: myTopics,
             },
             posts,
             topics,
             posting: false,
+            loaded: true,
         });
-    };
-
-    head = () => {};
-    ahead = () => {
-        const { token, type, id } = this.props.match.params;
-        //const { type, id } = this.state;
-        switch (type) {
-            case 'u':
-                return (
-                    <UserHead
-                        me={this.state.user}
-                        userID={id}
-                        refresh={this.refresh}
-                    />
-                );
-            case 'h':
-                console.log('head: type ' + type + ', id ' + id);
-                return (
-                    <TopicHead
-                        me={this.state.user}
-                        token={token}
-                        topicID={id}
-                        refresh={this.refresh}
-                    />
-                );
-            case 'c':
-                return (
-                    <CommentHead
-                        me={this.state.user}
-                        token={token}
-                        commentID={id}
-                        refresh={this.refresh}
-                    />
-                );
-            case '$':
-                return (
-                    <ProductHead
-                        me={this.state.user}
-                        productID={id}
-                        refresh={this.refresh}
-                    />
-                );
-            default:
-            //return (
-            //    <UserHead
-            //        me={this.state.user}
-            //        userID={this.state.user.ID}
-            //        refresh={this.refresh}
-            //    />
-            //);
-        }
     };
 
     refresh = () => {
@@ -140,11 +82,22 @@ export default class Home extends Component {
 
     handleHead = (type, id) => {
         console.log(type + ' ' + id);
-        this.setState({ type, id });
+        this.setState({ type, id, redirect: true });
     };
 
     render() {
+        const {
+            user,
+            posting,
+            type: nextType,
+            id: nextID,
+            redirect,
+            loaded,
+        } = this.state;
         const { token, type, id } = this.props.match.params;
+        if (redirect) {
+            return <Redirect to={`/home/${token}/${nextType}/${nextID}`} />;
+        }
         return (
             <div id="home-container">
                 <div id="home-head">
@@ -159,7 +112,7 @@ export default class Home extends Component {
                 </div>
                 {this.state.posting ? (
                     <Posting
-                        user={this.state.user.username}
+                        user={user.username}
                         token={token}
                         onClose={() => this.setState({ posting: false })}
                     />
@@ -169,18 +122,16 @@ export default class Home extends Component {
                         <UserImage
                             id="user-image"
                             size="100px"
-                            image={this.state.user.image}
+                            image={user.image}
                         />
-                        <strong id="user-name">
-                            {this.state.user.username}
-                        </strong>
+                        <strong id="user-name">{user.username}</strong>
                         <p id="name">
-                            {this.state.user.name} {this.state.user.lastname}
+                            {user.name} {user.lastname}
                         </p>
                         <FaComment
                             id="comment-icon"
-                            onClick={e =>
-                                this.state.posting
+                            onClick={() =>
+                                posting
                                     ? this.setState({ posting: false })
                                     : this.setState({ posting: true })
                             }
@@ -188,40 +139,16 @@ export default class Home extends Component {
                         <FaShoppingCart id="cart-icon" />
                     </div>
                     <div id="feed">
-                        <Feed
-                            token={token}
-                            me={this.state.user}
-                            type={type}
-                            id={id}
-                        />
-                        <div id="follows">
-                            <div id="topics">Meus tópicos</div>
-                            {this.state.user.topics.map((topic, index) => (
-                                <Topic
-                                    key={index}
-                                    token={token}
-                                    hashtag={topic.Subject.Hashtag}
-                                    topicID={topic.Subject.Id}
-                                    followID={topic.UserInterestId}
-                                    followed={true}
-                                    wallpaper={topic.Subject.Media.URL}
-                                    handleHead={this.handleHead}
-                                />
-                            ))}
-                            <div id="topics">Recomendado</div>
-                            {this.state.topics.map((topic, index) => (
-                                <Topic
-                                    key={index}
-                                    token={token}
-                                    hashtag={topic.Hashtag}
-                                    topicID={topic.Id}
-                                    followed={false}
-                                    wallpaper={topic.Media.URL}
-                                    refresh={this.refresh}
-                                    handleHead={this.handleHead}
-                                />
-                            ))}
-                        </div>
+                        {loaded ? (
+                            <Feed
+                                token={token}
+                                handleHead={this.handleHead}
+                                me={user}
+                                type={type}
+                                id={id}
+                            />
+                        ) : null}
+                        <Follows handleHead={this.handleHead} token={token} />
                     </div>
                 </div>
             </div>

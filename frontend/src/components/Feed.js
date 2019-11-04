@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 import '../pages/Home.css';
 import api from '../services/api';
 import Comment from '../components/Comment';
@@ -10,11 +9,8 @@ import ProductHead from '../components/Heads/ProductHead';
 
 export default class Feed extends Component {
     state = {
-        head: <div id="shit" />,
+        head: <div />,
         comments: [],
-        type: '',
-        id: '',
-        redirect: false,
     };
 
     componentDidMount = () => {
@@ -22,7 +18,7 @@ export default class Feed extends Component {
         this.getComments();
     };
 
-    getHead = () => {
+    getHead = async () => {
         const { token, me, type, id } = this.props;
         switch (type) {
             case 'u':
@@ -45,12 +41,13 @@ export default class Feed extends Component {
                 });
                 break;
             case 'c':
+                const { data: comment } = await api.get(`/posts?PostId=${id}`);
                 this.setState({
                     head: (
                         <CommentHead
                             me={me}
                             token={token}
-                            commentID={id}
+                            comment={comment}
                             refresh={this.refresh}
                         />
                     ),
@@ -95,17 +92,9 @@ export default class Feed extends Component {
         }
     };
 
-    handleHead = (type, id) => {
-        console.log(type + ' ' + id);
-        this.setState({ type, id, redirect: true });
-    };
-
     render() {
-        const { head, comments, type, id, redirect } = this.state;
-        const { me, token } = this.props;
-        if (redirect) {
-            return <Redirect to={`/home/${token}/${type}/${id}`} />;
-        }
+        const { head, comments } = this.state;
+        const { me, token, handleHead } = this.props;
         return (
             <div id="comments">
                 {head}
@@ -115,7 +104,7 @@ export default class Feed extends Component {
                         me={me}
                         comment={comment}
                         token={token}
-                        handleHead={this.handleHead}
+                        handleHead={handleHead}
                     />
                 ))}
             </div>

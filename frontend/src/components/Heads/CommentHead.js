@@ -5,7 +5,6 @@ import {
     FaRegThumbsUp,
     FaRegThumbsDown,
     FaComment,
-    FaArrowUp,
     FaCartPlus,
     FaPlus,
     FaTimes,
@@ -16,31 +15,14 @@ import api from '../../services/api';
 
 export default class CommentHead extends Component {
     state = {
-        comment: {
-            Owner: {},
-            MediaObjects: [],
-            Dislikes: [],
-            Likes: [],
-            Id: '',
-        },
         iLiked: false,
-        nLikes: 0,
+        nLikes: this.props.comment.Likes.length,
         iDisliked: false,
-        nDislikes: 0,
-    };
-    componentDidMount = async () => {
-        const { commentID } = this.props;
-        const { data: comment } = await api.get(`/posts?PostId=${commentID}`);
-        this.setState({
-            comment,
-            nLikes: comment.Likes.length,
-            nDislikes: comment.Dislikes.length,
-        });
+        nDislikes: this.props.comment.Dislikes.length,
     };
 
     handleLike = async () => {
-        const { token } = this.props;
-        const { comment } = this.state;
+        const { token, comment } = this.props;
         const { data } = await api.put(
             `/posts/like?AccessToken=${token}&PostId=${comment.Id}`
         );
@@ -53,8 +35,7 @@ export default class CommentHead extends Component {
     };
 
     handleDislike = async () => {
-        const { token } = this.props;
-        const { comment } = this.state;
+        const { token, comment } = this.props;
         const { data } = await api.put(
             `/posts/dislike?AccessToken=${token}&PostId=${comment.Id}`
         );
@@ -67,7 +48,8 @@ export default class CommentHead extends Component {
     };
 
     render() {
-        const { comment, iDisliked, iLiked } = this.state;
+        const { comment } = this.props;
+        const { iDisliked, iLiked } = this.state;
         return (
             <div id="commenthead-container">
                 <div id="head">

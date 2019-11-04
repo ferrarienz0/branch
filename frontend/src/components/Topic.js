@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 import { FaComment, FaPlus, FaTimes, FaArrowUp } from 'react-icons/fa';
 import './Topic.css';
 import api from '../services/api';
@@ -7,27 +6,31 @@ import Posting from '../components/Posting';
 
 export default class Topic extends Component {
     state = {
-        followID: this.props.followID,
-        followed: this.props.followed,
+        followID: this.props.topic.followID,
         posting: false,
         reload: false,
     };
-    handleFollow = () => {
-        if (!this.state.followed) {
-            api.post(
-                `/userInterests?AccessToken=${this.props.token}&SubjectId=${this.props.topicID}`
-            ).then(res => {
-                this.setState({ followId: res.data.Id, followed: true });
-                this.props.refresh();
-            });
+
+    handleFollow = async () => {
+        const { followID } = this.state;
+        const { token, topic } = this.props;
+        if (!Boolean(followID)) {
+            const { data } = await api.post(
+                `/userInterests?AccessToken=${token}&SubjectId=${topic.id}`
+            );
+            this.setState({ followID: data.Id });
+            this.props.refresh();
         } else {
-            api.delete(`/userInterests?id=${this.state.followID}`).then(res => {
-                this.setState({ followed: false });
+            api.delete(`/userInterests?id=${followID}`).then(res => {
+                this.setState({ followID: null });
                 this.props.refresh();
             });
         }
     };
+
     render() {
+        const { posting, followID } = this.state;
+        const { topic, handleHead } = this.props;
         return (
             <div
                 id="topic-container"
@@ -36,29 +39,27 @@ export default class Topic extends Component {
                     135deg,
                     var(--black) 25%,
                     transparent 110%
-                ),  url(${this.props.wallpaper})`,
+                ),  url(${topic.banner})`,
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: 'cover',
                 }}
             >
-                <h2 id="hashtag">{this.props.hashtag}</h2>
+                <h2 id="hashtag">{topic.hashtag}</h2>
                 <div id="foot">
                     <FaArrowUp
                         id="go-ahead-icon"
-                        onClick={() =>
-                            this.props.handleHead('h', this.props.topicID)
-                        }
+                        onClick={() => handleHead('h', topic.id)}
                     />
                     <FaComment
                         id="comment"
                         onClick={e =>
-                            this.state.posting
+                            posting
                                 ? this.setState({ posting: false })
                                 : this.setState({ posting: true })
                         }
                     />
-                    {this.state.followed ? (
+                    {Boolean(followID) ? (
                         <FaTimes id="follow-icon" onClick={this.handleFollow} />
                     ) : (
                         <FaPlus id="follow-icon" onClick={this.handleFollow} />
