@@ -56,7 +56,7 @@ export default class Comment extends Component {
             nDislikes: data.TotalDeslikes,
         });
         if (this.state.iLiked) this.setState({ iLiked: false });
-        this.setState({ iLiked: true, iDisliked: false });
+        else this.setState({ iLiked: true, iDisliked: false });
     };
 
     handleDislike = async () => {
@@ -68,7 +68,7 @@ export default class Comment extends Component {
             nDislikes: data.TotalDeslikes,
         });
         if (this.state.iDisliked) this.setState({ iDisliked: false });
-        this.setState({ iDisliked: true, iLiked: false });
+        else this.setState({ iDisliked: true, iLiked: false });
     };
 
     render() {

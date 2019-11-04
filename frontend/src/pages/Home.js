@@ -11,7 +11,6 @@ import './Home.css';
 import icone from '../assets/icone.svg';
 import api from '../services/api';
 import Topic from '../components/Topic';
-import Comment from '../components/Comment';
 import UserHead from '../components/Heads/UserHead';
 import TopicHead from '../components/Heads/TopicHead';
 import CommentHead from '../components/Heads/CommentHead';

@@ -68,6 +68,8 @@ export default class Feed extends Component {
                     ),
                 });
                 break;
+            default:
+                this.setState({ head: <div /> });
         }
     };
 
@@ -84,6 +86,8 @@ export default class Feed extends Component {
             case 'u':
                 req = `/user/posts?UserId=${id}`;
                 break;
+            default:
+                req = '';
         }
         if (req !== '') {
             const { data: comments } = await api.get(req);

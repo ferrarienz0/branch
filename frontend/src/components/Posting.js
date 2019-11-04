@@ -12,6 +12,12 @@ export default class Posting extends Component {
     handlePost = async () => {
         let formData = new FormData();
         formData.append('image', this.state.temp);
+        let config = {
+            headers: {
+                Accept: '',
+                'Content-Type': 'multipart/form-data',
+            },
+        };
         const { data } = await api.post(
             `/media?AccessToken=${this.props.token}&IsUserMedia=false`,
             formData,
@@ -22,12 +28,6 @@ export default class Posting extends Component {
             Text: this.state.text,
             Medias: this.state.image.id === -1 ? [] : [this.state.image.id],
         });
-        let config = {
-            headers: {
-                Accept: '',
-                'Content-Type': 'multipart/form-data',
-            },
-        };
         this.props.onClose();
     };
     handleFile = async e => {
