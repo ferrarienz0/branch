@@ -134,7 +134,7 @@
     display: flex;
 }
 
-#home-body #feed #posts {
+#home-body #feed #comments {
     flex: 5;
 
     border-right: 1px solid var(--gray-2);

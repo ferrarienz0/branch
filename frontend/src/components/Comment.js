@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 import {
     FaThumbsUp,
     FaThumbsDown,
@@ -73,18 +72,13 @@ export default class Comment extends Component {
     };
 
     render() {
-        if (this.state.goAhead) {
-            return (
-                <Redirect
-                    to={`/home/${this.props.token}/c/${this.props.comment.Id}`}
-                />
-            );
-        }
+        const { comment, handleHead } = this.props;
+        const { iLiked, nLikes, iDisliked, nDislikes } = this.state;
         return (
             <div id="comment-container">
                 <div id="head">
                     <div id="user-image">
-                        <UserImage size="50px" image={this.props.me.image} />
+                        <UserImage size="50px" image={comment.Owner.image} />
                         {false ? (
                             <FaTimes id="follow-icon" />
                         ) : (
@@ -92,36 +86,35 @@ export default class Comment extends Component {
                         )}
                     </div>
                     <div id="user-name">
-                        <strong>@{this.props.comment.Owner.Nickname}</strong>
+                        <strong>@{comment.Owner.Nickname}</strong>
                         <p id="name">
-                            {this.props.comment.Owner.Firstname}{' '}
-                            {this.props.comment.Owner.Lastname}
+                            {comment.Owner.Firstname} {comment.Owner.Lastname}
                         </p>
                     </div>
                     <div id="go-ahead">
                         <FaArrowUp
                             id="go-ahead-icon"
-                            onClick={this.handleGoahead}
+                            onClick={() => handleHead('c', comment.Id)}
                         />
                     </div>
                 </div>
                 <div id="body">
-                    <p id="text">{this.props.comment.Text}</p>
+                    <p id="text">{comment.Text}</p>
                     <img
                         id="image"
                         alt=""
                         src={
-                            this.props.comment.MediaObjects.length === 0
+                            comment.MediaObjects.length === 0
                                 ? ''
-                                : this.props.comment.MediaObjects[0].URL
+                                : comment.MediaObjects[0].URL
                         }
                     />
                 </div>
                 <div id="foot">
                     <p id="number">
-                        <strong>{this.state.nDislikes}</strong>
+                        <strong>{nDislikes}</strong>
                     </p>
-                    {this.state.iDisliked ? (
+                    {iDisliked ? (
                         <FaThumbsDown
                             onClick={this.handleDislike}
                             id="dislike-icon"
@@ -133,9 +126,9 @@ export default class Comment extends Component {
                         />
                     )}
                     <p id="number">
-                        <strong>{this.state.nLikes}</strong>
+                        <strong>{nLikes}</strong>
                     </p>
-                    {this.state.iLiked ? (
+                    {iLiked ? (
                         <FaThumbsUp onClick={this.handleLike} id="like-icon" />
                     ) : (
                         <FaRegThumbsUp

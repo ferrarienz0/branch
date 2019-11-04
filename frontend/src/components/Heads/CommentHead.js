@@ -16,20 +16,63 @@ import api from '../../services/api';
 
 export default class CommentHead extends Component {
     state = {
-        comment: { Owner: {}, MediaObjects: [], Dislikes: [], Likes: [] },
+        comment: {
+            Owner: {},
+            MediaObjects: [],
+            Dislikes: [],
+            Likes: [],
+            Id: '',
+        },
+        iLiked: false,
+        nLikes: 0,
+        iDisliked: false,
+        nDislikes: 0,
     };
     componentDidMount = async () => {
-        const { data: comment } = await api.get(
-            `/posts?PostId=${this.props.commentID}`
-        );
-        this.setState({ comment });
+        const { commentID } = this.props;
+        const { data: comment } = await api.get(`/posts?PostId=${commentID}`);
+        this.setState({
+            comment,
+            nLikes: comment.Likes.length,
+            nDislikes: comment.Dislikes.length,
+        });
     };
+
+    handleLike = async () => {
+        const { token } = this.props;
+        const { comment } = this.state;
+        const { data } = await api.put(
+            `/posts/like?AccessToken=${token}&PostId=${comment.Id}`
+        );
+        this.setState({
+            nLikes: data.TotalLikes,
+            nDislikes: data.TotalDeslikes,
+        });
+        if (this.state.iLiked) this.setState({ iLiked: false });
+        this.setState({ iLiked: true, iDisliked: false });
+    };
+
+    handleDislike = async () => {
+        const { token } = this.props;
+        const { comment } = this.state;
+        const { data } = await api.put(
+            `/posts/dislike?AccessToken=${token}&PostId=${comment.Id}`
+        );
+        this.setState({
+            nLikes: data.TotalLikes,
+            nDislikes: data.TotalDeslikes,
+        });
+        if (this.state.iDisliked) this.setState({ iDisliked: false });
+        this.setState({ iDisliked: true, iLiked: false });
+    };
+
     render() {
+        const { comment, iDisliked, iLiked } = this.state;
         return (
             <div id="commenthead-container">
                 <div id="head">
                     <div id="user-image">
-                        <UserImage size="50px" image={this.props.me.image} />
+                        <UserImage size="50px" image={comment.Owner.image} />
                         {false ? (
                             <FaTimes id="follow-icon" />
                         ) : (
@@ -37,30 +80,29 @@ export default class CommentHead extends Component {
                         )}
                     </div>
                     <div id="user-name">
-                        <strong>@{this.state.comment.Owner.Nickname}</strong>
+                        <strong>@{comment.Owner.Nickname}</strong>
                         <p id="name">
-                            {this.state.comment.Owner.Firstname}{' '}
-                            {this.state.comment.Owner.Lastname}
+                            {comment.Owner.Firstname} {comment.Owner.Lastname}
                         </p>
                     </div>
                 </div>
                 <div id="body">
-                    <p id="text">{this.state.comment.Text}</p>
+                    <p id="text">{comment.Text}</p>
                     <img
                         id="image"
                         alt=""
                         src={
-                            this.state.comment.MediaObjects.length === 0
+                            comment.MediaObjects.length === 0
                                 ? ''
-                                : this.state.comment.MediaObjects[0].URL
+                                : comment.MediaObjects[0].URL
                         }
                     />
                 </div>
                 <div id="foot">
                     <p id="number">
-                        <strong>{this.state.comment.Dislikes.length}</strong>
+                        <strong>{comment.Dislikes.length}</strong>
                     </p>
-                    {true ? (
+                    {iDisliked ? (
                         <FaThumbsDown
                             onClick={this.handleDislike}
                             id="dislike-icon"
@@ -72,9 +114,9 @@ export default class CommentHead extends Component {
                         />
                     )}
                     <p id="number">
-                        <strong>{this.state.comment.Likes.length}</strong>
+                        <strong>{comment.Likes.length}</strong>
                     </p>
-                    {false ? (
+                    {iLiked ? (
                         <FaThumbsUp onClick={this.handleLike} id="like-icon" />
                     ) : (
                         <FaRegThumbsUp

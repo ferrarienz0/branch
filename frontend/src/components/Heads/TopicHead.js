@@ -7,13 +7,44 @@ export default class TopicHead extends Component {
     state = {
         topic: {},
         wallpaper: '',
+        posting: false,
+        followID: '',
+        followed: false,
+        reload: false,
     };
-    componentWillMount = async () => {
+
+    componentDidMount = async () => {
         const { data: topic } = await api.get(
             `/subject?id=${this.props.topicID}`
         );
         this.setState({ topic, wallpaper: topic.Media.URL });
+        const { data: myTopics } = await api.get(
+            `/userInterests?AccessToken=${this.props.token}`
+        );
+        myTopics.forEach(follow => {
+            if (follow.Subject.Id === this.props.topicID) {
+                this.setState({
+                    followID: follow.UserInterestId,
+                    followed: true,
+                });
+            }
+        });
     };
+
+    handleFollow = () => {
+        if (!this.state.followed) {
+            api.post(
+                `/userInterests?AccessToken=${this.props.token}&SubjectId=${this.props.topicID}`
+            ).then(res => {
+                this.setState({ followId: res.data.Id, followed: true });
+            });
+        } else {
+            api.delete(`/userInterests?id=${this.state.followID}`).then(res => {
+                this.setState({ followed: false });
+            });
+        }
+    };
+
     render() {
         return (
             <div

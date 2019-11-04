@@ -7,8 +7,7 @@ import Posting from '../components/Posting';
 
 export default class Topic extends Component {
     state = {
-        topicID: this.props.topicId,
-        followId: this.props.followId,
+        followID: this.props.followID,
         followed: this.props.followed,
         posting: false,
         reload: false,
@@ -16,28 +15,19 @@ export default class Topic extends Component {
     handleFollow = () => {
         if (!this.state.followed) {
             api.post(
-                `/userInterests?AccessToken=${this.props.token}&SubjectId=${this.state.topicID}`
+                `/userInterests?AccessToken=${this.props.token}&SubjectId=${this.props.topicID}`
             ).then(res => {
                 this.setState({ followId: res.data.Id, followed: true });
                 this.props.refresh();
             });
         } else {
-            api.delete(`/userInterests?id=${this.state.followId}`).then(res => {
+            api.delete(`/userInterests?id=${this.state.followID}`).then(res => {
                 this.setState({ followed: false });
                 this.props.refresh();
             });
         }
     };
-    handleComment = async () => {};
     render() {
-        if (this.state.reload) {
-            this.setState({ reload: false });
-            return (
-                <Redirect
-                    to={`/home/${this.props.token}/h/${this.state.topicID}`}
-                />
-            );
-        }
         return (
             <div
                 id="topic-container"
@@ -57,9 +47,7 @@ export default class Topic extends Component {
                     <FaArrowUp
                         id="go-ahead-icon"
                         onClick={() =>
-                            this.setState({
-                                reload: true,
-                            })
+                            this.props.handleHead('h', this.props.topicID)
                         }
                     />
                     <FaComment
