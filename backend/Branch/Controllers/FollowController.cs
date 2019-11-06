@@ -25,32 +25,13 @@ namespace Branch.Controllers
         [HttpGet]
         [Route("follow")]
         [ResponseType(typeof(List<dynamic>))]
-        public async Task<IHttpActionResult> GetUserFollows([FromUri] string AccessToken)
+        public IHttpActionResult GetUserFollows([FromUri] string AccessToken)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            var Connection = new NpgsqlConnection(ConnectionString);
-            await Connection.OpenAsync();
+            var Follows = DB.Follows.Where(x => x.FollowerId == UserId).Select(x => x.Followed);
 
-            List<dynamic> Responses = new List<dynamic>();
-
-            using (var SQLCommand = new NpgsqlCommand($"SELECT * FROM FollowerPerson({UserId})", Connection))
-            using (var Reader = await SQLCommand.ExecuteReaderAsync()) {
-
-                while(await Reader.ReadAsync())
-                {
-                    dynamic Response = new ExpandoObject();
-                    Response.UserId = Reader.GetValue(0);
-                    Response.FollowId = Reader.GetValue(1);
-
-                    Responses.Add(Response);
-                }
-
-            }
-
-            await Connection.CloseAsync();
-
-            return Ok(Responses);
+            return Ok(Follows);
         }
 
         [HttpGet]
