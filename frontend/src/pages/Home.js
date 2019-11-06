@@ -36,6 +36,7 @@ export default class Home extends Component {
     };
 
     componentDidMount = async () => {
+        //console.log(localStorage.getItem('token') === null);
         const { token } = this.props.match.params;
         const { data: user } = await api.get(`/user?AccessToken=${token}`);
         const { data: posts } = await api.get(`/posts?AccessToken=${token}`);
@@ -83,12 +84,15 @@ export default class Home extends Component {
     handleHead = (type, id) => {
         console.log(type + ' ' + id);
         this.setState({ type, id });
+        //this.setState({ state: this.state });
+
         this.forceUpdate();
     };
 
     render() {
         const { user, posting, type, id, loaded } = this.state;
         const { token } = this.props.match.params;
+        console.log('renderizei');
         return (
             <div id="home-container">
                 <div id="home-head">

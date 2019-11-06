@@ -25,6 +25,7 @@ export default class Login extends Component {
             })
             .then(res => {
                 this.setState({ token: res.data.Token, isSession: true });
+                localStorage.setItem('token', res.data.Token);
             })
             .catch(err => {
                 this.setState({ warning: 'Usuário ou senha incorretos' });
