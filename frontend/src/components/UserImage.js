@@ -6,7 +6,13 @@ import './UserImage.css';
 //componente responsável por exibir o ícone do usuário
 export default function UserImage(props) {
     return (
-        <div id="userimage-container">
+        <div
+            id="userimage-container"
+            style={{
+                height: `${props.size}`,
+                width: `${props.size}`,
+            }}
+        >
             {props.image == null ? (
                 <FaUserCircle
                     id="user-icon"
@@ -23,8 +29,6 @@ export default function UserImage(props) {
                 <div
                     id="user-image"
                     style={{
-                        height: `${props.size}`,
-                        width: `${props.size}`,
                         background: `url('${props.image}')`,
                         backgroundPosition: 'center',
                         backgroundRepeat: 'no-repeat',

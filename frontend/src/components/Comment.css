@@ -1,0 +1,167 @@
+#comment-container {
+    margin: 5px 5px 5px 40px;
+
+    border-bottom: 1px solid var(--dark-blue);
+}
+
+#comment-container:hover {
+    background: var(--gray-1);
+    border-bottom: 1px solid var(--blue);
+    transform: translateX(-5px);
+    transition: 0.1s;
+}
+
+#comment-container #head {
+    height: 60px;
+    padding: 5px 20px 5px 5px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    background: none;
+    border: none;
+}
+
+#comment-container #head #user-image {
+    position: relative;
+}
+
+#comment-container #head #user-image #follow-icon {
+    height: 20px;
+    width: 20px;
+    right: -5px;
+    bottom: 0;
+
+    position: absolute;
+    cursor: pointer;
+
+    border-radius: 50%;
+    color: var(--white);
+    background: var(--black);
+}
+
+#comment-container #head #user-image #follow-icon:hover {
+    color: var(--light-white);
+    transition: 0.1s;
+}
+
+#comment-container #head #user-name {
+    margin-left: 10px;
+
+    color: var(--magenta);
+}
+
+#comment-container #head #name {
+    color: var(--gray-4);
+    font-size: 11px;
+}
+
+#comment-container #head #go-ahead {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    flex-direction: row-reverse;
+    cursor: pointer;
+}
+
+#comment-container #head #go-ahead #go-ahead-icon {
+    height: 25px;
+    width: 25px;
+
+    cursor: pointer;
+
+    color: var(--white);
+}
+
+#comment-container #head #go-ahead #go-ahead-icon:hover {
+    color: var(--light-white);
+    transition: 0.1s;
+}
+
+#comment-container #body {
+    width: 100%;
+    padding: 10px;
+
+    border: none;
+    display: flex;
+    flex-direction: column;
+
+    background: none;
+}
+
+#comment-container #body #text {
+    color: var(--white);
+}
+
+#comment-container #body #image {
+    width: 100%;
+    max-width: 350px;
+    padding: 10px;
+}
+
+#comment-container #foot {
+    height: 40px;
+    padding: 0 10px;
+
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+}
+
+#comment-container #foot #number {
+    color: var(--white);
+}
+
+#comment-container #foot #comment-icon,
+#cart-icon,
+#like-icon,
+#dislike-icon {
+    height: 25px;
+    width: 25px;
+    margin: 0 5px;
+
+    cursor: pointer;
+}
+
+#comment-container #foot #cart-icon {
+    color: var(--yellow);
+}
+
+#comment-container #foot #cart-icon:hover {
+    color: var(--white);
+    transition: 0.1s;
+}
+
+#comment-container #foot #comment-icon {
+    height: 25px;
+    width: 25px;
+
+    cursor: pointer;
+
+    color: var(--white);
+}
+
+#comment-container #foot #comment-icon:hover {
+    color: var(--light-white);
+    transition: 0.1s;
+}
+
+#comment-container #foot #like-icon {
+    margin-bottom: 10px;
+    color: var(--green);
+}
+
+#comment-container #foot #like-icon:hover {
+    color: var(--white);
+    transition: 0.1s;
+}
+
+#comment-container #foot #dislike-icon {
+    color: var(--orange);
+}
+
+#comment-container #foot #dislike-icon:hover {
+    color: var(--white);
+    transition: 0.1s;
+}

@@ -83,7 +83,6 @@ export default class Register extends Component {
         this.setState({ image: data[0].URL });
     };
     render() {
-        console.log(this.state.image);
         if (this.state.isSession) {
             return <Redirect to={`/home/${this.state.token}`} />;
         }
