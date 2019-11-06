@@ -266,6 +266,7 @@
       <DependentUpon>201911032142242_FixUserMedia.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\NoSQL\Owner.cs" />
     <Compile Include="Models\SQL\Relationship\GameTeam.cs" />
     <Compile Include="Models\NoSQL\DataAccess.cs" />
     <Compile Include="Models\NoSQL\Post.cs" />

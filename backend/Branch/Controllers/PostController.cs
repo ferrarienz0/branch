@@ -36,8 +36,15 @@ namespace Branch.Controllers
             var UserId = TokenValidator.VerifyToken(AccessToken);
             NewPost.UserId = UserId;
 
-            var Owner = DB.Users.Find(UserId);
-            NewPost.Owner = Owner;
+            var User = DB.Users.Find(UserId);
+            NewPost.Owner = new Owner()
+            {
+                Id = User.Id,
+                Firstname = User.Firstname,
+                Lastname = User.Lastname,
+                Nickname = User.Nickname,
+                MediaURL = User.Media.URL
+            };
 
             NewPost = await TreatPostAddons(NewPost);
 
@@ -83,6 +90,20 @@ namespace Branch.Controllers
                                                 .Union(MentionPosts)
                                                 .ToList();
 
+            foreach(var Post in RecommendedPosts)
+            {
+                var User = DB.Users.Find(Post.UserId);
+
+                Post.Owner = new Owner()
+                {
+                    Id = UserId,
+                    Firstname = User.Firstname,
+                    Lastname = User.Lastname,
+                    Nickname = User.Nickname,
+                    MediaURL = User.Media.URL
+                };
+            }
+
             return Ok(RecommendedPosts);
         }
 
@@ -93,6 +114,17 @@ namespace Branch.Controllers
         { 
             var Filter = Builders<Post>.Filter.Eq("Id", ObjectId.Parse(PostId));
             var Post = MongoContext.PostCollection.Find(Filter).FirstOrDefault();
+
+            var User = DB.Users.Find(Post.UserId);
+
+            Post.Owner = new Owner()
+            {
+                Id = User.Id,
+                Firstname = User.Firstname,
+                Lastname = User.Lastname,
+                Nickname = User.Nickname,
+                MediaURL = User.Media.URL
+            };
 
             return Ok(Post);
         }
@@ -107,6 +139,20 @@ namespace Branch.Controllers
 
             var CommentFilter = Builders<Post>.Filter.In(x => x.Id, Post.Comments);
             var Comments = MongoContext.PostCollection.Find(CommentFilter).ToList();
+
+            foreach (var Comment in Comments)
+            {
+                var User = DB.Users.Find(Post.UserId);
+
+                Post.Owner = new Owner()
+                {
+                    Id = User.Id,
+                    Firstname = User.Firstname,
+                    Lastname = User.Lastname,
+                    Nickname = User.Nickname,
+                    MediaURL = User.Media.URL
+                };
+            }
 
             return Ok(Comments);
         }
@@ -166,8 +212,6 @@ namespace Branch.Controllers
             {
                 PostLiked.Likes.Remove(UserId);
             }
-
-            int TotalDislikes = PostLiked.Dislikes.Count;
 
             await MongoContext.PostCollection.FindOneAndReplaceAsync(filter, PostLiked);
 
@@ -284,10 +328,14 @@ namespace Branch.Controllers
             NewPost.Products = ProductsObjects;
 
             var Medias = new List<Media>();
-            foreach (var Id in NewPost.Medias)
+
+            if(NewPost.Medias != default)
             {
-                var Media = DB.Medias.Find(Id);
-                Medias.Add(Media);
+                foreach (var Id in NewPost.Medias)
+                {
+                    var Media = DB.Medias.Find(Id);
+                    Medias.Add(Media);
+                }
             }
 
             NewPost.MediaObjects = Medias;
