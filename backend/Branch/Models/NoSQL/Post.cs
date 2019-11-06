@@ -21,7 +21,7 @@ namespace Branch.Models.NoSQL
         public int UserId { get; set; }
 
         [BsonElement("owner")]
-        public virtual User Owner { get; set; }
+        public virtual Owner Owner { get; set; }
 
         [BsonElement("type")]
         [BsonRequired()]
