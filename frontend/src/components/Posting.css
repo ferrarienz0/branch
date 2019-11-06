@@ -93,10 +93,14 @@ input[type='file'] {
 }
 
 #posting-container #preview {
-    max-width: 100%;
+    position: absolute;
+    max-width: 200px;
     max-height: 200px;
-    margin-top: 10px;
+    margin: 10px;
+    top: 0px;
+    left: 500px;
     margin-right: 5px;
+    background: chartreuse;
     border-radius: 5px;
-    box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.401);
+    box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);
 }

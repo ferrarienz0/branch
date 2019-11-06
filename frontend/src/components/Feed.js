@@ -71,7 +71,7 @@ export default class Feed extends Component {
     };
 
     getComments = async () => {
-        const { id, type } = this.props;
+        const { id, type, token } = this.props;
         let req = '';
         switch (type) {
             case 'h':
@@ -84,12 +84,10 @@ export default class Feed extends Component {
                 req = `/user/posts?UserId=${id}`;
                 break;
             default:
-                req = '';
+                req = `/posts?AccessToken=${token}`;
         }
-        if (req !== '') {
-            const { data: comments } = await api.get(req);
-            this.setState({ comments });
-        }
+        const { data: comments } = await api.get(req);
+        this.setState({ comments });
     };
 
     render() {

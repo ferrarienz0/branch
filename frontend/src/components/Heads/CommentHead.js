@@ -21,7 +21,29 @@ export default class CommentHead extends Component {
         nDislikes: this.props.comment.Dislikes.length,
     };
 
+    componentDidMount = async () => {
+        const { token, me, comment } = this.props;
+        const { data: iFollow } = await api.get(`/follow?AccessToken=${token}`);
+        console.log(comment);
+        iFollow.forEach(followed => {
+            if (followed.UserId === comment.Owner.Id) {
+                this.setState({ iFollow: true });
+            }
+        });
+        if (comment.Likes.indexOf(me.ID) !== -1) {
+            this.setState({
+                iLiked: true,
+            });
+        }
+        if (comment.Dislikes.indexOf(me.ID) !== -1) {
+            this.setState({
+                iDisliked: true,
+            });
+        }
+    };
+
     handleLike = async () => {
+        const { iLiked } = this.state;
         const { token, comment } = this.props;
         const { data } = await api.put(
             `/posts/like?AccessToken=${token}&PostId=${comment.Id}`
@@ -30,8 +52,8 @@ export default class CommentHead extends Component {
             nLikes: data.TotalLikes,
             nDislikes: data.TotalDeslikes,
         });
-        if (this.state.iLiked) this.setState({ iLiked: false });
-        this.setState({ iLiked: true, iDisliked: false });
+        if (iLiked) this.setState({ iLiked: false });
+        else this.setState({ iLiked: true, iDisliked: false });
     };
 
     handleDislike = async () => {
@@ -44,21 +66,27 @@ export default class CommentHead extends Component {
             nDislikes: data.TotalDeslikes,
         });
         if (this.state.iDisliked) this.setState({ iDisliked: false });
-        this.setState({ iDisliked: true, iLiked: false });
+        else this.setState({ iDisliked: true, iLiked: false });
     };
 
     render() {
-        const { comment } = this.props;
-        const { iDisliked, iLiked } = this.state;
+        const { comment, me } = this.props;
+        const { iLiked, nLikes, iDisliked, nDislikes, iFollow } = this.state;
         return (
             <div id="commenthead-container">
                 <div id="head">
                     <div id="user-image">
                         <UserImage size="50px" image={comment.Owner.image} />
-                        {false ? (
-                            <FaTimes id="follow-icon" />
+                        {me.ID === comment.Owner.Id ? null : iFollow ? (
+                            <FaTimes
+                                id="follow-icon"
+                                onClick={this.handleFollow}
+                            />
                         ) : (
-                            <FaPlus id="follow-icon" />
+                            <FaPlus
+                                id="follow-icon"
+                                onClick={this.handleFollow}
+                            />
                         )}
                     </div>
                     <div id="user-name">
@@ -82,7 +110,7 @@ export default class CommentHead extends Component {
                 </div>
                 <div id="foot">
                     <p id="number">
-                        <strong>{comment.Dislikes.length}</strong>
+                        <strong>{nDislikes}</strong>
                     </p>
                     {iDisliked ? (
                         <FaThumbsDown
@@ -96,7 +124,7 @@ export default class CommentHead extends Component {
                         />
                     )}
                     <p id="number">
-                        <strong>{comment.Likes.length}</strong>
+                        <strong>{nLikes}</strong>
                     </p>
                     {iLiked ? (
                         <FaThumbsUp onClick={this.handleLike} id="like-icon" />

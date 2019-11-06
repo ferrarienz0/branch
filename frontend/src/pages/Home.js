@@ -112,7 +112,6 @@ export default class Home extends Component {
                 </div>
                 {this.state.posting ? (
                     <Posting
-                        user={user.username}
                         token={token}
                         onClose={() => this.setState({ posting: false })}
                     />

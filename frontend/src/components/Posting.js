@@ -7,11 +7,13 @@ export default class Posting extends Component {
     state = {
         image: { id: -1, URL: '' },
         text: '',
-        temp: '',
+        preview: '',
     };
     handlePost = async () => {
+        const { image, text, preview } = this.state;
+        const { token, onClose } = this.props;
         let formData = new FormData();
-        formData.append('image', this.state.temp);
+        formData.append('image', preview);
         let config = {
             headers: {
                 Accept: '',
@@ -19,27 +21,27 @@ export default class Posting extends Component {
             },
         };
         const { data } = await api.post(
-            `/media?AccessToken=${this.props.token}&IsUserMedia=false`,
+            `/media?AccessToken=${token}&IsUserMedia=false`,
             formData,
             config
         );
+        console.log(data);
         this.setState({ image: { id: data[0].Id, URL: data[0].URL } });
-        await api.post(`/post?AccessToken=${this.props.token}`, {
-            Text: this.state.text,
-            Medias: this.state.image.id === -1 ? [] : [this.state.image.id],
+        await api.post(`/post?AccessToken=${token}`, {
+            Text: text,
+            Medias: image.id === -1 ? [] : [image.id],
         });
-        this.props.onClose();
+        onClose();
     };
-    handleFile = async e => {
-        console.log(e.target.files[0]);
-        this.setState({ temp: e.target.files[0] });
+
+    handleFile = e => {
+        this.setState({ preview: URL.createObjectURL(e.target.files[0]) });
     };
+
     render() {
+        const { preview } = this.state;
         return (
             <div id="posting-container">
-                {/*<div id="head">
-                    <FaArrowLeft id="back-icon" onClick={this.props.onClose} />
-        </div>*/}
                 <textarea
                     id="text-area"
                     type="text"
@@ -53,11 +55,7 @@ export default class Posting extends Component {
                         <FaPaperPlane id="send-icon" />
                     </button>
                 </div>
-                <img
-                    id="preview"
-                    src={this.state.image === null ? '' : this.state.image.URL}
-                    alt=""
-                />
+                <img id="preview" src={preview} alt="" />
                 <input
                     id="selecao-arquivo"
                     type="file"
