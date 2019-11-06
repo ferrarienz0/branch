@@ -82,22 +82,13 @@ export default class Home extends Component {
 
     handleHead = (type, id) => {
         console.log(type + ' ' + id);
-        this.setState({ type, id, redirect: true });
+        this.setState({ type, id });
+        this.forceUpdate();
     };
 
     render() {
-        const {
-            user,
-            posting,
-            type: nextType,
-            id: nextID,
-            redirect,
-            loaded,
-        } = this.state;
-        const { token, type, id } = this.props.match.params;
-        if (redirect) {
-            return <Redirect to={`/home/${token}/${nextType}/${nextID}`} />;
-        }
+        const { user, posting, type, id, loaded } = this.state;
+        const { token } = this.props.match.params;
         return (
             <div id="home-container">
                 <div id="home-head">
