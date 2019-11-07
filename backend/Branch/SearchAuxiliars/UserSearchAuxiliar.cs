@@ -31,9 +31,9 @@ namespace Branch.SearchAuxiliars
         {
             var AllSubjects = SQLContext.Subjects.ToList();
             
-            return FollowedSubjects(UserId)
-                                           .Except(AllSubjects)
-                                           .ToList();
+            return AllSubjects
+                              .Except(FollowedSubjects(UserId))
+                              .ToList();
         }
 
         /// <summary>

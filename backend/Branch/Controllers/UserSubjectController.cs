@@ -19,18 +19,6 @@ namespace Branch.Controllers
     {
         private readonly SQLContext SQLContext = new SQLContext();
 
-        [HttpGet]
-        [Route("user/subjects")]
-        [ResponseType(typeof(List<Subject>))]
-        public IHttpActionResult UserFollowedSubjects([FromUri] string AccessToken)
-        {
-            var UserId = TokenValidator.VerifyToken(AccessToken);
-
-            var Subjects = UserSearchAuxiliar.FollowedSubjects(UserId);
-
-            return Ok(Subjects);
-        }
-
         [HttpPost]
         [Route("user/follow/subject")]
         [ResponseType(typeof(UserSubject))]
