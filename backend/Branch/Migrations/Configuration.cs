@@ -5,14 +5,14 @@ namespace Branch.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Branch.Models.Context>
+    internal sealed class Configuration : DbMigrationsConfiguration<Branch.Models.SQLContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(Branch.Models.Context context)
+        protected override void Seed(Branch.Models.SQLContext context)
         {
             //  This method will be called after migrating to the latest version.
 

@@ -13,23 +13,23 @@ using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using Branch.JWTProvider;
 using Branch.Models;
+using Branch.SearchAuxiliars;
 using Npgsql;
 
 namespace Branch.Controllers
 {
     public class FollowController : ApiController
     {
-        private readonly Context DB = new Context();
-        private readonly string ConnectionString = "server=tuffi.db.elephantsql.com;User Id=vlvhqsdd;Database=vlvhqsdd;Port=5432;Password=0pBsOXETTteJOJt6Ysf0jq_135BK--N3";
+        private readonly SQLContext SQLContext = new SQLContext();
 
         [HttpGet]
-        [Route("follow")]
-        [ResponseType(typeof(List<dynamic>))]
-        public IHttpActionResult GetUserFollows([FromUri] string AccessToken)
+        [Route("follows")]
+        [ResponseType(typeof(List<User>))]
+        public IHttpActionResult UserFollows([FromUri] string AccessToken)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            var Follows = DB.Follows.Where(x => x.FollowerId == UserId).Select(x => x.Followed);
+            var Follows = UserSearchAuxiliar.Follows(UserId);
 
             return Ok(Follows);
         }
@@ -37,16 +37,19 @@ namespace Branch.Controllers
         [HttpGet]
         [Route("followers")]
         [ResponseType(typeof(List<User>))]
-        public List<User> GetUserFollowers([FromUri] string AccessToken)
+        public IHttpActionResult UserFollowers([FromUri] string AccessToken)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
-            return DB.Follows.Where(x => x.FollowedId == UserId).Select(x => x.Follower).ToList();
+
+            var Followers = UserSearchAuxiliar.Followers(UserId);
+
+            return Ok(Followers);
         }
 
         [HttpPost]
-        [Route("follow")]
+        [Route("follow/create")]
         [ResponseType(typeof(Follow))]
-        public async Task<IHttpActionResult> PostFollow([FromUri] string AccessToken, [FromUri] int RequestedUserId)
+        public IHttpActionResult CreateFollow([FromUri] string AccessToken, [FromUri] int RequestedUserId)
         {
             if (!ModelState.IsValid)
             {
@@ -55,7 +58,9 @@ namespace Branch.Controllers
 
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            var AlreadyExists = DB.Follows.ToList().Where(x => x.FollowedId == RequestedUserId && x.FollowerId == UserId).Count() > 0;
+            var AlreadyExists = SQLContext.Follows
+                                                  .Where(x => x.FollowedId == RequestedUserId && x.FollowerId == UserId)
+                                                  .Any();
 
             if (AlreadyExists)
             {
@@ -68,28 +73,29 @@ namespace Branch.Controllers
                 FollowedId = RequestedUserId
             };  
 
-            DB.Follows.Add(Follow);
-
-            await DB.SaveChangesAsync();
+            SQLContext.Follows.Add(Follow);
+            SQLContext.SaveChanges();
 
             return Ok(Follow);
         }
 
         [HttpDelete]
-        [Route("follow")]
-        public async Task<IHttpActionResult> DeleteFollow([FromUri] string AccessToken, [FromUri] int FollowedId)
+        [Route("follow/delete")]
+        public IHttpActionResult DeleteFollow([FromUri] string AccessToken, [FromUri] int FollowedId)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            Follow follow = DB.Follows.Where(x => x.FollowerId == UserId && x.FollowedId == FollowedId).FirstOrDefault();
+            Follow Follow = SQLContext.Follows
+                                              .Where(x => x.FollowerId == UserId && x.FollowedId == FollowedId)
+                                              .FirstOrDefault();
 
-            if (follow == null)
+            if (Follow == null)
             {
                 return NotFound();
             }
 
-            DB.Follows.Remove(follow);
-            await DB.SaveChangesAsync();
+            SQLContext.Follows.Remove(Follow);
+            SQLContext.SaveChanges();
 
             return Ok();
         }
@@ -98,7 +104,7 @@ namespace Branch.Controllers
         {
             if (disposing)
             {
-                DB.Dispose();
+                SQLContext.Dispose();
             }
             base.Dispose(disposing);
         }
