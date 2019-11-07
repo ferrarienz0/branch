@@ -272,6 +272,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\NoSQL\Models\Post\Owner.cs" />
+    <Compile Include="Models\NoSQL\Models\Post\PostComparer.cs" />
     <Compile Include="Models\SQL\Relationship\GameTeam.cs" />
     <Compile Include="Models\NoSQL\NoSQLContext.cs" />
     <Compile Include="Models\NoSQL\Models\Post\Post.cs" />

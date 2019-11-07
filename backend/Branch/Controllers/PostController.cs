@@ -73,12 +73,13 @@ namespace Branch.Controllers
 
             var TopicsPosts = PostSearchAuxiliar.PostsBySubjects(UserTopics.Select(x => x.Id));
 
+            var PostComparer = new PostComparer();
+
             var RecommendedPosts = UserPosts
-                                             .Union(UserMentionPosts)
-                                             .Union(FollowsPosts)
-                                             .Union(FollowsMentionPosts)
-                                             .Union(TopicsPosts)
-                                             .Distinct()
+                                             .Union(UserMentionPosts, PostComparer)
+                                             .Union(FollowsPosts, PostComparer)
+                                             .Union(FollowsMentionPosts, PostComparer)
+                                             .Union(TopicsPosts, PostComparer)
                                              .ToList();
 
 
