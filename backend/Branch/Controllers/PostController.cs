@@ -1,6 +1,7 @@
 ﻿using Branch.JWTProvider;
 using Branch.Models;
 using Branch.Models.NoSQL;
+using Branch.SearchAuxiliars;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
@@ -18,15 +19,13 @@ namespace Branch.Controllers
 {
     public class PostController : ApiController
     {
-        private readonly DataAccess MongoContext = new DataAccess();
-        private readonly Context DB = new Context();
-
-        //TODO: Get Products!!
+        private readonly NoSQLContext NoSQLContext = new NoSQLContext();
+        private readonly SQLContext SQLContext = new SQLContext();
 
         [HttpPost]
-        [Route("post")]
+        [Route("post/create")]
         [ResponseType(typeof(Post))]
-        public async Task<IHttpActionResult> PostPost([FromBody] Post NewPost, [FromUri] string AccessToken)
+        public IHttpActionResult CreatePost([FromBody] Post NewPost, [FromUri] string AccessToken)
         {
             if (!ModelState.IsValid)
             {
@@ -34,29 +33,22 @@ namespace Branch.Controllers
             }
 
             var UserId = TokenValidator.VerifyToken(AccessToken);
+            
             NewPost.UserId = UserId;
 
-            var User = DB.Users.Find(UserId);
-            NewPost.Owner = new Owner()
-            {
-                Id = User.Id,
-                Firstname = User.Firstname,
-                Lastname = User.Lastname,
-                Nickname = User.Nickname,
-                MediaURL = User.Media.URL
-            };
+            NewPost = PostSearchAuxiliar.UpdateOwner(NewPost);
 
-            NewPost = await TreatPostAddons(NewPost);
+            NewPost = TreatPostAddons(NewPost);
 
-            await MongoContext.PostCollection.InsertOneAsync(NewPost);
+            NoSQLContext.PostCollection.InsertOne(NewPost);
 
             if (NewPost.Parent != ObjectId.Empty)
             {
-                var Parent = await FindParent(NewPost);
+                var Parent = FindParent(NewPost);
 
                 if (Parent != default)
                 {
-                    await UpdateParent(Parent, NewPost.Id);
+                    UpdateParent(Parent, NewPost.Id);
                 }
             }
 
@@ -66,105 +58,86 @@ namespace Branch.Controllers
         [HttpGet]
         [Route("posts")]
         [ResponseType(typeof(List<Post>))]
-        public async Task<IHttpActionResult> GetPosts([FromUri] string AccessToken)
+        public IHttpActionResult RecommendedPosts([FromUri] string AccessToken)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
-            var UserFollowings = DB.Follows.ToList().Where(x => x.FollowerId == UserId).Select(x => x.FollowedId);
-            var UserSubjects = DB.UserSubjects.Where(x => x.UserId == UserId).ToList();
 
-            var Posts = await MongoContext.PostCollection.Find(_ => true).ToListAsync();
+            var UserFollows = UserSearchAuxiliar.Follows(UserId);
+            var UserTopics = UserSearchAuxiliar.FollowedSubjects(UserId);
 
-            var FollowerPosts = Posts.Where(x => UserFollowings.Contains(x.UserId) || x.UserId == UserId).ToList();
-            
-            List<Post> UserSubjectPosts = new List<Post>();
-            foreach(var UserSubject in UserSubjects)
-            {
-                var SubjectPost = Posts.Where(x => x.Hashtags.Contains(UserSubject.SubjectId)).ToList();
-                UserSubjectPosts.AddRange(SubjectPost);
-            }
+            var UserPosts = PostSearchAuxiliar.PostsByAuthor(UserId);
+            var UserMentionPosts = PostSearchAuxiliar.MentionsUser(UserId);
 
-            var MentionPosts = Posts.Where(x => x.Mentions.Exists(y => UserFollowings.Contains(y.Id) || y.Id == UserId)).ToList();
+            var FollowsPosts = PostSearchAuxiliar.PostsByAuthors(UserFollows.Select(x => x.Id));
+            var FollowsMentionPosts = PostSearchAuxiliar.MentionsUsers(UserFollows);
 
-            var RecommendedPosts = FollowerPosts
-                                                .Union(UserSubjectPosts)
-                                                .Union(MentionPosts)
-                                                .ToList();
+            var TopicsPosts = PostSearchAuxiliar.PostsBySubjects(UserTopics.Select(x => x.Id));
 
-            foreach(var Post in RecommendedPosts)
-            {
-                var User = DB.Users.Find(Post.UserId);
+            var RecommendedPosts = UserPosts
+                                             .Union(UserMentionPosts)
+                                             .Union(FollowsPosts)
+                                             .Union(FollowsMentionPosts)
+                                             .Union(TopicsPosts)
+                                             .Distinct()
+                                             .ToList();
 
-                Post.Owner = new Owner()
-                {
-                    Id = UserId,
-                    Firstname = User.Firstname,
-                    Lastname = User.Lastname,
-                    Nickname = User.Nickname,
-                    MediaURL = User.Media.URL
-                };
-            }
+
+            RecommendedPosts = PostSearchAuxiliar.UpdateOwner(RecommendedPosts);
 
             return Ok(RecommendedPosts);
         }
 
         [HttpGet]
-        [Route("posts")]
+        [Route("post")]
         [ResponseType(typeof(Post))]
-        public IHttpActionResult GetPostById([FromUri] string PostId)
-        { 
-            var Filter = Builders<Post>.Filter.Eq("Id", ObjectId.Parse(PostId));
-            var Post = MongoContext.PostCollection.Find(Filter).FirstOrDefault();
-
-            var User = DB.Users.Find(Post.UserId);
-
-            Post.Owner = new Owner()
-            {
-                Id = User.Id,
-                Firstname = User.Firstname,
-                Lastname = User.Lastname,
-                Nickname = User.Nickname,
-                MediaURL = User.Media.URL
-            };
+        public IHttpActionResult PostById([FromUri] string PostId)
+        {
+            var Post = PostSearchAuxiliar.PostById(PostId);
+            Post = PostSearchAuxiliar.UpdateOwner(Post);
 
             return Ok(Post);
         }
 
         [HttpGet]
+        [Route("posts/subject")]
+        [ResponseType(typeof(List<Post>))]
+        public IHttpActionResult PostsBySubject([FromUri] int SubjectId)
+        {
+            var Posts = PostSearchAuxiliar.PostsBySubject(SubjectId);
+            Posts = PostSearchAuxiliar.UpdateOwner(Posts);
+
+            return Ok(Posts);
+        }
+
+        [HttpGet]
+        [Route("posts/user")]
+        [ResponseType(typeof(List<Post>))]
+        public IHttpActionResult PostsByUser([FromUri] int UserId)
+        {
+            var Posts = PostSearchAuxiliar.PostsByAuthor(UserId);
+            Posts = PostSearchAuxiliar.UpdateOwner(Posts);
+
+            return Ok(Posts);
+        }
+
+        [HttpGet]
         [Route("post/comments")]
         [ResponseType(typeof(List<Post>))]
-        public IHttpActionResult GetComments([FromUri] string PostId)
+        public IHttpActionResult PostComments([FromUri] string PostId)
         {
-            var Filter = Builders<Post>.Filter.Eq("Id", ObjectId.Parse(PostId));
-            var Post = MongoContext.PostCollection.Find(Filter).FirstOrDefault();
-
-            var CommentFilter = Builders<Post>.Filter.In(x => x.Id, Post.Comments);
-            var Comments = MongoContext.PostCollection.Find(CommentFilter).ToList();
-
-            foreach (var Comment in Comments)
-            {
-                var User = DB.Users.Find(Post.UserId);
-
-                Post.Owner = new Owner()
-                {
-                    Id = User.Id,
-                    Firstname = User.Firstname,
-                    Lastname = User.Lastname,
-                    Nickname = User.Nickname,
-                    MediaURL = User.Media.URL
-                };
-            }
+            var Comments = PostSearchAuxiliar.PostComments(PostId);
+            Comments = PostSearchAuxiliar.UpdateOwner(Comments);
 
             return Ok(Comments);
         }
 
         [HttpPut]
-        [Route("posts/like")]
-        public async Task<IHttpActionResult> Like([FromUri] string AccessToken, [FromUri] string PostId)
+        [Route("post/like")]
+        public IHttpActionResult Like([FromUri] string AccessToken, [FromUri] string PostId)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            var filter = Builders<Post>.Filter.Eq("Id", ObjectId.Parse(PostId));
-            var PostLiked = MongoContext.PostCollection.Find(filter).FirstOrDefault();
+            var PostLiked = PostSearchAuxiliar.PostById(PostId);
          
             if (PostLiked.Likes.Contains(UserId))
             {
@@ -180,50 +153,49 @@ namespace Branch.Controllers
                 PostLiked.Dislikes.Remove(UserId);
             }
 
-            await MongoContext.PostCollection.FindOneAndReplaceAsync(filter, PostLiked);
+            NoSQLContext.PostCollection.FindOneAndReplace(x => x.Id == PostLiked.Id, PostLiked);
 
             int TotalLikes = PostLiked.Likes.Count;
             int TotalDeslikes = PostLiked.Dislikes.Count;
+
             dynamic Response = new { TotalLikes, TotalDeslikes };
 
             return Ok(Response);
         }
 
         [HttpPut]
-        [Route("posts/dislike")]
+        [Route("post/dislike")]
         [ResponseType(typeof(int))]
-        public async Task<IHttpActionResult> Dislike([FromUri] string AccessToken, [FromUri] string PostId)
+        public IHttpActionResult Dislike([FromUri] string AccessToken, [FromUri] string PostId)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            var filter = Builders<Post>.Filter.Eq("Id", ObjectId.Parse(PostId));
-            var PostLiked = MongoContext.PostCollection.Find(filter).FirstOrDefault();
+            var PostDisliked = PostSearchAuxiliar.PostById(PostId);
 
-            if (PostLiked.Dislikes.Contains(UserId))
+            if (PostDisliked.Dislikes.Contains(UserId))
             {
-                PostLiked.Dislikes.Remove(UserId);
+                PostDisliked.Dislikes.Remove(UserId);
             }
             else
             {
-                PostLiked.Dislikes.Add(UserId);
+                PostDisliked.Dislikes.Add(UserId);
             }
 
-            if(PostLiked.Likes.Contains(UserId))
+            if(PostDisliked.Likes.Contains(UserId))
             {
-                PostLiked.Likes.Remove(UserId);
+                PostDisliked.Likes.Remove(UserId);
             }
 
-            await MongoContext.PostCollection.FindOneAndReplaceAsync(filter, PostLiked);
+            NoSQLContext.PostCollection.FindOneAndReplace(x => x.Id == PostDisliked.Id, PostDisliked);
 
-            int TotalLikes = PostLiked.Likes.Count;
-            int TotalDeslikes = PostLiked.Dislikes.Count;
+            int TotalLikes = PostDisliked.Likes.Count;
+            int TotalDeslikes = PostDisliked.Dislikes.Count;
+
             dynamic Response = new { TotalLikes, TotalDeslikes };
 
             return Ok(Response);
         }
 
-
-        // Treatment Functions
         private List<string> FindTag(string Text, string Tag)
         {
             int TagIndex;
@@ -255,18 +227,19 @@ namespace Branch.Controllers
             return Tags;
         }
 
-        private async Task<List<int>> CheckHashtagsExistence(List<string> Hashtags)
+        private List<int> CheckHashtagsExistence(List<string> Hashtags)
         {
             List<int> Subjects = new List<int>();
 
             foreach (var Hashtag in Hashtags)
             {
-                var Exists = await DB.Subjects.FirstOrDefaultAsync(x => x.Hashtag == Hashtag);
+                var Exists = SQLContext.Subjects.FirstOrDefault(x => x.Hashtag == Hashtag);
 
                 if (Exists == default)
                 {
-                    var Added = DB.Subjects.Add(new Subject() { Hashtag = Hashtag });
-                    await DB.SaveChangesAsync();
+                    var Added = SQLContext.Subjects.Add(new Subject() { Hashtag = Hashtag });
+                    SQLContext.SaveChanges();
+
                     Subjects.Add(Added.Id);
                 }
 
@@ -279,13 +252,13 @@ namespace Branch.Controllers
             return Subjects;
         }
 
-        private async Task<List<User>> CheckMentionsExistence(List<string> Mentions)
+        private List<User> CheckMentionsExistence(List<string> Mentions)
         {
             List<User> UsersList = new List<User>();
 
             foreach (var Mention in Mentions)
             {
-                var Exists = await DB.Users.FirstOrDefaultAsync(x => x.Nickname == Mention.Substring(1, Mention.Length));
+                var Exists = SQLContext.Users.FirstOrDefault(x => x.Nickname == Mention.Substring(1, Mention.Length));
 
                 if (Exists != default)
                 {
@@ -296,13 +269,13 @@ namespace Branch.Controllers
             return UsersList;
         }
 
-        private async Task<List<Product>> CheckProductExistence(List<string> Products)
+        private List<Product> CheckProductExistence(List<string> Products)
         {
             List<Product> UsersList = new List<Product>();
 
             foreach (var Product in Products)
             {
-                var Exists = await DB.Products.FirstOrDefaultAsync(x => x.Name == Product.Substring(1, Product.Length));
+                var Exists = SQLContext.Products.FirstOrDefault(x => x.Name == Product.Substring(1, Product.Length));
 
                 if (Exists != default)
                 {
@@ -313,15 +286,15 @@ namespace Branch.Controllers
             return UsersList;
         }
 
-        private async Task<Post> TreatPostAddons(Post NewPost)
+        private Post TreatPostAddons(Post NewPost)
         {
             var Hashtags = FindTag(NewPost.Text, "#");
             var Mentions = FindTag(NewPost.Text, "@");
             var Products = FindTag(NewPost.Text, "$");
 
-            var HashtagObjects = await CheckHashtagsExistence(Hashtags);
-            var MentionObjects = await CheckMentionsExistence(Mentions);
-            var ProductsObjects = await CheckProductExistence(Products);
+            var HashtagObjects = CheckHashtagsExistence(Hashtags);
+            var MentionObjects = CheckMentionsExistence(Mentions);
+            var ProductsObjects = CheckProductExistence(Products);
 
             NewPost.Hashtags = HashtagObjects;
             NewPost.Mentions = MentionObjects;
@@ -333,7 +306,7 @@ namespace Branch.Controllers
             {
                 foreach (var Id in NewPost.Medias)
                 {
-                    var Media = DB.Medias.Find(Id);
+                    var Media = SQLContext.Medias.Find(Id);
                     Medias.Add(Media);
                 }
             }
@@ -346,18 +319,17 @@ namespace Branch.Controllers
             return NewPost;
         }
 
-        private async Task<Post> FindParent(Post NewPost)
+        private Post FindParent(Post NewPost)
         {
-            var ParentPost = await MongoContext.PostCollection.FindAsync(x => x.Id == NewPost.Parent);
-            var Result = await ParentPost.FirstOrDefaultAsync();
+            var ParentPost = PostSearchAuxiliar.PostById(NewPost.Parent.ToString());
             
-            return Result;
+            return ParentPost;
         }
 
-        private async Task UpdateParent(Post Parent, ObjectId CommentId)
+        private void UpdateParent(Post Parent, ObjectId CommentId)
         {
             Parent.Comments.Add(CommentId);
-            await MongoContext.PostCollection.UpdateOneAsync(x => x.Id == Parent.Id,
+            NoSQLContext.PostCollection.UpdateOne(x => x.Id == Parent.Id,
                                                              Builders<Post>.Update.Set(Post => Post, Parent));
         }
     }

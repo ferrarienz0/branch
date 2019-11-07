@@ -20,72 +20,71 @@ namespace Branch.Controllers
 {
     public class UserController : ApiController
     {
-        private Context db = new Context();
-        private readonly DataAccess MongoContext = new DataAccess();
+        private readonly SQLContext SQLContext = new SQLContext();
 
         [HttpGet]
-        [Route("user")]
-        public IQueryable<User> GetUsers()
+        [Route("users")]
+        public List<User> GetUsers()
         {
-            return db.Users;
+            return SQLContext.Users.ToList();
         }
 
         [HttpGet]
         [Route("user")]
         [ResponseType(typeof(User))]
-        public async Task<IHttpActionResult> GetUser(int id)
+        public IHttpActionResult UserById(int UserId)
         {
-            User user = await db.Users.FindAsync(id);
+            User User = SQLContext.Users.Find(UserId);
 
-            if (user == null)
+            if (User == null)
             {
                 return NotFound();
             }
 
-            return Ok(user);
+            return Ok(User);
         }
 
         [HttpGet]
         [Route("user")]
         [ResponseType(typeof(User))]
-        public async Task<IHttpActionResult> GetUser([FromUri] string AccessToken)
+        public IHttpActionResult UserByToken([FromUri] string AccessToken)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            User user = await db.Users.FindAsync(UserId);
+            User User = SQLContext.Users.Find(UserId);
 
-            if (user == null)
+            if (User == null)
             {
                 return NotFound();
             }
 
-            return Ok(user);
+            return Ok(User);
         }
 
         [HttpPut]
-        [Route("user")]
+        [Route("user/update")]
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutUser(int id, User user)
+        public IHttpActionResult UpdateUser(int UserId, User User)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != user.Id)
+            if (UserId != User.Id)
             {
                 return BadRequest();
             }
 
-            db.Entry(user).State = EntityState.Modified;
+            SQLContext.Entry(User).State = EntityState.Modified;
 
             try
             {
-                await db.SaveChangesAsync();
+                SQLContext.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                if (!UserExists(UserId))
                 {
                     return NotFound();
                 }
@@ -99,62 +98,52 @@ namespace Branch.Controllers
         }
 
         [HttpPost]
-        [Route("user")]
+        [Route("user/create")]
         [ResponseType(typeof(User))]
-        public async Task<IHttpActionResult> PostUser(User user)
+        public IHttpActionResult CreateUser(User User)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Users.Add(user);
-            await db.SaveChangesAsync();
+            SQLContext.Users.Add(User);
+            SQLContext.SaveChanges();
 
-            return Ok(user);
+            return Ok(User);
         }
 
-        [HttpGet]
-        [Route("user/posts")]
-        [ResponseType(typeof(List<Post>))]
-        public IHttpActionResult GetUserPosts([FromUri] int UserId)
-        {
-            var Posts = MongoContext.PostCollection.Find(_ => true).ToList();
-
-            var SelectedPosts = Posts.Where(x => x.Mentions.Exists(y => y.Id == UserId) || x.UserId == UserId);
-
-            return Ok(SelectedPosts);
-        }
 
         [HttpDelete]
-        [Route("user")]
+        [Route("user/delete")]
         [ResponseType(typeof(User))]
-        public async Task<IHttpActionResult> DeleteUser(int id)
+        public IHttpActionResult DeleteUser(int UserId)
         {
-            User user = await db.Users.FindAsync(id);
-            if (user == null)
+            User User = SQLContext.Users.Find(UserId);
+            
+            if (User == null)
             {
                 return NotFound();
             }
 
-            db.Users.Remove(user);
-            await db.SaveChangesAsync();
+            SQLContext.Users.Remove(User);
+            SQLContext.SaveChanges();
 
-            return Ok(user);
+            return Ok(User);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+                SQLContext.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private bool UserExists(int id)
         {
-            return db.Users.Count(e => e.Id == id) > 0;
+            return SQLContext.Users.Any(e => e.Id == id);
         }
     }
 }

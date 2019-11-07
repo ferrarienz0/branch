@@ -11,37 +11,40 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Branch.JWTProvider;
 using Branch.Models;
+using Branch.SearchAuxiliars;
 
 namespace Branch.Controllers
 {
     public class UserSubjectController : ApiController
     {
-        private readonly Context DB = new Context();
+        private readonly SQLContext SQLContext = new SQLContext();
 
         [HttpGet]
-        [Route("userInterests")]
+        [Route("user/subjects")]
         [ResponseType(typeof(List<Subject>))]
-        public IHttpActionResult GetUserInterests([FromUri] string AccessToken)
+        public IHttpActionResult UserFollowedSubjects([FromUri] string AccessToken)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            return Ok(DB.UserSubjects.Where(x => x.UserId == UserId).Select(x => new { x.Subject, UserInterestId = x.Id }).ToList());
+            var Subjects = UserSearchAuxiliar.FollowedSubjects(UserId);
+
+            return Ok(Subjects);
         }
 
         [HttpPost]
-        [Route("userInterests")]
+        [Route("user/follow/subject")]
         [ResponseType(typeof(UserSubject))]
-        public async Task<IHttpActionResult> PostUserSubject([FromUri] string AccessToken, [FromUri] int SubjectId)
+        public IHttpActionResult FollowSubject([FromUri] string AccessToken, [FromUri] int SubjectId)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
-            var Subject = await DB.Subjects.FindAsync(SubjectId);
+            var Subject = SQLContext.Subjects.Find(SubjectId);
 
             if(Subject == null)
             {
                 return NotFound();
             }
 
-            var AlreadyExists = DB.UserSubjects.Where(x => x.UserId == UserId && x.SubjectId == SubjectId).Count() > 0;
+            var AlreadyExists = UserSearchAuxiliar.FollowedSubjects(UserId).Contains(Subject);
 
             if(AlreadyExists)
             {
@@ -54,36 +57,35 @@ namespace Branch.Controllers
                 SubjectId = SubjectId
             };
 
-            DB.UserSubjects.Add(UserInterest);
-
-            await DB.SaveChangesAsync();
+            SQLContext.UserSubjects.Add(UserInterest);
+            SQLContext.SaveChanges();
 
             return Ok(UserInterest);
         }
 
         [HttpDelete]
-        [Route("userInterests")]
+        [Route("user/unfollow/subject")]
         [ResponseType(typeof(UserSubject))]
-        public async Task<IHttpActionResult> DeleteUserSubject(int id)
+        public IHttpActionResult DeleteUserSubject(int SubjectFollowId)
         {
-            UserSubject userSubject = await DB.UserSubjects.FindAsync(id);
+            UserSubject UserSubject = SQLContext.UserSubjects.Find(SubjectFollowId);
             
-            if (userSubject == null)
+            if (UserSubject == null)
             {
                 return NotFound();
             }
 
-            DB.UserSubjects.Remove(userSubject);
-            await DB.SaveChangesAsync();
+            SQLContext.UserSubjects.Remove(UserSubject);
+            SQLContext.SaveChanges();
 
-            return Ok(userSubject);
+            return Ok(UserSubject);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                DB.Dispose();
+                SQLContext.Dispose();
             }
             base.Dispose(disposing);
         }

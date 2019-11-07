@@ -18,11 +18,11 @@ namespace Branch.Controllers
 {
     public class MediaController : ApiController
     {
-        private readonly Context DB = new Context();
+        private readonly SQLContext SQLContext = new SQLContext();
         private readonly string Root = HttpContext.Current.Server.MapPath("~/Media_Data");
 
         [HttpPost]
-        [Route("media")]
+        [Route("media/create")]
         [ResponseType(typeof(List<Media>))]
         public async Task<IHttpActionResult> PostMedia([FromUri] string AccessToken, bool IsUserMedia)
         {
@@ -34,7 +34,7 @@ namespace Branch.Controllers
 
             try
             {
-                await Request.Content.ReadAsMultipartAsync(Provider);
+                await Request.Content.ReadAsMultipartAsync(Provider).ConfigureAwait(false);
 
                 foreach (var _File in Provider.FileData)
                 {
@@ -43,7 +43,7 @@ namespace Branch.Controllers
                     var Name = (string) FileData.Name;
                     var FileExtension = (string) FileData.FileExtension;
 
-                    var NewMedia = await TreatMediaCreation(Name, FileExtension, UserId, IsUserMedia);
+                    var NewMedia = TreatMediaCreation(Name, FileExtension, UserId, IsUserMedia);
 
                     Medias.Add(NewMedia);
                 }
@@ -59,9 +59,9 @@ namespace Branch.Controllers
 
         [HttpGet]
         [Route("media")]
-        public IHttpActionResult GetMedia([FromUri] int id)
+        public IHttpActionResult MediaById([FromUri] int MediaId)
         {
-            var Media = DB.Medias.Find(id);
+            var Media = SQLContext.Medias.Find(MediaId);
 
             return Ok(Media);
         }
@@ -85,30 +85,31 @@ namespace Branch.Controllers
             return FileData; 
         }
 
-        private async Task<Media> TreatMediaCreation(string Name, string FileExtension, int UserId, bool IsUserMedia)
+        private Media TreatMediaCreation(string Name, string FileExtension, int UserId, bool IsUserMedia)
         {
-            var MediaType = DB.TypeMedias.Where(x => x.Name == FileExtension).FirstOrDefault();
+            var MediaType = SQLContext.TypeMedias.Where(x => x.Name == FileExtension).FirstOrDefault();
 
             if (MediaType == default)
             {
                 MediaType = new TypeMedia { Name = FileExtension };
-                DB.TypeMedias.Add(MediaType);
-                await DB.SaveChangesAsync();
+                
+                SQLContext.TypeMedias.Add(MediaType);
+                SQLContext.SaveChanges();
             }
 
             var NewMedia = new Media { URL = Url.Content(Path.Combine("~/Media_Data", Name)) };
 
-            DB.Medias.Add(NewMedia);
-            await DB.SaveChangesAsync();
+            SQLContext.Medias.Add(NewMedia);
+            SQLContext.SaveChanges();
 
             if(IsUserMedia)
             {
-                var User = await DB.Users.FindAsync(UserId);
+                var User = SQLContext.Users.Find(UserId);
                 User.MediaId = NewMedia.Id;
-                DB.Entry(User).State = System.Data.Entity.EntityState.Modified;
+                SQLContext.Entry(User).State = System.Data.Entity.EntityState.Modified;
             }
 
-            await DB.SaveChangesAsync();
+            SQLContext.SaveChanges();
 
             return NewMedia;
         }
@@ -117,7 +118,7 @@ namespace Branch.Controllers
         {
             if (disposing)
             {
-                DB.Dispose();
+                SQLContext.Dispose();
             }
             base.Dispose(disposing);
         }

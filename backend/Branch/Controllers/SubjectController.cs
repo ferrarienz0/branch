@@ -12,6 +12,7 @@ using System.Web.Http.Description;
 using Branch.JWTProvider;
 using Branch.Models;
 using Branch.Models.NoSQL;
+using Branch.SearchAuxiliars;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -19,93 +20,96 @@ namespace Branch.Controllers
 {
     public class SubjectController : ApiController
     {
-        private readonly Context DB = new Context();
-        private readonly DataAccess MongoContext = new DataAccess();
+        private readonly SQLContext SQLContext = new SQLContext();
 
         [HttpGet]
-        [Route("subject")]
+        [Route("subjects")]
         [ResponseType(typeof(List<Subject>))]
         public List<Subject> GetSubjects()
         {
-            var Subjects = DB.Subjects.ToList();
+            var Subjects = SQLContext.Subjects.ToList();
 
             return Subjects;
         }
 
         [HttpGet]
-        [Route("subject")]
+        [Route("subjects/unfollowed")]
         [ResponseType(typeof(List<Subject>))]
-        public List<Subject> GetUnfollowedSubjects([FromUri] string AccessToken)
+        public IHttpActionResult UnfollowedSubjects([FromUri] string AccessToken)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            var Subjects = DB.Subjects.Where(x => DB.UserSubjects.Where(y => y.SubjectId == x.Id && y.UserId == UserId).Count() == 0).ToList();
+            var Subjects = UserSearchAuxiliar.UnfollowedSubjects(UserId);
 
-            return Subjects;
+            return Ok(Subjects);
+        }
+
+        [HttpGet]
+        [Route("subjects/followed")]
+        [ResponseType(typeof(List<Subject>))]
+        public IHttpActionResult FollowedSubjects([FromUri] string AccessToken)
+        {
+            var UserId = TokenValidator.VerifyToken(AccessToken);
+
+            var Subjects = UserSearchAuxiliar.FollowedSubjects(UserId);
+
+            return Ok(Subjects);
         }
 
         [HttpGet]
         [Route("subject")]
         [ResponseType(typeof(Subject))]
-        public async Task<IHttpActionResult> GetSubject(int id)
+        public IHttpActionResult SubjectById(int SubjectId)
         {
-            Subject subject = await DB.Subjects.FindAsync(id);
-            if (subject == null)
+            Subject Subject = SQLContext.Subjects.Find(SubjectId);
+
+            if (Subject == null)
             {
                 return NotFound();
             }
 
-            return Ok(subject);
+            return Ok(Subject);
         }
 
         [HttpPost]
-        [Route("subject")]
+        [Route("subject/create")]
         [ResponseType(typeof(Subject))]
-        public async Task<IHttpActionResult> PostSubject([FromBody] Subject Subject)
+        public IHttpActionResult CreateSubject([FromBody] Subject Subject)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            DB.Subjects.Add(Subject);
-            await DB.SaveChangesAsync();
+            SQLContext.Subjects.Add(Subject);
+            SQLContext.SaveChanges();
 
             return Ok(Subject);
         }
 
-        [HttpGet]
-        [Route("subject/posts")]
-        [ResponseType(typeof(List<Post>))]
-        public IHttpActionResult GetSubjectPosts([FromUri] int SubjectId)
-        {
-            var Posts = MongoContext.PostCollection.Find(x => x.Hashtags.Contains(SubjectId)).ToList();
-
-            return Ok(Posts);
-        }
-
         [HttpDelete]
-        [Route("subject")]
+        [Route("subject/delete")]
         [ResponseType(typeof(Subject))]
-        public async Task<IHttpActionResult> DeleteSubject(int id)
+        public IHttpActionResult DeleteSubject(int SubjectId)
         {
-            Subject subject = await DB.Subjects.FindAsync(id);
-            if (subject == null)
+            Subject Subject = SQLContext.Subjects.Find(SubjectId);
+            
+            if (Subject == null)
             {
                 return NotFound();
             }
 
-            DB.Subjects.Remove(subject);
-            await DB.SaveChangesAsync();
+            SQLContext.Subjects.Remove(Subject);
+            SQLContext.SaveChanges();
 
-            return Ok(subject);
+            return Ok(Subject);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                DB.Dispose();
+                SQLContext.Dispose();
             }
             base.Dispose(disposing);
         }
