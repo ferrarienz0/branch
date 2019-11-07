@@ -16,7 +16,7 @@ namespace Branch.Controllers
 {
     public class UserSubjectController : ApiController
     {
-        private readonly Context DB = new Context();
+        private readonly SQLContext DB = new SQLContext();
 
         [HttpGet]
         [Route("userInterests")]

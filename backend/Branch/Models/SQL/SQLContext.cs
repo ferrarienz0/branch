@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Branch.Models
 {
-    public class Context : DbContext
+    public class SQLContext : DbContext
     {
 
         public DbSet<Game> Games { get; set; }
@@ -57,7 +57,7 @@ namespace Branch.Models
 
         public DbSet<UserMarketplace> UserMarketplaces { get; set; }
 
-        public Context() : base("branchsql")
+        public SQLContext() : base("branchsql")
         {
 
         }

@@ -19,8 +19,8 @@ namespace Branch.Controllers
 {
     public class SubjectController : ApiController
     {
-        private readonly Context DB = new Context();
-        private readonly DataAccess MongoContext = new DataAccess();
+        private readonly SQLContext DB = new SQLContext();
+        private readonly NoSQLContext MongoContext = new NoSQLContext();
 
         [HttpGet]
         [Route("subject")]

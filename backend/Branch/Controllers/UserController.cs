@@ -20,8 +20,8 @@ namespace Branch.Controllers
 {
     public class UserController : ApiController
     {
-        private Context db = new Context();
-        private readonly DataAccess MongoContext = new DataAccess();
+        private SQLContext db = new SQLContext();
+        private readonly NoSQLContext MongoContext = new NoSQLContext();
 
         [HttpGet]
         [Route("user")]
@@ -154,7 +154,7 @@ namespace Branch.Controllers
 
         private bool UserExists(int id)
         {
-            return db.Users.Count(e => e.Id == id) > 0;
+            return db.Users.Any(e => e.Id == id);
         }
     }
 }

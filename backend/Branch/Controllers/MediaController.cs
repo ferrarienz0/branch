@@ -18,7 +18,7 @@ namespace Branch.Controllers
 {
     public class MediaController : ApiController
     {
-        private readonly Context DB = new Context();
+        private readonly SQLContext DB = new SQLContext();
         private readonly string Root = HttpContext.Current.Server.MapPath("~/Media_Data");
 
         [HttpPost]

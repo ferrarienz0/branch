@@ -19,7 +19,7 @@ namespace Branch.Controllers
 {
     public class FollowController : ApiController
     {
-        private readonly Context DB = new Context();
+        private readonly SQLContext DB = new SQLContext();
         private readonly string ConnectionString = "server=tuffi.db.elephantsql.com;User Id=vlvhqsdd;Database=vlvhqsdd;Port=5432;Password=0pBsOXETTteJOJt6Ysf0jq_135BK--N3";
 
         [HttpGet]

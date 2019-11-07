@@ -18,8 +18,8 @@ namespace Branch.Controllers
 {
     public class PostController : ApiController
     {
-        private readonly DataAccess MongoContext = new DataAccess();
-        private readonly Context DB = new Context();
+        private readonly NoSQLContext MongoContext = new NoSQLContext();
+        private readonly SQLContext DB = new SQLContext();
 
         //TODO: Get Products!!
 
