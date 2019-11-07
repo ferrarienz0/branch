@@ -14,7 +14,7 @@ namespace Branch.Controllers
 {
     public class SessionController : ApiController
     {
-        private readonly SQLContext db = new SQLContext();
+        private readonly SQLContext SQLContext = new SQLContext();
 
         public class UserAuth
         {
@@ -25,9 +25,9 @@ namespace Branch.Controllers
 
         [HttpPost]
         [Route("session")]
-        public async Task<IHttpActionResult> PostToken([FromBody] UserAuth UserAuth)
+        public IHttpActionResult PostToken([FromBody] UserAuth UserAuth)
         {
-            User User = await db.Users.FirstOrDefaultAsync(u => u.Nickname == UserAuth.Nickname && u.Password == UserAuth.PasswordHash);
+            User User = SQLContext.Users.FirstOrDefault(u => u.Nickname == UserAuth.Nickname && u.Password == UserAuth.PasswordHash);
             
             if (User == default)
             {
@@ -42,6 +42,7 @@ namespace Branch.Controllers
             );
 
             NewToken.SetExpiration(UserAuth.ValidTime);
+            
             var Token = NewToken.CreateToken(UserAuth.ValidTime);
 
             var Response = new { Token };

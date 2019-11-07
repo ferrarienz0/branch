@@ -133,7 +133,7 @@ namespace Branch.Controllers
 
         private bool AddressExists(int id)
         {
-            return db.Addresses.Count(e => e.Id == id) > 0;
+            return db.Addresses.Any(e => e.Id == id);
         }
     }
 }

@@ -17,11 +17,11 @@ namespace Branch.SearchAuxiliars
         /// <summary>
         /// Returns posts that mentions a certain user
         /// </summary>
-        /// <param name="User">The User</param>
-        public static List<Post> MentionsUser(User User)
+        /// <param name="UserId">The user's id</param>
+        public static List<Post> MentionsUser(int UserId)
         {
             return NoSQLContext.PostCollection
-                                              .Find(x => x.Mentions.Contains(User))
+                                              .Find(x => x.Mentions.Select(y => y.Id).Contains(UserId))
                                               .ToList();
         }
 
@@ -29,7 +29,7 @@ namespace Branch.SearchAuxiliars
         /// Returns posts that mentions one or more users
         /// </summary>
         /// <param name="Users">The user collection</param>
-        public static List<Post> MentionsUsers(ICollection<User> Users)
+        public static List<Post> MentionsUsers(IEnumerable<User> Users)
         {
             return NoSQLContext.PostCollection
                                               .Find(x => x.Mentions.Intersect(Users).Any())
@@ -51,7 +51,7 @@ namespace Branch.SearchAuxiliars
         /// Returns users' posts
         /// </summary>
         /// <param name="UserIds">The users' ids</param>
-        public static List<Post> PostsByAuthors(ICollection<int> UserIds)
+        public static List<Post> PostsByAuthors(IEnumerable<int> UserIds)
         {
             return NoSQLContext.PostCollection
                                               .Find(x => UserIds.Contains(x.UserId))
@@ -73,7 +73,7 @@ namespace Branch.SearchAuxiliars
         /// Returns topics' posts
         /// </summary>
         /// <param name="SubjectIds">The subjects' ids</param>
-        public static List<Post> PostsBySubjects(ICollection<int> SubjectIds)
+        public static List<Post> PostsBySubjects(IEnumerable<int> SubjectIds)
         {
             return NoSQLContext.PostCollection
                                               .Find(x => x.Hashtags.Intersect(SubjectIds).Any())
@@ -95,7 +95,7 @@ namespace Branch.SearchAuxiliars
         /// Returns products' posts
         /// </summary>
         /// <param name="ProductIds">The products' ids</param>
-        public static List<Post> PostsByProducts(ICollection<int> ProductIds)
+        public static List<Post> PostsByProducts(IEnumerable<int> ProductIds)
         {
             return NoSQLContext.PostCollection
                                               .Find(x => x.Products
