@@ -5,7 +5,8 @@ import Topic from '../components/Topic';
 
 export default class Follows extends Component {
     state = {
-        user: {
+        me: {
+            people: [],
             topics: [],
         },
         topics: [],
@@ -13,13 +14,15 @@ export default class Follows extends Component {
 
     componentDidMount = async () => {
         const { token } = this.props;
-        const { data: myTopics } = await api.get(
+        const { data: me_topics } = await api.get(
             `/userInterests?AccessToken=${token}`
         );
+        const { data: people } = await api.get(`/follow?AccessToken=${token}`);
         const { data: topics } = await api.get(`/subject?AccessToken=${token}`);
         this.setState({
-            user: {
-                topics: myTopics,
+            me: {
+                topics: me_topics,
+                people,
             },
             topics,
         });
@@ -30,12 +33,14 @@ export default class Follows extends Component {
     };
 
     render() {
-        const { user, topics } = this.state;
+        const { me, topics } = this.state;
         const { token, handleHead } = this.props;
         return (
             <div id="follows">
+                <div id="topics">Meus seguidos</div>
+                {/*me.people.map((user, index) => console.log(user))*/}
                 <div id="topics">Meus tópicos</div>
-                {user.topics.map((topic, index) => (
+                {me.topics.map((topic, index) => (
                     <Topic
                         key={index}
                         token={token}

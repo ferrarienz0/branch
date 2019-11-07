@@ -96,7 +96,7 @@ export default class Comment extends Component {
             <div id="comment-container">
                 <div id="head">
                     <div id="user-image">
-                        <UserImage size="50px" image={comment.Owner.image} />
+                        <UserImage size="50px" image={comment.Owner.MediaURL} />
                         {me.ID === comment.Owner.Id ? null : iFollow ? (
                             <FaTimes
                                 id="follow-icon"

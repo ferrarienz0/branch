@@ -5,7 +5,6 @@ import './Register.css';
 import viacep from '../services/viacep';
 import api from '../services/api';
 import logo from '../assets/logo.svg';
-import UserImage from '../components/UserImage';
 
 export default class Register extends Component {
     state = {
@@ -66,22 +65,22 @@ export default class Register extends Component {
             },
         });
     };
-    handleFile = async e => {
-        let config = {
-            headers: {
-                Accept: '',
-                'Content-Type': 'multipart/form-data',
-            },
-        };
-        let formData = new FormData();
-        formData.append('image', e.target.files[0]);
-        const { data } = await api.post(
-            `/media?AccessToken=${this.props.token}&IsUserMedia=true`,
-            formData,
-            config
-        );
-        this.setState({ image: data[0].URL });
-    };
+    //handleFile = async e => {
+    //    let config = {
+    //        headers: {
+    //            Accept: '',
+    //            'Content-Type': 'multipart/form-data',
+    //        },
+    //    };
+    //    let formData = new FormData();
+    //    formData.append('image', e.target.files[0]);
+    //    const { data } = await api.post(
+    //        `/media?AccessToken=${this.props.token}&IsUserMedia=true`,
+    //        formData,
+    //        config
+    //    );
+    //    this.setState({ image: data[0].URL });
+    //};
     render() {
         if (this.state.isSession) {
             return <Redirect to={`/home/${this.state.token}`} />;
@@ -171,20 +170,6 @@ export default class Register extends Component {
                         type="password"
                         onChange={this.handlePassword}
                     />
-                    <label id="media" htmlFor="selecao-arquivo">
-                        <UserImage
-                            htmlFor="selecao-arquivo"
-                            id="user-image"
-                            size="100px"
-                            image={this.state.image}
-                        />
-                    </label>
-                    <input
-                        id="selecao-arquivo"
-                        type="file"
-                        name="pic"
-                        onChange={this.handleFile}
-                    ></input>
                     <p id="warning">{this.state.warning}</p>
                     <Link
                         id="register-button"

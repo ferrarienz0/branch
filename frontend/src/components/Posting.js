@@ -6,36 +6,48 @@ import api from '../services/api';
 export default class Posting extends Component {
     state = {
         image: { id: -1, URL: '' },
+        temp: '',
         text: '',
         preview: '',
     };
+
     handlePost = async () => {
-        const { image, text, preview } = this.state;
+        const { image, text, temp } = this.state;
         const { token, onClose } = this.props;
-        let formData = new FormData();
-        formData.append('image', preview);
-        let config = {
-            headers: {
-                Accept: '',
-                'Content-Type': 'multipart/form-data',
-            },
-        };
-        const { data } = await api.post(
-            `/media?AccessToken=${token}&IsUserMedia=false`,
-            formData,
-            config
+        console.log(temp);
+        if (Boolean(temp.name)) {
+            let config = {
+                headers: {
+                    Accept: '',
+                    'Content-Type': 'multipart/form-data',
+                },
+            };
+            let formData = new FormData();
+            formData.append('image', temp);
+            const { data } = await api.post(
+                `/media?AccessToken=${token}&IsUserMedia=false`,
+                formData,
+                config
+            );
+            this.setState({ image: { id: data[0].Id, URL: data[0].URL } });
+        }
+        const { data: postagem } = await api.post(
+            `/post?AccessToken=${token}`,
+            {
+                Text: text,
+                Medias: image.id === -1 ? [] : [image.id],
+            }
         );
-        console.log(data);
-        this.setState({ image: { id: data[0].Id, URL: data[0].URL } });
-        await api.post(`/post?AccessToken=${token}`, {
-            Text: text,
-            Medias: image.id === -1 ? [] : [image.id],
-        });
+        console.log(postagem);
         onClose();
     };
 
     handleFile = e => {
-        this.setState({ preview: URL.createObjectURL(e.target.files[0]) });
+        console.log(e.target.files[0]);
+        this.setState({
+            preview: URL.createObjectURL(e.target.files[0]),
+            temp: e.target.files[0],
+        });
     };
 
     render() {

@@ -29,6 +29,8 @@ export default function UserImage(props) {
                 <div
                     id="user-image"
                     style={{
+                        height: `${props.size}`,
+                        width: `${props.size}`,
                         background: `url('${props.image}')`,
                         backgroundPosition: 'center',
                         backgroundRepeat: 'no-repeat',

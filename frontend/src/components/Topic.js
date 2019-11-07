@@ -19,11 +19,11 @@ export default class Topic extends Component {
                 `/userInterests?AccessToken=${token}&SubjectId=${topic.id}`
             );
             this.setState({ followID: data.Id });
-            this.props.refresh();
+            //this.props.refresh();
         } else {
-            api.delete(`/userInterests?id=${followID}`).then(res => {
+            api.delete(`/userInterests?id=${followID}`).then(() => {
                 this.setState({ followID: null });
-                this.props.refresh();
+                //this.props.refresh();
             });
         }
     };

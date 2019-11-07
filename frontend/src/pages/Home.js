@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
     FaPaperPlane,
     FaPaperclip,
@@ -12,7 +12,12 @@ import icone from '../assets/icone.svg';
 import api from '../services/api';
 import Posting from '../components/Posting';
 import UserImage from '../components/UserImage';
-import Feed from '../components/Feed';
+//import Feed from '../components/Feed';
+import Comment from '../components/Comment';
+import UserHead from '../components/Heads/UserHead';
+import TopicHead from '../components/Heads/TopicHead';
+import CommentHead from '../components/Heads/CommentHead';
+import ProductHead from '../components/Heads/ProductHead';
 import Follows from '../components/Follows';
 
 export default class Home extends Component {
@@ -33,10 +38,15 @@ export default class Home extends Component {
         id: '',
         redirect: false,
         loaded: false,
+        head: '',
+        loaded_head: false,
+        feed: {
+            comments: [],
+            loaded: false,
+        },
     };
 
     componentDidMount = async () => {
-        //console.log(localStorage.getItem('token') === null);
         const { token } = this.props.match.params;
         const { data: user } = await api.get(`/user?AccessToken=${token}`);
         const { data: posts } = await api.get(`/posts?AccessToken=${token}`);
@@ -55,12 +65,87 @@ export default class Home extends Component {
                 email: user.Email,
                 image: user.Media,
                 topics: myTopics,
+                ...user,
             },
             posts,
             topics,
             posting: false,
-            loaded: true,
         });
+        this.handleHead('', '');
+    };
+
+    getHead = async (type, id) => {
+        console.log('in getHead');
+        const { token } = this.props.match.params;
+        const { user: me /*, type, id*/ } = this.state;
+        let head = <div />;
+        switch (type) {
+            case 'u':
+                head = <UserHead me={me} userID={id} refresh={this.refresh} />;
+                break;
+            case 'h':
+                head = (
+                    <TopicHead
+                        me={me}
+                        token={token}
+                        topicID={id}
+                        refresh={this.refresh}
+                    />
+                );
+                break;
+            case 'c':
+                const { data: comment } = await api.get(`/posts?PostId=${id}`);
+                head = (
+                    <CommentHead
+                        me={me}
+                        token={token}
+                        comment={comment}
+                        refresh={this.refresh}
+                    />
+                );
+                break;
+            case '$':
+                head = (
+                    <ProductHead
+                        me={me}
+                        token={token}
+                        productID={id}
+                        refresh={this.refresh}
+                    />
+                );
+
+                break;
+            default:
+                head = <div />;
+        }
+        this.setState({
+            head,
+            loaded_head: true,
+        });
+        console.log('out getHead');
+    };
+
+    getComments = async (type, id) => {
+        console.log('in getComments');
+        const { token } = this.props.match.params;
+        //const { id, type } = this.state;
+        let req = '';
+        switch (type) {
+            case 'h':
+                req = `/subject/posts?SubjectId=${id}`;
+                break;
+            case 'c':
+                req = `/post/comments?PostId=${id}`;
+                break;
+            case 'u':
+                req = `/user/posts?UserId=${id}`;
+                break;
+            default:
+                req = `/posts?AccessToken=${token}`;
+        }
+        const { data: comments } = await api.get(req);
+        this.setState({ feed: { comments, loaded: true } });
+        console.log('out getComments');
     };
 
     refresh = () => {
@@ -81,18 +166,39 @@ export default class Home extends Component {
         );
     };
 
-    handleHead = (type, id) => {
-        console.log(type + ' ' + id);
-        this.setState({ type, id });
-        //this.setState({ state: this.state });
+    handleImage = async e => {
+        const { token } = this.props.match.params;
+        let formData = new FormData();
+        formData.append('image', e.target.files[0]);
+        let config = {
+            headers: {
+                Accept: '',
+                'Content-Type': 'multipart/form-data',
+            },
+        };
+        const { data } = await api.post(
+            `/media?AccessToken=${token}&IsUserMedia=true`,
+            formData,
+            config
+        );
+        this.setState({ user: { image: data[0].URL } });
+    };
 
-        this.forceUpdate();
+    handleHead = (type, id) => {
+        //console.log('antes ' + type + ' ' + id);
+        console.log('in handleHead');
+        //this.setState({ type, id });
+        //console.log(this.state);
+        this.getHead(type, id);
+        this.getComments(type, id);
+        console.log('out handleHead');
+        //console.log('depois ' + this.state.type + ' ' + this.state.id);
     };
 
     render() {
-        const { user, posting, type, id, loaded } = this.state;
+        const { user, posting, feed, head } = this.state;
         const { token } = this.props.match.params;
-        console.log('renderizei');
+        console.log('in render');
         return (
             <div id="home-container">
                 <div id="home-head">
@@ -113,11 +219,19 @@ export default class Home extends Component {
                 ) : null}
                 <div id="home-body">
                     <div id="perfil">
-                        <UserImage
-                            id="user-image"
-                            size="100px"
-                            image={user.image}
-                        />
+                        <label htmlFor="new-image">
+                            <UserImage
+                                id="user-image"
+                                size="100px"
+                                image={user.image.URL}
+                            />
+                        </label>
+                        <input
+                            id="new-image"
+                            type="file"
+                            name="pic"
+                            onChange={this.handleImage}
+                        ></input>
                         <strong id="user-name">{user.username}</strong>
                         <p id="name">
                             {user.name} {user.lastname}
@@ -133,15 +247,18 @@ export default class Home extends Component {
                         <FaShoppingCart id="cart-icon" />
                     </div>
                     <div id="feed">
-                        {loaded ? (
-                            <Feed
-                                token={token}
-                                handleHead={this.handleHead}
-                                me={user}
-                                type={type}
-                                id={id}
-                            />
-                        ) : null}
+                        <div id="comments">
+                            {head}
+                            {feed.comments.map((comment, index) => (
+                                <Comment
+                                    key={index}
+                                    me={user}
+                                    comment={comment}
+                                    token={token}
+                                    handleHead={this.handleHead}
+                                />
+                            ))}
+                        </div>
                         <Follows handleHead={this.handleHead} token={token} />
                     </div>
                 </div>
