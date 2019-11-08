@@ -19,10 +19,8 @@ namespace Branch.SearchAuxiliars
         /// <param name="UserId">The user's id</param>
         public static List<Post> MentionsUser(int UserId, SQLContext SQLContext)
         {
-            var User = SQLContext.Users.Find(UserId);
-
             return NoSQLContext.PostCollection
-                                              .Find(x => x.Mentions.Contains(User))
+                                              .Find(x => x.Mentions.Contains(UserId))
                                               .ToList();
         }
 
@@ -30,7 +28,7 @@ namespace Branch.SearchAuxiliars
         /// Returns posts that mentions one or more users
         /// </summary>
         /// <param name="Users">The user collection</param>
-        public static List<Post> MentionsUsers(IEnumerable<User> Users)
+        public static List<Post> MentionsUsers(IEnumerable<int> Users)
         {
             var Posts = NoSQLContext.PostCollection
                                                    .Find(_ => true)
@@ -96,7 +94,7 @@ namespace Branch.SearchAuxiliars
         public static List<Post> PostsByProduct(int ProductId)
         {
             return NoSQLContext.PostCollection
-                                              .Find(x => x.Products.Exists(y => y.Id == ProductId))
+                                              .Find(x => x.Products.Contains(ProductId))
                                               .ToList();
         }
 
@@ -108,7 +106,6 @@ namespace Branch.SearchAuxiliars
         {
             return NoSQLContext.PostCollection
                                               .Find(x => x.Products
-                                                                   .Select(y => y.Id)
                                                                    .Intersect(ProductIds)
                                                                    .Any())
                                               .ToList();
