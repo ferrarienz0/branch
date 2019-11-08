@@ -11,14 +11,13 @@ namespace Branch.SearchAuxiliars
 {
     public static class PostSearchAuxiliar
     {
-        private static readonly SQLContext SQLContext = new SQLContext();
         private static readonly NoSQLContext NoSQLContext = new NoSQLContext();
 
         /// <summary>
         /// Returns posts that mentions a certain user
         /// </summary>
         /// <param name="UserId">The user's id</param>
-        public static List<Post> MentionsUser(int UserId)
+        public static List<Post> MentionsUser(int UserId, SQLContext SQLContext)
         {
             var User = SQLContext.Users.Find(UserId);
 
@@ -147,11 +146,11 @@ namespace Branch.SearchAuxiliars
         /// Updates the posts' owner
         /// </summary>
         /// <param name="Posts">The post collection</param>
-        public static List<Post> UpdateOwner(List<Post> Posts)
+        public static List<Post> UpdateOwner(List<Post> Posts, SQLContext SQLContext)
         {
             for(int i = 0; i < Posts.Count; i++)
             {
-                Posts[i] = UpdateOwner(Posts[i]);
+                Posts[i] = UpdateOwner(Posts[i], SQLContext);
             }
 
             return Posts;
@@ -161,7 +160,7 @@ namespace Branch.SearchAuxiliars
         /// Updates the post's owner
         /// </summary>
         /// <param name="Post">The post</param>
-        public static Post UpdateOwner(Post Post)
+        public static Post UpdateOwner(Post Post, SQLContext SQLContext)
         {
             var User = SQLContext.Users.Find(Post.UserId);
 
