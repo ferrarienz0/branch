@@ -25,9 +25,11 @@ export default class Comment extends Component {
 
     componentDidMount = async () => {
         const { token, me, comment } = this.props;
-        const { data: iFollow } = await api.get(`/follow?AccessToken=${token}`);
+        const { data: iFollow } = await api.get(
+            `/follows?AccessToken=${token}`
+        );
         iFollow.forEach(followed => {
-            if (followed.UserId === comment.Owner.Id) {
+            if (followed.Id === comment.Owner.Id) {
                 this.setState({ iFollow: true });
             }
         });
@@ -47,7 +49,7 @@ export default class Comment extends Component {
         const { iLiked } = this.state;
         const { token, comment } = this.props;
         const { data } = await api.put(
-            `/posts/like?AccessToken=${token}&PostId=${comment.Id}`
+            `/post/like?AccessToken=${token}&PostId=${comment.Id}`
         );
         this.setState({
             nLikes: data.TotalLikes,
@@ -59,7 +61,7 @@ export default class Comment extends Component {
 
     handleDislike = async () => {
         const { data } = await api.put(
-            `/posts/dislike?AccessToken=${this.props.token}&PostId=${this.props.comment.Id}`
+            `/post/dislike?AccessToken=${this.props.token}&PostId=${this.props.comment.Id}`
         );
         this.setState({
             nLikes: data.TotalLikes,
@@ -74,23 +76,21 @@ export default class Comment extends Component {
         const { comment, token } = this.props;
         if (!iFollow) {
             api.post(
-                `/follow?AccessToken=${token}&RequestedUserId=${comment.Owner.Id}`
+                `/follow/create?AccessToken=${token}&RequestedUserId=${comment.Owner.Id}`
             ).then(res => {
-                console.log(res.data);
                 this.setState({ iFollow: true });
             });
         } else {
             api.delete(
-                `/follow?AccessToken=${token}&FollowedId=${comment.Owner.Id}`
+                `/follow/delete?AccessToken=${token}&FollowedId=${comment.Owner.Id}`
             ).then(res => {
-                console.log(res.data);
                 this.setState({ iFollow: false });
             });
         }
     };
 
     render() {
-        const { comment, handleHead, me } = this.props;
+        const { comment, onHead, me } = this.props;
         const { iLiked, nLikes, iDisliked, nDislikes, iFollow } = this.state;
         return (
             <div id="comment-container">
@@ -116,10 +116,7 @@ export default class Comment extends Component {
                         </p>
                     </div>
                     <div id="go-ahead">
-                        <FaArrowUp
-                            id="go-ahead-icon"
-                            onClick={() => handleHead('c', comment.Id)}
-                        />
+                        <FaArrowUp id="go-ahead-icon" onClick={onHead} />
                     </div>
                 </div>
                 <div id="body">

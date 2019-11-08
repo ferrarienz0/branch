@@ -19,14 +19,16 @@ export default class CommentHead extends Component {
         nLikes: this.props.comment.Likes.length,
         iDisliked: false,
         nDislikes: this.props.comment.Dislikes.length,
+        iFollow: false,
     };
 
     componentDidMount = async () => {
         const { token, me, comment } = this.props;
-        const { data: iFollow } = await api.get(`/follow?AccessToken=${token}`);
-        console.log(comment);
+        const { data: iFollow } = await api.get(
+            `/follows?AccessToken=${token}`
+        );
         iFollow.forEach(followed => {
-            if (followed.UserId === comment.Owner.Id) {
+            if (followed.Id === comment.Owner.Id) {
                 this.setState({ iFollow: true });
             }
         });
@@ -46,7 +48,7 @@ export default class CommentHead extends Component {
         const { iLiked } = this.state;
         const { token, comment } = this.props;
         const { data } = await api.put(
-            `/posts/like?AccessToken=${token}&PostId=${comment.Id}`
+            `/post/like?AccessToken=${token}&PostId=${comment.Id}`
         );
         this.setState({
             nLikes: data.TotalLikes,
@@ -59,7 +61,7 @@ export default class CommentHead extends Component {
     handleDislike = async () => {
         const { token, comment } = this.props;
         const { data } = await api.put(
-            `/posts/dislike?AccessToken=${token}&PostId=${comment.Id}`
+            `/post/dislike?AccessToken=${token}&PostId=${comment.Id}`
         );
         this.setState({
             nLikes: data.TotalLikes,
@@ -67,6 +69,24 @@ export default class CommentHead extends Component {
         });
         if (this.state.iDisliked) this.setState({ iDisliked: false });
         else this.setState({ iDisliked: true, iLiked: false });
+    };
+
+    handleFollow = () => {
+        const { iFollow } = this.state;
+        const { comment, token } = this.props;
+        if (!iFollow) {
+            api.post(
+                `/follow/create?AccessToken=${token}&RequestedUserId=${comment.Owner.Id}`
+            ).then(res => {
+                this.setState({ iFollow: true });
+            });
+        } else {
+            api.delete(
+                `/follow/delete?AccessToken=${token}&FollowedId=${comment.Owner.Id}`
+            ).then(res => {
+                this.setState({ iFollow: false });
+            });
+        }
     };
 
     render() {

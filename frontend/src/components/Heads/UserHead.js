@@ -8,8 +8,9 @@ export default class UserHead extends Component {
         user: {},
     };
     componentDidMount = async () => {
-        const { data: user } = await api.get(`/user?id=${this.props.userID}`);
-        console.log(user);
+        const { data: user } = await api.get(
+            `/user?UserId=${this.props.user.Id}`
+        );
         this.setState({ user });
     };
     render() {

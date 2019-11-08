@@ -144,6 +144,38 @@
     flex: 3;
 }
 
+#home-body #feed #follows #users {
+    height: 30px;
+    margin: 10px 0 5px 0;
+    padding: 0 10px;
+
+    display: flex;
+    align-items: center;
+
+    color: var(--dark-magenta);
+    font-style: oblique;
+    border-bottom: 1px solid var(--dark-magenta);
+}
+
+#home-body #feed #follows #user {
+    margin: 5px;
+
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+#home-body #feed #follows #user:hover {
+    transform: translateX(5px);
+    transition: 0.1s;
+}
+
+#home-body #feed #follows #user #name {
+    margin-left: 5px;
+
+    color: var(--magenta);
+}
+
 #home-body #feed #follows #topics {
     height: 30px;
     margin: 10px 0 5px 0;

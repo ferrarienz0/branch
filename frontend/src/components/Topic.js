@@ -6,31 +6,34 @@ import Posting from '../components/Posting';
 
 export default class Topic extends Component {
     state = {
-        followID: this.props.topic.followID,
+        follow: this.props.topic.follow,
         posting: false,
         reload: false,
     };
 
     handleFollow = async () => {
-        const { followID } = this.state;
+        const { follow } = this.state;
         const { token, topic } = this.props;
-        if (!Boolean(followID)) {
-            const { data } = await api.post(
-                `/userInterests?AccessToken=${token}&SubjectId=${topic.id}`
-            );
-            this.setState({ followID: data.Id });
+        if (!follow) {
+            api.post(
+                `/user/follow/subject?AccessToken=${token}&SubjectId=${topic.id}`
+            ).then(() => {
+                this.setState({ follow: true });
+            });
             //this.props.refresh();
         } else {
-            api.delete(`/userInterests?id=${followID}`).then(() => {
-                this.setState({ followID: null });
+            api.delete(
+                `/user/unfollow/subject?AccessToken=${token}&SubjectId=${topic.id}`
+            ).then(() => {
+                this.setState({ follow: false });
                 //this.props.refresh();
             });
         }
     };
 
     render() {
-        const { posting, followID } = this.state;
-        const { topic, handleHead } = this.props;
+        const { posting, follow } = this.state;
+        const { topic, onHead } = this.props;
         return (
             <div
                 id="topic-container"
@@ -47,10 +50,7 @@ export default class Topic extends Component {
             >
                 <h2 id="hashtag">{topic.hashtag}</h2>
                 <div id="foot">
-                    <FaArrowUp
-                        id="go-ahead-icon"
-                        onClick={() => handleHead('h', topic.id)}
-                    />
+                    <FaArrowUp id="go-ahead-icon" onClick={onHead} />
                     <FaComment
                         id="comment"
                         onClick={e =>
@@ -59,7 +59,7 @@ export default class Topic extends Component {
                                 : this.setState({ posting: true })
                         }
                     />
-                    {Boolean(followID) ? (
+                    {follow ? (
                         <FaTimes id="follow-icon" onClick={this.handleFollow} />
                     ) : (
                         <FaPlus id="follow-icon" onClick={this.handleFollow} />

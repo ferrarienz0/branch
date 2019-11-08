@@ -5,26 +5,20 @@ import api from '../../services/api';
 
 export default class TopicHead extends Component {
     state = {
-        topic: {},
-        wallpaper: '',
-        posting: false,
-        followID: '',
         followed: false,
+        posting: false,
         reload: false,
     };
 
     componentDidMount = async () => {
-        const { data: topic } = await api.get(
-            `/subject?id=${this.props.topicID}`
+        //get tópicos que logado segue
+        const { data: topics } = await api.get(
+            `/subjects/followed?AccessToken=${this.props.token}`
         );
-        this.setState({ topic, wallpaper: topic.Media.URL });
-        const { data: myTopics } = await api.get(
-            `/userInterests?AccessToken=${this.props.token}`
-        );
-        myTopics.forEach(follow => {
-            if (follow.Subject.Id === this.props.topicID) {
+        //verifica se este tópico é seguido por logado
+        topics.forEach(follow => {
+            if (follow.Id === this.props.topic.Id) {
                 this.setState({
-                    followID: follow.UserInterestId,
                     followed: true,
                 });
             }
@@ -32,20 +26,25 @@ export default class TopicHead extends Component {
     };
 
     handleFollow = () => {
-        if (!this.state.followed) {
+        const { followed } = this.state;
+        const { token, topic } = this.props;
+        if (!followed) {
             api.post(
-                `/userInterests?AccessToken=${this.props.token}&SubjectId=${this.props.topicID}`
+                `/user/follow/subject?AccessToken=${token}&SubjectId=${topic.ID}`
             ).then(res => {
-                this.setState({ followId: res.data.Id, followed: true });
+                this.setState({ followed: true });
             });
         } else {
-            api.delete(`/userInterests?id=${this.state.followID}`).then(res => {
+            api.delete(
+                `/user/unfollow/subject?SubjectFollowId=${topic.ID}`
+            ).then(res => {
                 this.setState({ followed: false });
             });
         }
     };
 
     render() {
+        const { topic } = this.props;
         return (
             <div
                 id="topichead-container"
@@ -54,13 +53,13 @@ export default class TopicHead extends Component {
                     135deg,
                     var(--black) 25%,
                     transparent 110%
-                ),  url(${this.state.wallpaper})`,
+                ),  url(${topic.banner})`,
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: 'cover',
                 }}
             >
-                <h2 id="hashtag">{this.state.topic.Hashtag}</h2>
+                <h2 id="hashtag">{topic.hashtag}</h2>
                 <div id="foot">
                     <FaComment
                         id="comment"

@@ -25,20 +25,19 @@ export default class Posting extends Component {
             let formData = new FormData();
             formData.append('image', temp);
             const { data } = await api.post(
-                `/media?AccessToken=${token}&IsUserMedia=false`,
+                `/media/create?AccessToken=${token}&IsUserMedia=false`,
                 formData,
                 config
             );
             this.setState({ image: { id: data[0].Id, URL: data[0].URL } });
         }
         const { data: postagem } = await api.post(
-            `/post?AccessToken=${token}`,
+            `/post/create?AccessToken=${token}`,
             {
                 Text: text,
                 Medias: image.id === -1 ? [] : [image.id],
             }
         );
-        console.log(postagem);
         onClose();
     };
 
