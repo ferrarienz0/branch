@@ -9,13 +9,11 @@ namespace Branch.SearchAuxiliars
 {
     public static class UserSearchAuxiliar
     {
-        private static readonly SQLContext SQLContext = new SQLContext();
-
         /// <summary>
         /// Returns the subjects followed by a certain User 
         /// </summary>
         /// <param name="UserId">The user's id</param>
-        public static List<Subject> FollowedSubjects(int UserId)
+        public static List<Subject> FollowedSubjects(int UserId, SQLContext SQLContext)
         {
             return SQLContext.UserSubjects
                                           .Where(x => x.UserId == UserId)
@@ -27,12 +25,12 @@ namespace Branch.SearchAuxiliars
         /// Returns the subjects not followed by a certain User 
         /// </summary>
         /// <param name="UserId">The user's id</param>
-        public static List<Subject> UnfollowedSubjects(int UserId)
+        public static List<Subject> UnfollowedSubjects(int UserId, SQLContext SQLContext)
         {
             var AllSubjects = SQLContext.Subjects.ToList();
             
             return AllSubjects
-                              .Except(FollowedSubjects(UserId))
+                              .Except(FollowedSubjects(UserId, SQLContext))
                               .ToList();
         }
 
@@ -40,7 +38,7 @@ namespace Branch.SearchAuxiliars
         /// Returns the user's follows 
         /// </summary>
         /// <param name="UserId">The user's id</param>
-        public static List<User> Follows(int UserId)
+        public static List<User> Follows(int UserId, SQLContext SQLContext)
         {
             return SQLContext.Follows
                                      .Where(x => x.FollowerId == UserId)
@@ -52,9 +50,9 @@ namespace Branch.SearchAuxiliars
         /// Returns the users not followed by a certain user 
         /// </summary>
         /// <param name="UserId">The user's id</param>
-        public static List<User> Unfolloweds(int UserId)
+        public static List<User> Unfolloweds(int UserId, SQLContext SQLContext)
         {
-            var UserFollows = Follows(UserId);
+            var UserFollows = Follows(UserId, SQLContext);
 
             return SQLContext.Users
                                    .Except(UserFollows)
@@ -65,7 +63,7 @@ namespace Branch.SearchAuxiliars
         /// Returns the user's followers
         /// </summary>
         /// <param name="UserId">The user's id</param>
-        public static List<User> Followers(int UserId)
+        public static List<User> Followers(int UserId, SQLContext SQLContext)
         {
             return SQLContext.Follows
                                      .Where(x => x.FollowedId == UserId)
@@ -77,7 +75,7 @@ namespace Branch.SearchAuxiliars
         /// Returns the user's media (profile photo)
         /// </summary>
         /// <param name="UserId">The user's id</param>
-        public static Media Media(int UserId)
+        public static Media Media(int UserId, SQLContext SQLContext)
         {
             return SQLContext.Users
                                    .Find(UserId)

@@ -36,7 +36,7 @@ namespace Branch.Controllers
             
             NewPost.UserId = UserId;
 
-            NewPost = PostSearchAuxiliar.UpdateOwner(NewPost);
+            NewPost = PostSearchAuxiliar.UpdateOwner(NewPost, SQLContext);
 
             NewPost = TreatPostAddons(NewPost);
 
@@ -62,11 +62,11 @@ namespace Branch.Controllers
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            var UserFollows = UserSearchAuxiliar.Follows(UserId);
-            var UserTopics = UserSearchAuxiliar.FollowedSubjects(UserId);
+            var UserFollows = UserSearchAuxiliar.Follows(UserId, SQLContext);
+            var UserTopics = UserSearchAuxiliar.FollowedSubjects(UserId, SQLContext);
 
             var UserPosts = PostSearchAuxiliar.PostsByAuthor(UserId);
-            var UserMentionPosts = PostSearchAuxiliar.MentionsUser(UserId);
+            var UserMentionPosts = PostSearchAuxiliar.MentionsUser(UserId, SQLContext);
 
             var FollowsPosts = PostSearchAuxiliar.PostsByAuthors(UserFollows.Select(x => x.Id));
             var FollowsMentionPosts = PostSearchAuxiliar.MentionsUsers(UserFollows);
@@ -83,7 +83,7 @@ namespace Branch.Controllers
                                              .ToList();
 
 
-            RecommendedPosts = PostSearchAuxiliar.UpdateOwner(RecommendedPosts);
+            RecommendedPosts = PostSearchAuxiliar.UpdateOwner(RecommendedPosts, SQLContext);
 
             return Ok(RecommendedPosts);
         }
@@ -94,7 +94,7 @@ namespace Branch.Controllers
         public IHttpActionResult PostById([FromUri] string PostId)
         {
             var Post = PostSearchAuxiliar.PostById(PostId);
-            Post = PostSearchAuxiliar.UpdateOwner(Post);
+            Post = PostSearchAuxiliar.UpdateOwner(Post, SQLContext);
 
             return Ok(Post);
         }
@@ -105,7 +105,7 @@ namespace Branch.Controllers
         public IHttpActionResult PostsBySubject([FromUri] int SubjectId)
         {
             var Posts = PostSearchAuxiliar.PostsBySubject(SubjectId);
-            Posts = PostSearchAuxiliar.UpdateOwner(Posts);
+            Posts = PostSearchAuxiliar.UpdateOwner(Posts, SQLContext);
 
             return Ok(Posts);
         }
@@ -116,7 +116,7 @@ namespace Branch.Controllers
         public IHttpActionResult PostsByUser([FromUri] int UserId)
         {
             var Posts = PostSearchAuxiliar.PostsByAuthor(UserId);
-            Posts = PostSearchAuxiliar.UpdateOwner(Posts);
+            Posts = PostSearchAuxiliar.UpdateOwner(Posts, SQLContext);
 
             return Ok(Posts);
         }
@@ -127,7 +127,7 @@ namespace Branch.Controllers
         public IHttpActionResult PostComments([FromUri] string PostId)
         {
             var Comments = PostSearchAuxiliar.PostComments(PostId);
-            Comments = PostSearchAuxiliar.UpdateOwner(Comments);
+            Comments = PostSearchAuxiliar.UpdateOwner(Comments, SQLContext);
 
             return Ok(Comments);
         }
