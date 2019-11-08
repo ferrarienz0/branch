@@ -54,9 +54,13 @@ namespace Branch.Controllers
         [HttpDelete]
         [Route("user/unfollow/subject")]
         [ResponseType(typeof(UserSubject))]
-        public IHttpActionResult DeleteUserSubject(int SubjectFollowId)
+        public IHttpActionResult DeleteUserSubject([FromUri] string AccessToken, int SubjectId)
         {
-            UserSubject UserSubject = SQLContext.UserSubjects.Find(SubjectFollowId);
+            var UserId = TokenValidator.VerifyToken(AccessToken);
+
+            UserSubject UserSubject = SQLContext.UserSubjects
+                                                            .Where(x => x.UserId == UserId && x.SubjectId == SubjectId)
+                                                            .FirstOrDefault();
             
             if (UserSubject == null)
             {
