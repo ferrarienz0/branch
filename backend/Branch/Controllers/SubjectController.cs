@@ -39,7 +39,7 @@ namespace Branch.Controllers
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            var Subjects = UserSearchAuxiliar.UnfollowedSubjects(UserId);
+            var Subjects = UserSearchAuxiliar.UnfollowedSubjects(UserId, SQLContext);
 
             return Ok(Subjects);
         }
@@ -51,7 +51,7 @@ namespace Branch.Controllers
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            var Subjects = UserSearchAuxiliar.FollowedSubjects(UserId);
+            var Subjects = UserSearchAuxiliar.FollowedSubjects(UserId, SQLContext);
 
             return Ok(Subjects);
         }
