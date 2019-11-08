@@ -20,8 +20,10 @@ namespace Branch.SearchAuxiliars
         /// <param name="UserId">The user's id</param>
         public static List<Post> MentionsUser(int UserId)
         {
+            var User = SQLContext.Users.Find(UserId);
+
             return NoSQLContext.PostCollection
-                                              .Find(x => x.Mentions.Select(y => y.Id).Contains(UserId))
+                                              .Find(x => x.Mentions.Contains(User))
                                               .ToList();
         }
 
@@ -31,9 +33,13 @@ namespace Branch.SearchAuxiliars
         /// <param name="Users">The user collection</param>
         public static List<Post> MentionsUsers(IEnumerable<User> Users)
         {
-            return NoSQLContext.PostCollection
-                                              .Find(x => x.Mentions.Intersect(Users).Any())
-                                              .ToList();
+            var Posts = NoSQLContext.PostCollection
+                                                   .Find(_ => true)
+                                                   .ToList();
+
+            return Posts
+                        .Where(x => x.Mentions.Intersect(Users).Any())
+                        .ToList();
         }
 
         /// <summary>
@@ -75,9 +81,13 @@ namespace Branch.SearchAuxiliars
         /// <param name="SubjectIds">The subjects' ids</param>
         public static List<Post> PostsBySubjects(IEnumerable<int> SubjectIds)
         {
-            return NoSQLContext.PostCollection
-                                              .Find(x => x.Hashtags.Intersect(SubjectIds).Any())
-                                              .ToList();
+            var Posts = NoSQLContext.PostCollection
+                                                   .Find(_ => true)
+                                                   .ToList();
+
+            return Posts
+                        .Where(x => x.Hashtags.Intersect(SubjectIds).Any())
+                        .ToList();
         }
 
         /// <summary>
@@ -161,7 +171,7 @@ namespace Branch.SearchAuxiliars
                 Firstname = User.Firstname,
                 Lastname = User.Lastname,
                 Nickname = User.Nickname,
-                MediaURL = User.Media.URL
+                MediaURL = User.Media?.URL
             };
 
             return Post;
