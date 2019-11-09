@@ -41,10 +41,10 @@ namespace Branch.Models.NoSQL
         public List<int> Hashtags { get; set; }
 
         [BsonElement("mentions")]
-        public List<User> Mentions { get; set; }
+        public List<int> Mentions { get; set; }
 
         [BsonElement("products")]
-        public List<Product> Products { get; set; }
+        public List<int> Products { get; set; }
 
         [BsonElement("likes")]
         public List<int> Likes { get; set; }

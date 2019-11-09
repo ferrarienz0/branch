@@ -62,13 +62,16 @@ namespace Branch.Controllers
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            var UserFollows = UserSearchAuxiliar.Follows(UserId, SQLContext);
+            var UserFollows = UserSearchAuxiliar
+                                                .Follows(UserId, SQLContext)
+                                                .Select(x => x.Id);
+
             var UserTopics = UserSearchAuxiliar.FollowedSubjects(UserId, SQLContext);
 
             var UserPosts = PostSearchAuxiliar.PostsByAuthor(UserId);
             var UserMentionPosts = PostSearchAuxiliar.MentionsUser(UserId, SQLContext);
 
-            var FollowsPosts = PostSearchAuxiliar.PostsByAuthors(UserFollows.Select(x => x.Id));
+            var FollowsPosts = PostSearchAuxiliar.PostsByAuthors(UserFollows);
             var FollowsMentionPosts = PostSearchAuxiliar.MentionsUsers(UserFollows);
 
             var TopicsPosts = PostSearchAuxiliar.PostsBySubjects(UserTopics.Select(x => x.Id));
@@ -253,38 +256,39 @@ namespace Branch.Controllers
             return Subjects;
         }
 
-        private List<User> CheckMentionsExistence(List<string> Mentions)
+        private List<int> CheckMentionsExistence(List<string> Mentions)
         {
-            List<User> UsersList = new List<User>();
+            var UsersList = new List<int>();
 
             foreach (var Mention in Mentions)
             {
-                var Exists = SQLContext.Users.FirstOrDefault(x => x.Nickname == Mention.Substring(1, Mention.Length));
+                var User = SQLContext.Users
+                                            .FirstOrDefault(x => x.Nickname == Mention.Substring(1, Mention.Length));
 
-                if (Exists != default)
+                if (User != default)
                 {
-                    UsersList.Add(Exists);
+                    UsersList.Add(User.Id);
                 }
             }
 
             return UsersList;
         }
 
-        private List<Product> CheckProductExistence(List<string> Products)
+        private List<int> CheckProductExistence(List<string> Products)
         {
-            List<Product> UsersList = new List<Product>();
+            var ProductList = new List<int>();
 
             foreach (var Product in Products)
             {
-                var Exists = SQLContext.Products.FirstOrDefault(x => x.Name == Product.Substring(1, Product.Length));
+                var _Product = SQLContext.Products.FirstOrDefault(x => x.Name == Product.Substring(1, Product.Length));
 
-                if (Exists != default)
+                if (_Product != default)
                 {
-                    UsersList.Add(Exists);
+                    ProductList.Add(_Product.Id);
                 }
             }
 
-            return UsersList;
+            return ProductList;
         }
 
         private Post TreatPostAddons(Post NewPost)
