@@ -20,13 +20,11 @@ export default class Topic extends Component {
             ).then(() => {
                 this.setState({ follow: true });
             });
-            //this.props.refresh();
         } else {
             api.delete(
                 `/user/unfollow/subject?AccessToken=${token}&SubjectId=${topic.id}`
             ).then(() => {
                 this.setState({ follow: false });
-                //this.props.refresh();
             });
         }
     };

@@ -1,6 +1,5 @@
 import React from 'react';
 import { FaUserCircle } from 'react-icons/fa';
-//import Perfil from './Perfil';
 import './UserImage.css';
 
 //componente responsável por exibir o ícone do usuário
@@ -38,7 +37,6 @@ export default function UserImage(props) {
                     }}
                 />
             )}
-            {/*<Perfil />*/}
         </div>
     );
 }

@@ -12,14 +12,12 @@ import icone from '../assets/icone.svg';
 import api from '../services/api';
 import Posting from '../components/Posting';
 import UserImage from '../components/UserImage';
-//import Feed from '../components/Feed';
-import Comment from '../components/Comment';
-import Topic from '../components/Topic';
+import Feed from '../components/Feed';
 import UserHead from '../components/Heads/UserHead';
 import TopicHead from '../components/Heads/TopicHead';
 import CommentHead from '../components/Heads/CommentHead';
 import ProductHead from '../components/Heads/ProductHead';
-//import Follows from '../components/Follows';
+import Follows from '../components/Follows';
 
 export default class Home extends Component {
     state = {
@@ -163,10 +161,6 @@ export default class Home extends Component {
         this.setState({ feed: { comments, loaded: true } });
     };
 
-    refresh = () => {
-        window.location.reload();
-    };
-
     showPosting = () => {
         return (
             <div id="posting-container">
@@ -210,9 +204,8 @@ export default class Home extends Component {
         return (
             <div id="home-container">
                 <div id="home-head">
-                    <div id="logo">
+                    <div id="logo" onClick={() => this.handleHead('', '')}>
                         <img src={icone} alt="Branch"></img>
-                        <Link id="go-home" to={`/home/${token}`} />
                     </div>
                     <div id="space" />
                     <Link to="/">
@@ -255,69 +248,19 @@ export default class Home extends Component {
                         <FaShoppingCart id="cart-icon" />
                     </div>
                     <div id="feed">
-                        <div id="comments">
-                            {head}
-                            {feed.comments.map((comment, index) => (
-                                <Comment
-                                    key={index}
-                                    me={me}
-                                    comment={comment}
-                                    token={token}
-                                    onHead={() =>
-                                        this.handleHead('comment', comment.Id)
-                                    }
-                                />
-                            ))}
-                        </div>
-                        <div id="follows">
-                            <div id="users">Quem eu sigo</div>
-                            {me.users.map((user, index) => (
-                                <div
-                                    id="user"
-                                    onClick={() =>
-                                        this.handleHead('user', user.Id)
-                                    }
-                                    key={index}
-                                >
-                                    <UserImage size="30px" image={user.Media} />
-                                    <div id="name">@{user.Nickname}</div>
-                                </div>
-                            ))}
-                            <div id="topics">Meus tópicos</div>
-                            {me.topics.map((topic, index) => (
-                                <Topic
-                                    key={index}
-                                    token={token}
-                                    topic={{
-                                        id: topic.Id,
-                                        hashtag: topic.Hashtag,
-                                        banner: topic.Media.URL,
-                                        follow: true,
-                                    }}
-                                    refresh={this.refresh}
-                                    onHead={() =>
-                                        this.handleHead('topic', topic.Id)
-                                    }
-                                />
-                            ))}
-                            <div id="topics">Recomendado</div>
-                            {topics.map((topic, index) => (
-                                <Topic
-                                    key={index}
-                                    token={token}
-                                    topic={{
-                                        id: topic.Id,
-                                        hashtag: topic.Hashtag,
-                                        banner: topic.Media.URL,
-                                        follow: false,
-                                    }}
-                                    refresh={this.refresh}
-                                    onHead={() =>
-                                        this.handleHead('topic', topic.Id)
-                                    }
-                                />
-                            ))}
-                        </div>
+                        <Feed
+                            me={me}
+                            token={token}
+                            head={head}
+                            feed={feed}
+                            handleHead={this.handleHead}
+                        />
+                        <Follows
+                            me={me}
+                            topics={topics}
+                            token={token}
+                            handleHead={this.handleHead}
+                        />
                     </div>
                 </div>
             </div>

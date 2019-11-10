@@ -60,8 +60,9 @@ export default class Comment extends Component {
     };
 
     handleDislike = async () => {
+        const { token, comment } = this.props;
         const { data } = await api.put(
-            `/post/dislike?AccessToken=${this.props.token}&PostId=${this.props.comment.Id}`
+            `/post/dislike?AccessToken=${token}&PostId=${comment.Id}`
         );
         this.setState({
             nLikes: data.TotalLikes,
