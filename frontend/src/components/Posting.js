@@ -5,14 +5,14 @@ import api from '../services/api';
 
 export default class Posting extends Component {
     state = {
-        image: { id: -1, URL: '' },
+        data: [],
         temp: '',
         text: '',
         preview: '',
     };
 
     handlePost = async () => {
-        const { image, text, temp } = this.state;
+        const { data, text, temp } = this.state;
         const { token, onClose } = this.props;
         console.log(temp);
         if (Boolean(temp.name)) {
@@ -29,15 +29,12 @@ export default class Posting extends Component {
                 formData,
                 config
             );
-            this.setState({ image: { id: data[0].Id, URL: data[0].URL } });
+            this.setState({ data });
         }
-        const { data: postagem } = await api.post(
-            `/post/create?AccessToken=${token}`,
-            {
-                Text: text,
-                Medias: image.id === -1 ? [] : [image.id],
-            }
-        );
+        await api.post(`/post/create?AccessToken=${token}`, {
+            Text: text,
+            Medias: data === [] ? [] : [data[0].Id],
+        });
         onClose();
     };
 

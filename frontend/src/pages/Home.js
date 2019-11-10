@@ -82,7 +82,6 @@ export default class Home extends Component {
     };
 
     getHead = async (type, id) => {
-        //console.log('in getHead');
         const { token } = this.props.match.params;
         const { me } = this.state;
         let head = <div />;
@@ -139,13 +138,10 @@ export default class Home extends Component {
             head,
             loaded_head: true,
         });
-        //console.log('out getHead');
     };
 
     getComments = async (type, id) => {
-        //console.log('in getComments');
         const { token } = this.props.match.params;
-        //const { id, type } = this.state;
         let req = '';
         switch (type) {
             case 'user':
@@ -165,7 +161,6 @@ export default class Home extends Component {
         }
         const { data: comments } = await api.get(req);
         this.setState({ feed: { comments, loaded: true } });
-        //console.log('out getComments');
     };
 
     refresh = () => {
@@ -201,24 +196,17 @@ export default class Home extends Component {
             formData,
             config
         );
-        this.setState({ me: { image: data[0].URL } });
+        this.setState({ me: { image: data[0].URL, ...this.state.me } });
     };
 
     handleHead = (type, id) => {
-        //console.log('antes ' + type + ' ' + id);
-        //console.log('in handleHead');
-        //this.setState({ type, id });
-        //console.log(this.state);
         this.getHead(type, id);
         this.getComments(type, id);
-        //console.log('out handleHead');
-        //console.log('depois ' + this.state.type + ' ' + this.state.id);
     };
 
     render() {
         const { me, posting, feed, head, topics } = this.state;
         const { token } = this.props.match.params;
-        //console.log('in render');
         return (
             <div id="home-container">
                 <div id="home-head">
@@ -281,7 +269,6 @@ export default class Home extends Component {
                                 />
                             ))}
                         </div>
-                        {/*<Follows handleHead={this.handleHead} token={token} />*/}
                         <div id="follows">
                             <div id="users">Quem eu sigo</div>
                             {me.users.map((user, index) => (

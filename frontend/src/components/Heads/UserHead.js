@@ -4,17 +4,8 @@ import api from '../../services/api';
 import UserImage from '../UserImage';
 
 export default class UserHead extends Component {
-    state = {
-        user: {},
-    };
-    componentDidMount = async () => {
-        const { data: user } = await api.get(
-            `/user?UserId=${this.props.user.Id}`
-        );
-        this.setState({ user });
-    };
     render() {
-        const { user } = this.state;
+        const { user } = this.props;
         return (
             <div id="userhead-container">
                 <UserImage size="70px" />

@@ -95,8 +95,8 @@
 }
 
 #comment-container #body #image {
-    max-width: 250px;
-    max-height: 250px;
+    width: 100%;
+    max-width: 350px;
     padding: 10px;
 }
 
