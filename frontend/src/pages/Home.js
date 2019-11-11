@@ -15,7 +15,7 @@ import UserImage from '../components/UserImage';
 import Feed from '../components/Feed';
 import UserHead from '../components/Heads/UserHead';
 import TopicHead from '../components/Heads/TopicHead';
-import CommentHead from '../components/Heads/CommentHead';
+import Comment from '../components/Comment';
 import ProductHead from '../components/Heads/ProductHead';
 import Follows from '../components/Follows';
 
@@ -108,7 +108,8 @@ export default class Home extends Component {
             case 'comment':
                 const { data: comment } = await api.get(`/post?PostId=${id}`);
                 head = (
-                    <CommentHead
+                    <Comment
+                        head={true}
                         me={me}
                         token={token}
                         comment={comment}

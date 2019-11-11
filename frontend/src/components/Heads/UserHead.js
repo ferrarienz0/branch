@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './UserHead.css';
-import api from '../../services/api';
 import UserImage from '../UserImage';
 
 export default class UserHead extends Component {

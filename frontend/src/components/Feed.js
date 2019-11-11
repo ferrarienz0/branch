@@ -11,6 +11,7 @@ export default class Feed extends Component {
                 {feed.comments.map((comment, index) => (
                     <Comment
                         key={index}
+                        head={false}
                         me={me}
                         comment={comment}
                         token={token}

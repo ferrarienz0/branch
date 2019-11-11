@@ -16,8 +16,10 @@ export default class TopicHead extends Component {
             `/subjects/followed?AccessToken=${this.props.token}`
         );
         //verifica se este tópico é seguido por logado
+        console.log(this.props.topic.ID);
         topics.forEach(follow => {
-            if (follow.Id === this.props.topic.Id) {
+            console.log(follow);
+            if (follow.Id === this.props.topic.ID) {
                 this.setState({
                     followed: true,
                 });
