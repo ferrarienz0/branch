@@ -49,6 +49,8 @@
 #comment-container #head #user-name {
     margin-left: 10px;
 
+    cursor: pointer;
+
     color: var(--magenta);
 }
 
@@ -92,10 +94,12 @@
 
 #comment-container #body #text {
     color: var(--white);
+    display: flex;
+    flex-wrap: wrap;
 }
 
-#comment-container #body #text-box {
-    display: flex;
+#comment-container #body #word {
+    margin: 2px;
 }
 
 #comment-container #body #text #user {
@@ -240,6 +244,8 @@
 #commenthead-container #head #user-name {
     margin-left: 10px;
 
+    cursor: pointer;
+
     color: var(--magenta);
 }
 
@@ -283,6 +289,32 @@
 
 #commenthead-container #body #text {
     color: var(--white);
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#commenthead-container #body #word {
+    margin: 2px;
+}
+
+#commenthead-container #body #text #user {
+    color: var(--magenta);
+    cursor: pointer;
+}
+
+#commenthead-container #body #text #user:hover {
+    color: var(--white);
+    transition: 0.1s;
+}
+
+#commenthead-container #body #text #topic {
+    color: var(--green);
+    cursor: pointer;
+}
+
+#commenthead-container #body #text #topic:hover {
+    color: var(--white);
+    transition: 0.1s;
 }
 
 #commenthead-container #body #image {

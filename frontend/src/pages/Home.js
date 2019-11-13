@@ -86,7 +86,14 @@ export default class Home extends Component {
         switch (type) {
             case 'user':
                 const { data: user } = await api.get(`/user?UserId=${id}`);
-                head = <UserHead me={me} user={user} refresh={this.refresh} />;
+                head = (
+                    <UserHead
+                        me={me}
+                        user={user}
+                        token={token}
+                        refresh={this.refresh}
+                    />
+                );
                 break;
             case 'topic':
                 const { data: topic } = await api.get(

@@ -16,6 +16,7 @@ export default class Feed extends Component {
                         comment={comment}
                         token={token}
                         onHead={() => handleHead('comment', comment.Id)}
+                        handleHead={handleHead}
                     />
                 ))}
             </div>
