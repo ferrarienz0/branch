@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FaPaperPlane, FaPaperclip } from 'react-icons/fa';
-import './Posting.css';
-import api from '../services/api';
+import {} from './styles';
+import api from '../../services/api';
 
 export default class Posting extends Component {
     state = {

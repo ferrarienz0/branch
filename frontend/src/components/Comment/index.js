@@ -10,9 +10,9 @@ import {
     FaPlus,
     FaTimes,
 } from 'react-icons/fa';
-import './Comment.css';
-import UserImage from './UserImage';
-import api from '../services/api';
+import { Container, Header, Body, Footer } from './styles';
+import UserImage from '../UserImage';
+import api from '../../services/api';
 
 export default class Comment extends Component {
     state = {
@@ -129,8 +129,8 @@ export default class Comment extends Component {
         const { comment, onHead, handleHead, head, me } = this.props;
         const { iLiked, nLikes, iDisliked, nDislikes, iFollow } = this.state;
         return (
-            <div id={head ? 'commenthead-container' : 'comment-container'}>
-                <div id="head">
+            <Container head={head}>
+                <Header>
                     <div id="user-image">
                         <UserImage size="50px" image={comment.Owner.MediaURL} />
                         {me.ID === comment.Owner.Id ? null : iFollow ? (
@@ -160,8 +160,8 @@ export default class Comment extends Component {
                             <FaArrowUp id="go-ahead-icon" onClick={onHead} />
                         </div>
                     )}
-                </div>
-                <div id="body">
+                </Header>
+                <Body>
                     <div id="text">
                         {this.handleText().map((word, index) => (
                             <p id="word" key={index}>
@@ -178,8 +178,8 @@ export default class Comment extends Component {
                                 : comment.MediaObjects[0].URL
                         }
                     />
-                </div>
-                <div id="foot">
+                </Body>
+                <Footer>
                     <p id="number">
                         <strong>{nDislikes}</strong>
                     </p>
@@ -209,8 +209,8 @@ export default class Comment extends Component {
                     {this.props.me.is_product == null ? null : (
                         <FaCartPlus id="cart-icon" />
                     )}
-                </div>
-            </div>
+                </Footer>
+            </Container>
         );
     }
 }

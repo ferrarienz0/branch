@@ -1,3 +1,5 @@
+/*
+
 #posting-container {
     width: 500px;
     height: 300px;
@@ -104,3 +106,4 @@ input[type='file'] {
     border-radius: 5px;
     box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);
 }
+*/

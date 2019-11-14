@@ -1,23 +1,22 @@
 import React, { Component } from 'react';
-import '../pages/Home.css';
-import Topic from '../components/Topic';
-import UserImage from '../components/UserImage';
+import { Container, User } from './styles';
+import Topic from '../../components/Topic';
+import UserImage from '../../components/UserImage';
 
 export default class Follows extends Component {
     render() {
         const { me, topics, handleHead, token } = this.props;
         return (
-            <div id="follows">
+            <Container>
                 <div id="users">Quem eu sigo</div>
                 {me.users.map((user, index) => (
-                    <div
-                        id="user"
+                    <User
                         onClick={() => handleHead('user', user.Id)}
                         key={index}
                     >
                         <UserImage size="30px" image={user.Media} />
                         <div id="name">@{user.Nickname}</div>
-                    </div>
+                    </User>
                 ))}
                 <div id="topics">Meus tópicos</div>
                 {me.topics.map((topic, index) => (
@@ -47,7 +46,7 @@ export default class Follows extends Component {
                         onHead={() => handleHead('topic', topic.Id)}
                     />
                 ))}
-            </div>
+            </Container>
         );
     }
 }
