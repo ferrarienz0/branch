@@ -26,6 +26,7 @@ export default class Home extends Component {
             topics: [],
         },
         topics: [],
+        parent: '',
         posting: false,
         type: '',
         id: '',
@@ -73,14 +74,7 @@ export default class Home extends Component {
         const { data: user } = await api.get(`/user?UserId=${id}`);
         const { data: comments } = await api.get(`/posts/user?UserId=${id}`);
         this.setState({
-            head: (
-                <UserHead
-                    me={me}
-                    user={user}
-                    token={token}
-                    refresh={this.refresh}
-                />
-            ),
+            head: <UserHead me={me} user={user} token={token} />,
             loaded_head: true,
             feed: { comments, loaded: true },
         });
@@ -104,7 +98,6 @@ export default class Home extends Component {
                         banner: topic.Media.URL,
                     }}
                     token={token}
-                    refresh={this.refresh}
                 />
             ),
             loaded_head: true,
@@ -123,8 +116,8 @@ export default class Home extends Component {
                     head={true}
                     me={me}
                     comment={comment}
+                    handleHead={this.handleHead}
                     token={token}
-                    refresh={this.refresh}
                 />
             ),
             loaded_head: true,
@@ -140,14 +133,7 @@ export default class Home extends Component {
             `/posts/product?ProductId=${id}`
         );
         this.setState({
-            head: (
-                <ProductHead
-                    me={me}
-                    product={product}
-                    token={token}
-                    refresh={this.refresh}
-                />
-            ),
+            head: <ProductHead me={me} product={product} token={token} />,
             loaded_head: true,
             feed: { comments, loaded: true },
         });
@@ -200,8 +186,12 @@ export default class Home extends Component {
         }
     };
 
+    onPosting = parent => {
+        this.setState({ posting: true, parent });
+    };
+
     render() {
-        const { me, posting, feed, head, topics } = this.state;
+        const { me, posting, parent, feed, head, topics } = this.state;
         const { token } = this.props.match.params;
         return (
             <Container>
@@ -217,6 +207,7 @@ export default class Home extends Component {
                 {posting ? (
                     <Posting
                         token={token}
+                        parent={parent}
                         onClose={() => this.setState({ posting: false })}
                     />
                 ) : null}
@@ -256,6 +247,7 @@ export default class Home extends Component {
                             head={head}
                             feed={feed}
                             handleHead={this.handleHead}
+                            onPosting={this.onPosting}
                         />
                         <Follows
                             me={me}

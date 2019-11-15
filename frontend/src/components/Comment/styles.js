@@ -142,6 +142,7 @@ export const Footer = styled.div`
         color: var(--white);
     }
 
+    #answered-icon,
     #comment-icon,
     #cart-icon,
     #like-icon,
@@ -158,12 +159,11 @@ export const Footer = styled.div`
         }
     }
 
+    #answered-icon {
+        color: var(--blue);
+    }
+
     #comment-icon {
-        height: 25px;
-        width: 25px;
-
-        cursor: pointer;
-
         color: var(--white);
     }
 

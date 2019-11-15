@@ -6,13 +6,15 @@ import {
     FaRegThumbsDown,
     FaComment,
     FaArrowUp,
-    FaCartPlus,
+    //FaCartPlus,
     FaPlus,
     FaTimes,
+    FaReply,
 } from 'react-icons/fa';
 import { Container, Header, Body, Footer } from './styles';
 import UserImage from '../UserImage';
 import api from '../../services/api';
+import Posting from '../Posting';
 
 export default class Comment extends Component {
     state = {
@@ -126,8 +128,23 @@ export default class Comment extends Component {
     };
 
     render() {
-        const { comment, onHead, handleHead, head, me } = this.props;
-        const { iLiked, nLikes, iDisliked, nDislikes, iFollow } = this.state;
+        const {
+            comment,
+            onHead,
+            handleHead,
+            onPosting,
+            head,
+            me,
+            token,
+        } = this.props;
+        const {
+            iLiked,
+            nLikes,
+            iDisliked,
+            nDislikes,
+            iFollow,
+            posting,
+        } = this.state;
         return (
             <Container head={head}>
                 <Header>
@@ -205,9 +222,14 @@ export default class Comment extends Component {
                             id="like-icon"
                         />
                     )}
-                    <FaComment id="comment-icon" />
-                    {this.props.me.is_product == null ? null : (
-                        <FaCartPlus id="cart-icon" />
+                    <FaComment id="comment-icon" onClick={onPosting} />
+                    {comment.Parent === null ? null : (
+                        <FaReply
+                            id="answered-icon"
+                            onClick={() =>
+                                handleHead('comment', comment.Parent)
+                            }
+                        />
                     )}
                 </Footer>
             </Container>

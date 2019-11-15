@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import { FaComment, FaPlus, FaTimes, FaArrowUp } from 'react-icons/fa';
+import { FaPlus, FaTimes, FaArrowUp } from 'react-icons/fa';
 import { Container, Footer } from './styles';
 import api from '../../services/api';
-import Posting from '../../components/Posting';
 
 export default class Topic extends Component {
     state = {
         follow: this.props.topic.follow,
-        posting: false,
     };
 
     componentDidMount = async () => {
@@ -45,8 +43,8 @@ export default class Topic extends Component {
     };
 
     render() {
-        const { posting, follow } = this.state;
-        const { head, topic, token, onHead } = this.props;
+        const { follow } = this.state;
+        const { head, topic, onHead } = this.props;
         return (
             <Container banner={topic.banner} head={head}>
                 <h2>{topic.hashtag}</h2>
@@ -54,26 +52,12 @@ export default class Topic extends Component {
                     {head ? null : (
                         <FaArrowUp id="go-ahead-icon" onClick={onHead} />
                     )}
-                    <FaComment
-                        id="comment-icon"
-                        onClick={e =>
-                            posting
-                                ? this.setState({ posting: false })
-                                : this.setState({ posting: true })
-                        }
-                    />
                     {follow ? (
                         <FaTimes id="follow-icon" onClick={this.Unfollow} />
                     ) : (
                         <FaPlus id="follow-icon" onClick={this.Follow} />
                     )}
                 </Footer>
-                {posting ? (
-                    <Posting
-                        token={token}
-                        onClose={() => this.setState({ posting: false })}
-                    />
-                ) : null}
             </Container>
         );
     }

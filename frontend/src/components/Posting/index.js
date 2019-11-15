@@ -13,8 +13,7 @@ export default class Posting extends Component {
 
     handlePost = async () => {
         const { data, text, temp } = this.state;
-        const { token, onClose } = this.props;
-        console.log(temp);
+        const { token, parent, onClose } = this.props;
         if (Boolean(temp.name)) {
             let config = {
                 headers: {
@@ -31,15 +30,23 @@ export default class Posting extends Component {
             );
             this.setState({ data });
         }
-        await api.post(`/post/create?AccessToken=${token}`, {
-            Text: text,
-            Medias: data === [] ? [] : [data[0].Id],
-        });
+        console.log(parent);
+        if (parent === undefined) {
+            await api.post(`/post/create?AccessToken=${token}`, {
+                Text: text,
+                Medias: data[0] === undefined ? [] : [data[0].Id],
+            });
+        } else {
+            await api.post(`/post/create?AccessToken=${token}`, {
+                Parent: parent,
+                Text: text,
+                Medias: data[0] === undefined ? [] : [data[0].Id],
+            });
+        }
         onClose();
     };
 
     handleFile = e => {
-        console.log(e.target.files[0]);
         this.setState({
             preview: URL.createObjectURL(e.target.files[0]),
             temp: e.target.files[0],
