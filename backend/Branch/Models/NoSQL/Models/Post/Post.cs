@@ -56,6 +56,7 @@ namespace Branch.Models.NoSQL
         public List<ObjectId> Comments { get; set; }
 
         [BsonElement("parent")]
-        public ObjectId Parent { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Parent { get; set; }
     }
 }

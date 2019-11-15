@@ -42,7 +42,7 @@ namespace Branch.Controllers
 
             NoSQLContext.PostCollection.InsertOne(NewPost);
 
-            if (NewPost.Parent != ObjectId.Empty)
+            if (NewPost.Parent != null)
             {
                 var Parent = FindParent(NewPost);
 
@@ -157,7 +157,11 @@ namespace Branch.Controllers
                 PostLiked.Dislikes.Remove(UserId);
             }
 
-            NoSQLContext.PostCollection.FindOneAndReplace(x => x.Id == PostLiked.Id, PostLiked);
+            var Update = Builders<Post>.Update
+                                               .Set("Likes", PostLiked.Likes)
+                                               .Set("Dislikes", PostLiked.Dislikes);
+
+            PostSearchAuxiliar.UpdatePostById(PostLiked.Id, Update);
 
             int TotalLikes = PostLiked.Likes.Count;
             int TotalDeslikes = PostLiked.Dislikes.Count;
@@ -190,7 +194,11 @@ namespace Branch.Controllers
                 PostDisliked.Likes.Remove(UserId);
             }
 
-            NoSQLContext.PostCollection.FindOneAndReplace(x => x.Id == PostDisliked.Id, PostDisliked);
+            var Update = Builders<Post>.Update
+                                               .Set("Likes", PostDisliked.Likes)
+                                               .Set("Dislikes", PostDisliked.Dislikes);
+
+            PostSearchAuxiliar.UpdatePostById(PostDisliked.Id, Update);
 
             int TotalLikes = PostDisliked.Likes.Count;
             int TotalDeslikes = PostDisliked.Dislikes.Count;
@@ -326,16 +334,20 @@ namespace Branch.Controllers
 
         private Post FindParent(Post NewPost)
         {
-            var ParentPost = PostSearchAuxiliar.PostById(NewPost.Parent.ToString());
+            var ParentPost = PostSearchAuxiliar.PostById(NewPost.Parent);
             
             return ParentPost;
         }
 
         private void UpdateParent(Post Parent, ObjectId CommentId)
         {
-            Parent.Comments.Add(CommentId);
-            NoSQLContext.PostCollection.UpdateOne(x => x.Id == Parent.Id,
-                                                             Builders<Post>.Update.Set(Post => Post, Parent));
+            var NewComments = new List<ObjectId>(Parent.Comments)
+            {
+                CommentId
+            };
+
+            var Update = Builders<Post>.Update.Set("Comments", NewComments);
+            PostSearchAuxiliar.UpdatePostById(Parent.Id, Update);
         }
     }
 }
