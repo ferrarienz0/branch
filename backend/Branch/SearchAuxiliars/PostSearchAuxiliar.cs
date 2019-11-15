@@ -154,6 +154,16 @@ namespace Branch.SearchAuxiliars
         }
 
         /// <summary>
+        /// Updates the post
+        /// </summary>
+        /// <param name="UpdateDefinition">The post's update</param>
+        public static void UpdatePostById(ObjectId Id, UpdateDefinition<Post> UpdateDefinition)
+        {
+            var Filter = Builders<Post>.Filter.Eq("Id", Id);
+            NoSQLContext.PostCollection.UpdateOne(Filter, UpdateDefinition);
+        }
+
+        /// <summary>
         /// Updates the post's owner
         /// </summary>
         /// <param name="Post">The post</param>
