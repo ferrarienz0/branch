@@ -22,6 +22,7 @@ export default class Follows extends Component {
                 {me.topics.map((topic, index) => (
                     <Topic
                         key={index}
+                        head={false}
                         token={token}
                         topic={{
                             id: topic.Id,
@@ -36,6 +37,7 @@ export default class Follows extends Component {
                 {topics.map((topic, index) => (
                     <Topic
                         key={index}
+                        head={false}
                         token={token}
                         topic={{
                             id: topic.Id,

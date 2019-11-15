@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './UserHead.css';
+import { Container } from './styles';
 import { FaTimes, FaPlus } from 'react-icons/fa';
 import api from '../../services/api';
 import UserImage from '../UserImage';
@@ -43,9 +43,14 @@ export default class UserHead extends Component {
         const { iFollow } = this.state;
         const { user, me } = this.props;
         return (
-            <div id="userhead-container">
+            <Container>
                 <div id="user-image">
-                    <UserImage size="70px" />
+                    <UserImage
+                        size="70px"
+                        image={
+                            user.Media === null ? user.Media : user.Media.URL
+                        }
+                    />
                     {me.ID === user.Id ? null : iFollow ? (
                         <FaTimes id="follow-icon" onClick={this.handleFollow} />
                     ) : (
@@ -60,7 +65,7 @@ export default class UserHead extends Component {
                         {user.Firstname} {user.Lastname}
                     </p>
                 </div>
-            </div>
+            </Container>
         );
     }
 }

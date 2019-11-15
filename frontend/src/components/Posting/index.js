@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FaPaperPlane, FaPaperclip } from 'react-icons/fa';
-import {} from './styles';
+import { Container } from './styles';
 import api from '../../services/api';
 
 export default class Posting extends Component {
@@ -49,7 +49,7 @@ export default class Posting extends Component {
     render() {
         const { preview } = this.state;
         return (
-            <div id="posting-container">
+            <Container>
                 <textarea
                     id="text-area"
                     type="text"
@@ -57,7 +57,7 @@ export default class Posting extends Component {
                 />
                 <div id="buttons">
                     <label id="media" htmlFor="selecao-arquivo">
-                        <FaPaperclip id="clip-icon" />
+                        <FaPaperclip id="media-icon" />
                     </label>
                     <button id="send" onClick={this.handlePost}>
                         <FaPaperPlane id="send-icon" />
@@ -70,7 +70,7 @@ export default class Posting extends Component {
                     name="pic"
                     onChange={this.handleFile}
                 ></input>
-            </div>
+            </Container>
         );
     }
 }

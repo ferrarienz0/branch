@@ -10,6 +10,22 @@ export default class Topic extends Component {
         posting: false,
     };
 
+    componentDidMount = async () => {
+        const { topic, token } = this.props;
+        if (topic.follow === undefined) {
+            const { data: topics } = await api.get(
+                `/subjects/followed?AccessToken=${token}`
+            );
+            topics.forEach(follow => {
+                if (follow.Id === topic.ID) {
+                    this.setState({
+                        follow: true,
+                    });
+                }
+            });
+        }
+    };
+
     Follow = () => {
         const { token, topic } = this.props;
         api.post(
@@ -30,12 +46,14 @@ export default class Topic extends Component {
 
     render() {
         const { posting, follow } = this.state;
-        const { topic, token, onHead } = this.props;
+        const { head, topic, token, onHead } = this.props;
         return (
-            <Container banner={topic.banner}>
+            <Container banner={topic.banner} head={head}>
                 <h2>{topic.hashtag}</h2>
                 <Footer>
-                    <FaArrowUp id="go-ahead-icon" onClick={onHead} />
+                    {head ? null : (
+                        <FaArrowUp id="go-ahead-icon" onClick={onHead} />
+                    )}
                     <FaComment
                         id="comment-icon"
                         onClick={e =>

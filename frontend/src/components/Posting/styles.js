@@ -1,6 +1,6 @@
-/*
+import styled from 'styled-components';
 
-#posting-container {
+export const Container = styled.div`
     width: 500px;
     height: 300px;
     left: 150px;
@@ -9,101 +9,106 @@
     z-index: 4;
     position: fixed;
     display: flex;
-}
 
-#posting-container #text-area {
-    width: 500px;
-    height: 300px;
-    padding: 5px;
-    padding-bottom: 50px;
+    #text-area {
+        width: 500px;
+        height: 300px;
+        padding: 5px;
+        padding-bottom: 50px;
 
-    resize: none;
+        resize: none;
 
-    color: var(--white);
-    background: rgba(0, 0, 0, 0.8);
-    border: none;
-    border-bottom: 1px solid var(--dark-blue);
-    box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);
-}
+        color: var(--white);
+        background: rgba(0, 0, 0, 0.8);
+        border: none;
+        border-bottom: 1px solid var(--dark-blue);
+        box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);
 
-#posting-container #text-area:hover {
-    background: rgba(0, 0, 0, 0.9);
-    border-bottom: 1px solid var(--blue);
-    transition: 0.1s;
-}
+        &:hover {
+            background: rgba(0, 0, 0, 0.9);
+            border-bottom: 1px solid var(--blue);
+            transition: 0.1s;
+        }
 
-#posting-container #text-area::-webkit-scrollbar {
-    width: 10px;
-    cursor: pointer;
-}
+        &::-webkit-scrollbar {
+            width: 10px;
+            cursor: pointer;
+        }
 
-#posting-container #text-area::-webkit-scrollbar-thumb {
-    background: var(--gray-1);
-}
+        &::-webkit-scrollbar-thumb {
+            background: var(--gray-1);
 
-#posting-container #text-area::-webkit-scrollbar-thumb:hover {
-    background: var(--gray-2);
-    transition: 0.1s;
-}
+            &:hover {
+                background: var(--gray-2);
+                transition: 0.1s;
+            }
+        }
+    }
 
-#posting-container #buttons #send {
-    width: 40px;
-    height: 40px;
-    left: 580px;
-    top: 310px;
+    #send {
+        width: 40px;
+        height: 40px;
+        left: 580px;
+        top: 310px;
 
-    cursor: pointer;
-    position: fixed;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+        cursor: pointer;
+        position: fixed;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
-    background: none;
-    border: none;
-}
+        background: none;
+        border: none;
+        &:hover {
+            color: var(--light-white);
+            transition: 0.1s;
+        }
+    }
 
-#posting-container #buttons #media {
-    width: 40px;
-    height: 40px;
-    left: 540px;
-    top: 310px;
+    #media {
+        width: 40px;
+        height: 40px;
+        left: 540px;
+        top: 310px;
 
-    cursor: pointer;
-    position: fixed;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+        cursor: pointer;
+        position: fixed;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
-    border: none;
-}
+        border: none;
 
-#posting-container #buttons #send-icon:hover,
-#clip-icon:hover {
-    color: var(--light-white);
-    transition: 0.1s;
-}
+        &:hover {
+            color: var(--light-white);
+            transition: 0.1s;
+        }
+    }
 
-input[type='file'] {
-    display: none;
-}
+    #media-icon,
+    #send-icon {
+        height: 20px;
+        width: 20px;
 
-#clip-icon,
-#send-icon {
-    height: 20px;
-    width: 20px;
-    color: var(--white);
-}
+        color: var(--white);
+    }
 
-#posting-container #preview {
-    position: absolute;
-    max-width: 200px;
-    max-height: 200px;
-    margin: 10px;
-    top: 0px;
-    left: 500px;
-    margin-right: 5px;
-    background: chartreuse;
-    border-radius: 5px;
-    box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);
-}
-*/
+    input[type='file'] {
+        display: none;
+    }
+
+    #preview {
+        max-width: 200px;
+        max-height: 200px;
+        margin: 10px;
+        top: 0px;
+        left: 500px;
+        margin-right: 5px;
+
+        position: absolute;
+
+        background: chartreuse;
+        border-radius: 5px;
+        box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);
+    }
+`;

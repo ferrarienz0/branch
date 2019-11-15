@@ -7,10 +7,10 @@ import api from '../../services/api';
 import Posting from '../../components/Posting';
 import UserImage from '../../components/UserImage';
 import Feed from '../../components/Feed';
-import UserHead from '../../components/Heads/UserHead';
-import TopicHead from '../../components/Heads/TopicHead';
+import UserHead from '../../components/UserHead';
+import Topic from '../../components/Topic';
 import Comment from '../../components/Comment';
-import ProductHead from '../../components/Heads/ProductHead';
+import ProductHead from '../../components/ProductHead';
 import Follows from '../../components/Follows';
 
 export default class Home extends Component {
@@ -95,7 +95,8 @@ export default class Home extends Component {
         );
         this.setState({
             head: (
-                <TopicHead
+                <Topic
+                    head={true}
                     me={me}
                     topic={{
                         ID: topic.Id,

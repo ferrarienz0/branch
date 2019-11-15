@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    height: 70px;
+    height: ${props => (props.head ? '90px' : '70px')};
     margin: 0 0 5px 5px;
     padding: 5px 10px;
 
@@ -22,7 +22,7 @@ export const Container = styled.div`
 
     &:hover {
         border-bottom: 1px solid var(--green);
-        transform: translateX(5px);
+        transform: ${props => (props.head ? '' : 'translateX(5px)')};
         transition: 0.1s;
     }
 
