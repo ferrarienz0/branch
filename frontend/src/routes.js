@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Login from './pages/Login';
 import Home from './pages/Home';
-//import Explore from './pages/Explore';
 import Register from './pages/Register';
 
 export default function Routes() {
@@ -10,7 +9,7 @@ export default function Routes() {
         <BrowserRouter>
             <Switch>
                 <Route path="/" exact component={Login} />
-                <Route path="/home/:token/:type/:id" exact component={Home} />
+                <Route path="/home/:token/:type?/:id?" exact component={Home} />
                 <Route path="/register" component={Register} />
             </Switch>
         </BrowserRouter>

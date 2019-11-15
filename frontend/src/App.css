@@ -26,6 +26,10 @@
     --border: 1px solid var(--gray-3);
 }
 
+::-webkit-input-placeholder {
+    color: var(--gray-4);
+}
+
 a {
     text-decoration: none;
 }
