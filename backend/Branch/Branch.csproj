@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\EntityFramework.6.3.0\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.props')" />
   <Import Project="..\packages\Microsoft.CodeAnalysis.FxCopAnalyzers.2.9.7\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props" Condition="Exists('..\packages\Microsoft.CodeAnalysis.FxCopAnalyzers.2.9.7\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props')" />
   <Import Project="..\packages\Microsoft.NetFramework.Analyzers.2.9.7\build\Microsoft.NetFramework.Analyzers.props" Condition="Exists('..\packages\Microsoft.NetFramework.Analyzers.2.9.7\build\Microsoft.NetFramework.Analyzers.props')" />
   <Import Project="..\packages\Microsoft.NetCore.Analyzers.2.9.7\build\Microsoft.NetCore.Analyzers.props" Condition="Exists('..\packages\Microsoft.NetCore.Analyzers.2.9.7\build\Microsoft.NetCore.Analyzers.props')" />
@@ -60,13 +59,13 @@
       <HintPath>..\packages\DnsClient.1.2.0\lib\net471\DnsClient.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.3.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.3.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework6.Npgsql, Version=6.3.0.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework6.Npgsql.6.3.0\lib\net45\EntityFramework6.Npgsql.dll</HintPath>
+    <Reference Include="EntityFramework6.Npgsql, Version=3.2.1.1, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework6.Npgsql.3.2.1.1\lib\net45\EntityFramework6.Npgsql.dll</HintPath>
     </Reference>
     <Reference Include="JWT, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\JWT.5.3.1\lib\net472\JWT.dll</HintPath>
@@ -242,6 +241,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MediaController.cs" />
     <Compile Include="Controllers\PostController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\SubjectController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -271,36 +271,28 @@
     <Compile Include="Migrations\201911032142242_FixUserMedia.Designer.cs">
       <DependentUpon>201911032142242_FixUserMedia.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201911171255025_Pro-Marketplace.cs" />
+    <Compile Include="Migrations\201911171255025_Pro-Marketplace.Designer.cs">
+      <DependentUpon>201911171255025_Pro-Marketplace.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\NoSQL\Models\Post\Owner.cs" />
     <Compile Include="Models\NoSQL\Models\Post\PostComparer.cs" />
-    <Compile Include="Models\SQL\Relationship\GameTeam.cs" />
     <Compile Include="Models\NoSQL\NoSQLContext.cs" />
     <Compile Include="Models\NoSQL\Models\Post\Post.cs" />
     <Compile Include="Models\SQL\Social\City.cs" />
     <Compile Include="Models\SQL\SQLContext.cs" />
     <Compile Include="Models\SQL\Social\Estate.cs" />
     <Compile Include="Models\SQL\Media\Media.cs" />
-    <Compile Include="Models\SQL\Relationship\GameMedia.cs" />
-    <Compile Include="Models\SQL\Relationship\MarketplaceMedia.cs" />
-    <Compile Include="Models\SQL\Relationship\ProductMedia.cs" />
     <Compile Include="Models\SQL\Social\Address.cs" />
     <Compile Include="Models\SQL\Store\Cart.cs" />
     <Compile Include="Models\SQL\Social\Follow.cs" />
-    <Compile Include="Models\SQL\Game\Game.cs" />
-    <Compile Include="Models\SQL\Store\Marketplace.cs" />
-    <Compile Include="Models\SQL\Game\Pro.cs" />
     <Compile Include="Models\SQL\Store\Product.cs" />
     <Compile Include="Models\SQL\Relationship\ProductCart.cs" />
     <Compile Include="Models\SQL\Social\Subject.cs" />
-    <Compile Include="Models\SQL\Relationship\SubjectGame.cs" />
-    <Compile Include="Models\SQL\Game\Team.cs" />
-    <Compile Include="Models\SQL\Store\TypeProduct.cs" />
     <Compile Include="Models\SQL\Social\User.cs" />
     <Compile Include="Models\SQL\Relationship\UserSubject.cs" />
-    <Compile Include="Models\SQL\Relationship\UserGame.cs" />
     <Compile Include="Models\SQL\Media\TypeMedia.cs" />
-    <Compile Include="Models\SQL\Relationship\UserMarketplace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchAuxiliars\PostSearchAuxiliar.cs" />
     <Compile Include="SearchAuxiliars\UserSearchAuxiliar.cs" />
@@ -425,6 +417,9 @@
     <EmbeddedResource Include="Migrations\201911032142242_FixUserMedia.resx">
       <DependentUpon>201911032142242_FixUserMedia.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911171255025_Pro-Marketplace.resx">
+      <DependentUpon>201911171255025_Pro-Marketplace.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.7\analyzers\dotnet\cs\Microsoft.CodeAnalysis.VersionCheckAnalyzer.resources.dll" />
@@ -476,10 +471,7 @@
     <Error Condition="!Exists('..\packages\Microsoft.NetCore.Analyzers.2.9.7\build\Microsoft.NetCore.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.NetCore.Analyzers.2.9.7\build\Microsoft.NetCore.Analyzers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.NetFramework.Analyzers.2.9.7\build\Microsoft.NetFramework.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.NetFramework.Analyzers.2.9.7\build\Microsoft.NetFramework.Analyzers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.FxCopAnalyzers.2.9.7\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.FxCopAnalyzers.2.9.7\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props'))" />
-    <Error Condition="!Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.3.0\build\EntityFramework.props'))" />
-    <Error Condition="!Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.3.0\build\EntityFramework.targets'))" />
   </Target>
-  <Import Project="..\packages\EntityFramework.6.3.0\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

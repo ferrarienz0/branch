@@ -35,6 +35,9 @@ namespace Branch.Models
         public string Email { get; set; }
 
         [Required]
+        public bool IsPro { get; set; }
+
+        [Required]
         [Column(TypeName = "Date")]
         public DateTime BirthDate { get; set; }
 
