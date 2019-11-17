@@ -8,13 +8,6 @@ namespace Branch.Models
 {
     public class SQLContext : DbContext
     {
-
-        public DbSet<Game> Games { get; set; }
-
-        public DbSet<Pro> Pros { get; set; }
-
-        public DbSet<Team> Teams { get; set; }
-
         public DbSet<Media> Medias { get; set; }
 
         public DbSet<TypeMedia> TypeMedias { get; set; }
@@ -29,33 +22,15 @@ namespace Branch.Models
 
         public DbSet<Cart> Carts { get; set; }
 
-        public DbSet<Marketplace> Marketplaces { get; set; }
-
         public DbSet<Product> Products { get; set; }
-
-        public DbSet<TypeProduct> TypeProducts { get; set; }
-
-        public DbSet<GameMedia> GameMedias { get; set; }
-
-        public DbSet<MarketplaceMedia> MarketplaceMedias { get; set; }
 
         public DbSet<ProductCart> ProductCarts { get; set; }
 
-        public DbSet<ProductMedia> ProductMedias { get; set; }
-
-        public DbSet<SubjectGame> SubjectGames { get; set; }
-
-        public DbSet<UserGame> UserGames { get; set; }
-
         public DbSet<UserSubject> UserSubjects { get; set; }
-
-        public DbSet<GameTeam> GameTeams { get; set; }
 
         public DbSet<City> Cities { get; set; }
 
         public DbSet<Estate> States { get; set; }
-
-        public DbSet<UserMarketplace> UserMarketplaces { get; set; }
 
         public SQLContext() : base("branchsql")
         {
