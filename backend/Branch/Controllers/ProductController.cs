@@ -1,4 +1,5 @@
 ﻿using Branch.Models;
+using Branch.SearchAuxiliars;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,21 @@ namespace Branch.Controllers
             return Ok(Product);
         }
 
+        [HttpGet]
+        [Route("pro/products")]
+        [ResponseType(typeof(List<Product>))]
+        public IHttpActionResult ProductsByPro(int ProId)
+        {
+            var User = SQLContext.Users.Find(ProId);
+
+            if(User == null || !User.IsPro)
+            {
+                return NotFound();
+            }
+
+            return Ok(UserSearchAuxiliar.Products(ProId, SQLContext));
+        }
+
         [HttpPost]
         [Route("product/create")]
         [ResponseType(typeof(Product))]
@@ -61,6 +77,15 @@ namespace Branch.Controllers
             SQLContext.SaveChanges();
 
             return Ok(User);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                SQLContext.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

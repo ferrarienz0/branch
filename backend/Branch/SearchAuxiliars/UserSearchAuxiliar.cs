@@ -81,5 +81,12 @@ namespace Branch.SearchAuxiliars
                                    .Find(UserId)
                                    .Media;
         }
+
+        public static List<Product> Products(int UserId, SQLContext SQLContext)
+        {
+            return SQLContext.Products
+                                      .Where(x => x.ProId == UserId)
+                                      .ToList();
+        }
     }
 }
