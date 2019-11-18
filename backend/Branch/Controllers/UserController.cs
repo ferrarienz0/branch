@@ -64,7 +64,7 @@ namespace Branch.Controllers
         [HttpPut]
         [Route("user/update")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult UpdateUser(int UserId, User User)
+        public IHttpActionResult UpdateUser([FromUri] int UserId, [FromBody] User User)
         {
             if (!ModelState.IsValid)
             {
@@ -93,6 +93,27 @@ namespace Branch.Controllers
                     throw;
                 }
             }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        [HttpPut]
+        [Route("user/pro")]
+        [ResponseType(typeof(void))]
+        public IHttpActionResult MakeUserPro([FromUri] string AccessToken)
+        {
+            var UserId = TokenValidator.VerifyToken(AccessToken);
+            var User = SQLContext.Users.Find(UserId);
+
+            if(User == null)
+            {
+                return NotFound();
+            }
+
+            User.IsPro = true;
+
+            SQLContext.Entry(User).State = EntityState.Modified;
+            SQLContext.SaveChanges();
 
             return StatusCode(HttpStatusCode.NoContent);
         }
