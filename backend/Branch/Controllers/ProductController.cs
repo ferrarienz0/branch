@@ -61,9 +61,9 @@ namespace Branch.Controllers
                 return BadRequest(ModelState);
             }
 
-            var UserExists = SQLContext.Users.Find(Product.ProId) != null;
+            var User = SQLContext.Users.Find(Product.ProId);
 
-            if(!UserExists)
+            if(User == null || !User.IsPro)
             {
                 return NotFound();
             }
@@ -76,7 +76,7 @@ namespace Branch.Controllers
             SQLContext.Products.Add(Product);
             SQLContext.SaveChanges();
 
-            return Ok(User);
+            return Ok(Product);
         }
 
         protected override void Dispose(bool disposing)
