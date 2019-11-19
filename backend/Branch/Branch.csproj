@@ -275,6 +275,10 @@
     <Compile Include="Migrations\201911171255025_Pro-Marketplace.Designer.cs">
       <DependentUpon>201911171255025_Pro-Marketplace.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201911191800205_FixMediaId.cs" />
+    <Compile Include="Migrations\201911191800205_FixMediaId.Designer.cs">
+      <DependentUpon>201911191800205_FixMediaId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\NoSQL\Models\Post\Owner.cs" />
     <Compile Include="Models\NoSQL\Models\Post\PostComparer.cs" />
@@ -419,6 +423,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201911171255025_Pro-Marketplace.resx">
       <DependentUpon>201911171255025_Pro-Marketplace.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911191800205_FixMediaId.resx">
+      <DependentUpon>201911191800205_FixMediaId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

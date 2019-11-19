@@ -15,7 +15,7 @@ namespace Branch.Models
         public string Hashtag { get; set; }
 
         [ForeignKey("Media")]
-        public int MediaId { get; set; }
+        public int? MediaId { get; set; }
 
         public virtual Media Media { get; set; }
 
