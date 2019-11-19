@@ -256,7 +256,10 @@ namespace Branch.Controllers
 
                     if(NewPost.Medias != null)
                     {
-                        NewSubject.MediaId = NewPost.Medias[0];
+                        if(NewPost.Medias.Count > 0)
+                        {
+                            NewSubject.MediaId = NewPost.Medias[0];
+                        }
                     }
 
                     var Added = SQLContext.Subjects.Add(NewSubject);
