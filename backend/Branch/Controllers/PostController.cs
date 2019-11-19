@@ -239,7 +239,7 @@ namespace Branch.Controllers
             return Tags;
         }
 
-        private List<int> CheckHashtagsExistence(List<string> Hashtags)
+        private List<int> CheckHashtagsExistence(List<string> Hashtags, int? MediaId)
         {
             List<int> Subjects = new List<int>();
 
@@ -249,7 +249,13 @@ namespace Branch.Controllers
 
                 if (Exists == default)
                 {
-                    var Added = SQLContext.Subjects.Add(new Subject() { Hashtag = Hashtag });
+                    var Added = SQLContext.Subjects.Add(
+                        new Subject() 
+                        { Hashtag = Hashtag,
+                          MediaId = MediaId 
+                        }
+                    );
+
                     SQLContext.SaveChanges();
 
                     Subjects.Add(Added.Id);
@@ -305,7 +311,7 @@ namespace Branch.Controllers
             var Mentions = FindTag(NewPost.Text, "@");
             var Products = FindTag(NewPost.Text, "$");
 
-            var HashtagObjects = CheckHashtagsExistence(Hashtags);
+            var HashtagObjects = CheckHashtagsExistence(Hashtags, NewPost.Medias?[0]);
             var MentionObjects = CheckMentionsExistence(Mentions);
             var ProductsObjects = CheckProductExistence(Products);
 
