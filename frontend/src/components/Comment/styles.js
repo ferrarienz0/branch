@@ -120,6 +120,16 @@ export const Body = styled.div`
                     transition: 0.1s;
                 }
             }
+
+            #product {
+                color: var(--yellow);
+                cursor: pointer;
+
+                &:hover {
+                    color: var(--white);
+                    transition: 0.1s;
+                }
+            }
         }
     }
 

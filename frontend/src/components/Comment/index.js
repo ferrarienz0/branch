@@ -14,7 +14,6 @@ import {
 import { Container, Header, Body, Footer } from './styles';
 import UserImage from '../UserImage';
 import api from '../../services/api';
-import Posting from '../Posting';
 
 export default class Comment extends Component {
     state = {
@@ -97,54 +96,57 @@ export default class Comment extends Component {
         const { comment, handleHead } = this.props;
         let res = [],
             u = 0,
-            t = 0;
+            t = 0,
+            p = 0;
         let text = comment.Text.split(' ');
         text.forEach(word => {
-            if (word[0] === '@')
-                res.push(
-                    <i
-                        id="user"
-                        onClick={() =>
-                            handleHead('user', comment.Mentions[u++])
-                        }
-                    >
-                        {word}{' '}
-                    </i>
-                );
-            else if (word[0] === '#')
-                res.push(
-                    <i
-                        id="topic"
-                        onClick={() =>
-                            handleHead('topic', comment.Hashtags[t++])
-                        }
-                    >
-                        {word}{' '}
-                    </i>
-                );
-            else res.push(word + ' ');
+            switch (word[0]) {
+                case '@':
+                    res.push(
+                        <i
+                            id="user"
+                            onClick={() =>
+                                handleHead('user', comment.Mentions[u++])
+                            }
+                        >
+                            {word}
+                        </i>
+                    );
+                    break;
+                case '#':
+                    res.push(
+                        <i
+                            id="topic"
+                            onClick={() =>
+                                handleHead('topic', comment.Hashtags[t++])
+                            }
+                        >
+                            {word}
+                        </i>
+                    );
+                    break;
+                case '$':
+                    res.push(
+                        <i
+                            id="product"
+                            onClick={() =>
+                                handleHead('product', comment.Products[p++])
+                            }
+                        >
+                            {word}
+                        </i>
+                    );
+                    break;
+                default:
+                    res.push(word);
+            }
         });
         return res;
     };
 
     render() {
-        const {
-            comment,
-            onHead,
-            handleHead,
-            onPosting,
-            head,
-            me,
-            token,
-        } = this.props;
-        const {
-            iLiked,
-            nLikes,
-            iDisliked,
-            nDislikes,
-            iFollow,
-            posting,
-        } = this.state;
+        const { comment, onHead, handleHead, onPosting, head, me } = this.props;
+        const { iLiked, nLikes, iDisliked, nDislikes, iFollow } = this.state;
         return (
             <Container head={head}>
                 <Header>
@@ -222,7 +224,10 @@ export default class Comment extends Component {
                             id="like-icon"
                         />
                     )}
-                    <FaComment id="comment-icon" onClick={onPosting} />
+                    <FaComment
+                        id="comment-icon"
+                        onClick={() => onPosting(comment.Id)}
+                    />
                     {comment.Parent === null ? null : (
                         <FaReply
                             id="answered-icon"

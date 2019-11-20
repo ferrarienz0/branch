@@ -71,7 +71,7 @@ export const Body = styled.div`
 
 export const Perfil = styled.div`
     width: 150px;
-    height: 300px;
+    height: 350px;
     padding: 25px 25px 0 25px;
     top: 50px;
     left: 0px;
@@ -92,6 +92,18 @@ export const Perfil = styled.div`
         border-color: var(--orange);
         transition: 0.1s;
     }
+    #pro-icon {
+        width: 30px;
+        height: 30px;
+        left: 25px;
+
+        position: absolute;
+
+        background: var(--black);
+        border-radius: 50%;
+        border: 3px solid var(--black);
+        color: var(--yellow);
+    }
 
     input {
         visibility: hidden;
@@ -104,22 +116,23 @@ export const Perfil = styled.div`
         color: var(--magenta);
     }
 
-    #comment-icon {
-        width: 25px;
-        height: 25px;
+    #become-pro {
         margin-top: 20px;
 
         cursor: pointer;
 
-        color: var(--white);
+        font-size: 16px;
+        color: var(--yellow);
 
         &:hover {
-            color: var(--light-white);
+            color: var(--white);
             transition: 0.1s;
         }
     }
 
-    #cart-icon {
+    #comment-icon,
+    #cart-icon,
+    #product-icon {
         width: 25px;
         height: 25px;
         margin-top: 20px;

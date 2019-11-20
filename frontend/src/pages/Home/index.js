@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { FaShoppingCart, FaPowerOff, FaComment } from 'react-icons/fa';
+import {
+    FaShoppingCart,
+    FaPowerOff,
+    FaComment,
+    FaStar,
+    FaTag,
+} from 'react-icons/fa';
 import { Container, Header, Body, Perfil, Explore } from './styles.js';
 import icone from '../../assets/icone.svg';
 import api from '../../services/api';
@@ -22,6 +28,7 @@ export default class Home extends Component {
             userName: '',
             email: '',
             image: '',
+            pro: false,
             users: [],
             topics: [],
         },
@@ -60,6 +67,7 @@ export default class Home extends Component {
                 userName: decodeURIComponent(user.Nickname),
                 email: user.Email,
                 image: user.Media,
+                pro: user.IsPro,
                 users: me_users,
                 topics: me_topics,
             },
@@ -68,75 +76,97 @@ export default class Home extends Component {
         this.handleHead('', '');
     };
 
-    setHeadToUser = async id => {
-        const { token } = this.props.match.params;
+    becomePro = () => {
         const { me } = this.state;
-        const { data: user } = await api.get(`/user?UserId=${id}`);
-        const { data: comments } = await api.get(`/posts/user?UserId=${id}`);
-        this.setState({
-            head: <UserHead me={me} user={user} token={token} />,
-            loaded_head: true,
-            feed: { comments, loaded: true },
+        const { token } = this.props.match.params;
+        api.put(`/user/pro?AccessToken=${token}`).then(res => {
+            console.log(res);
+            this.setState({ me: { pro: true, ...me } });
         });
+    };
+
+    setHeadToUser = async id => {
+        if (id !== undefined) {
+            const { token } = this.props.match.params;
+            const { me } = this.state;
+            const { data: user } = await api.get(`/user?UserId=${id}`);
+            const { data: comments } = await api.get(
+                `/posts/user?UserId=${id}`
+            );
+            this.setState({
+                head: <UserHead me={me} user={user} token={token} />,
+                loaded_head: true,
+                feed: { comments, loaded: true },
+            });
+        }
     };
 
     setHeadToTopic = async id => {
-        const { token } = this.props.match.params;
-        const { me } = this.state;
-        const { data: topic } = await api.get(`/subject?SubjectId=${id}`);
-        const { data: comments } = await api.get(
-            `/posts/subject?SubjectId=${id}`
-        );
-        this.setState({
-            head: (
-                <Topic
-                    head={true}
-                    me={me}
-                    topic={{
-                        ID: topic.Id,
-                        hashtag: topic.Hashtag,
-                        banner: topic.Media.URL,
-                    }}
-                    token={token}
-                />
-            ),
-            loaded_head: true,
-            feed: { comments, loaded: true },
-        });
+        if (id !== undefined) {
+            const { token } = this.props.match.params;
+            const { me } = this.state;
+            const { data: topic } = await api.get(`/subject?SubjectId=${id}`);
+            const { data: comments } = await api.get(
+                `/posts/subject?SubjectId=${id}`
+            );
+            this.setState({
+                head: (
+                    <Topic
+                        head={true}
+                        me={me}
+                        topic={{
+                            ID: topic.Id,
+                            hashtag: topic.Hashtag,
+                            banner: topic.Media.URL,
+                        }}
+                        token={token}
+                    />
+                ),
+                loaded_head: true,
+                feed: { comments, loaded: true },
+            });
+        }
     };
 
     setHeadToComment = async id => {
-        const { token } = this.props.match.params;
-        const { me } = this.state;
-        const { data: comment } = await api.get(`/post?PostId=${id}`);
-        const { data: comments } = await api.get(`/post/comments?PostId=${id}`);
-        this.setState({
-            head: (
-                <Comment
-                    head={true}
-                    me={me}
-                    comment={comment}
-                    handleHead={this.handleHead}
-                    token={token}
-                />
-            ),
-            loaded_head: true,
-            feed: { comments, loaded: true },
-        });
+        if (id !== undefined) {
+            const { token } = this.props.match.params;
+            const { me } = this.state;
+            const { data: comment } = await api.get(`/post?PostId=${id}`);
+            const { data: comments } = await api.get(
+                `/post/comments?PostId=${id}`
+            );
+            this.setState({
+                head: (
+                    <Comment
+                        head={true}
+                        me={me}
+                        comment={comment}
+                        handleHead={this.handleHead}
+                        token={token}
+                        onPosting={this.onPosting}
+                    />
+                ),
+                loaded_head: true,
+                feed: { comments, loaded: true },
+            });
+        }
     };
 
     setHeadToProduct = async id => {
-        const { token } = this.props.match.params;
-        const { me } = this.state;
-        const { data: product } = await api.get(`/product?ProductId=${id}`);
-        const { data: comments } = await api.get(
-            `/posts/product?ProductId=${id}`
-        );
-        this.setState({
-            head: <ProductHead me={me} product={product} token={token} />,
-            loaded_head: true,
-            feed: { comments, loaded: true },
-        });
+        if (id !== undefined) {
+            const { token } = this.props.match.params;
+            const { me } = this.state;
+            const { data: product } = await api.get(`/product?ProductId=${id}`);
+            const { data: comments } = await api.get(
+                `/posts/product?ProductId=${id}`
+            );
+            this.setState({
+                head: <ProductHead me={me} product={product} token={token} />,
+                loaded_head: true,
+                feed: { comments, loaded: true },
+            });
+        }
     };
 
     setHeadToDefault = async () => {
@@ -187,6 +217,7 @@ export default class Home extends Component {
     };
 
     onPosting = parent => {
+        console.log(parent);
         this.setState({ posting: true, parent });
     };
 
@@ -213,6 +244,7 @@ export default class Home extends Component {
                 ) : null}
                 <Body>
                     <Perfil>
+                        {me.pro ? <FaStar id="pro-icon" /> : null}
                         <label htmlFor="new-image">
                             <UserImage
                                 id="user-image"
@@ -239,6 +271,13 @@ export default class Home extends Component {
                             }
                         />
                         <FaShoppingCart id="cart-icon" />
+                        {me.pro ? (
+                            <FaTag id="product-icon" />
+                        ) : (
+                            <i id="become-pro" onClick={this.becomePro}>
+                                Torne-se pro
+                            </i>
+                        )}
                     </Perfil>
                     <Explore>
                         <Feed

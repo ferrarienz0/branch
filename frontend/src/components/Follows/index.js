@@ -42,7 +42,8 @@ export default class Follows extends Component {
                         topic={{
                             id: topic.Id,
                             hashtag: topic.Hashtag,
-                            banner: topic.Media.URL,
+                            banner:
+                                topic.Media === null ? null : topic.Media.URL,
                             follow: false,
                         }}
                         onHead={() => handleHead('topic', topic.Id)}
