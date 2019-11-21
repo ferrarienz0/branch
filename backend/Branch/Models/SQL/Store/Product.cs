@@ -30,7 +30,7 @@ namespace Branch.Models
         public float MaxDiscount { get; set; }
 
         [ForeignKey("Pro")]
-        public int ProId { get; set; }
+        public int? ProId { get; set; }
 
         public virtual User Pro { get; set; }
 
