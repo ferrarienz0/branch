@@ -283,6 +283,14 @@
     <Compile Include="Migrations\201911211720479_Fix-ProId.Designer.cs">
       <DependentUpon>201911211720479_Fix-ProId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201911211902207_Product-Media.cs" />
+    <Compile Include="Migrations\201911211902207_Product-Media.Designer.cs">
+      <DependentUpon>201911211902207_Product-Media.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911211903217_ForeignKey-ProductMedia.cs" />
+    <Compile Include="Migrations\201911211903217_ForeignKey-ProductMedia.Designer.cs">
+      <DependentUpon>201911211903217_ForeignKey-ProductMedia.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\NoSQL\Models\Post\Owner.cs" />
     <Compile Include="Models\NoSQL\Models\Post\PostComparer.cs" />
@@ -433,6 +441,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201911211720479_Fix-ProId.resx">
       <DependentUpon>201911211720479_Fix-ProId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911211902207_Product-Media.resx">
+      <DependentUpon>201911211902207_Product-Media.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911211903217_ForeignKey-ProductMedia.resx">
+      <DependentUpon>201911211903217_ForeignKey-ProductMedia.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

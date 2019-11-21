@@ -34,6 +34,11 @@ namespace Branch.Models
 
         public virtual User Pro { get; set; }
 
+        [ForeignKey("Media")]
+        public int? MediaId { get; set; }
+
+        public virtual Media Media { get; set; }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }
 
