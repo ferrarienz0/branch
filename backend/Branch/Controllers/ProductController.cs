@@ -1,4 +1,5 @@
-﻿using Branch.Models;
+﻿using Branch.JWTProvider;
+using Branch.Models;
 using Branch.SearchAuxiliars;
 using System;
 using System.Collections.Generic;
@@ -54,14 +55,15 @@ namespace Branch.Controllers
         [HttpPost]
         [Route("product/create")]
         [ResponseType(typeof(Product))]
-        public IHttpActionResult CreateProduct(Product Product)
+        public IHttpActionResult CreateProduct([FromUri] string AccessToken, [FromBody] Product Product)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var User = SQLContext.Users.Find(Product.ProId);
+            var UserId = TokenValidator.VerifyToken(AccessToken);
+            var User = SQLContext.Users.Find(UserId);
 
             if(User == null || !User.IsPro)
             {
@@ -72,6 +74,8 @@ namespace Branch.Controllers
             {
                 Product.Name = Product.Name.Replace(' ', '_');
             }
+
+            Product.ProId = UserId;
 
             SQLContext.Products.Add(Product);
             SQLContext.SaveChanges();
