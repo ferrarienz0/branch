@@ -125,6 +125,17 @@ namespace Branch.Controllers
         }
 
         [HttpGet]
+        [Route("posts/product")]
+        [ResponseType(typeof(List<Post>))]
+        public IHttpActionResult PostsByProduct([FromUri] int ProductId)
+        {
+            var Posts = PostSearchAuxiliar.PostsByProduct(ProductId);
+            Posts = PostSearchAuxiliar.UpdateOwner(Posts, SQLContext);
+
+            return Ok(Posts);
+        }
+
+        [HttpGet]
         [Route("post/comments")]
         [ResponseType(typeof(List<Post>))]
         public IHttpActionResult PostComments([FromUri] string PostId)
