@@ -11,6 +11,7 @@ import { Container, Header, Body, Perfil, Explore } from './styles.js';
 import icone from '../../assets/icone.svg';
 import api from '../../services/api';
 import Posting from '../../components/Posting';
+import CreateProduct from '../../components/CreateProduct';
 import UserImage from '../../components/UserImage';
 import Feed from '../../components/Feed';
 import UserHead from '../../components/UserHead';
@@ -35,11 +36,12 @@ export default class Home extends Component {
         topics: [],
         parent: '',
         posting: false,
+        creatingProduct: false,
         type: '',
         id: '',
         redirect: false,
         loaded: false,
-        head: <div />,
+        head: <></>,
         loaded_head: false,
         feed: {
             comments: [],
@@ -117,7 +119,8 @@ export default class Home extends Component {
                         topic={{
                             ID: topic.Id,
                             hashtag: topic.Hashtag,
-                            banner: topic.Media.URL,
+                            banner:
+                                topic.Media === null ? null : topic.Media.URL,
                         }}
                         token={token}
                     />
@@ -162,7 +165,21 @@ export default class Home extends Component {
                 `/posts/product?ProductId=${id}`
             );
             this.setState({
-                head: <ProductHead me={me} product={product} token={token} />,
+                head: (
+                    <ProductHead
+                        me={me}
+                        product={{
+                            ID: product.Id,
+                            name: product.Name,
+                            description: product.Description,
+                            image: product.Media.URL,
+                            price: product.Price,
+                            discount: product.CurrentDiscount,
+                            stock: product.Stock,
+                        }}
+                        token={token}
+                    />
+                ),
                 loaded_head: true,
                 feed: { comments, loaded: true },
             });
@@ -217,12 +234,19 @@ export default class Home extends Component {
     };
 
     onPosting = parent => {
-        console.log(parent);
         this.setState({ posting: true, parent });
     };
 
     render() {
-        const { me, posting, parent, feed, head, topics } = this.state;
+        const {
+            me,
+            posting,
+            creatingProduct,
+            parent,
+            feed,
+            head,
+            topics,
+        } = this.state;
         const { token } = this.props.match.params;
         return (
             <Container>
@@ -240,6 +264,14 @@ export default class Home extends Component {
                         token={token}
                         parent={parent}
                         onClose={() => this.setState({ posting: false })}
+                    />
+                ) : null}
+                {creatingProduct ? (
+                    <CreateProduct
+                        token={token}
+                        onClose={() =>
+                            this.setState({ creatingProduct: false })
+                        }
                     />
                 ) : null}
                 <Body>
@@ -272,7 +304,18 @@ export default class Home extends Component {
                         />
                         <FaShoppingCart id="cart-icon" />
                         {me.pro ? (
-                            <FaTag id="product-icon" />
+                            <FaTag
+                                id="product-icon"
+                                onClick={() =>
+                                    creatingProduct
+                                        ? this.setState({
+                                              creatingProduct: false,
+                                          })
+                                        : this.setState({
+                                              creatingProduct: true,
+                                          })
+                                }
+                            />
                         ) : (
                             <i id="become-pro" onClick={this.becomePro}>
                                 Torne-se pro
