@@ -5,14 +5,14 @@ import api from '../../services/api';
 
 export default class Posting extends Component {
     state = {
-        data: [],
         temp: '',
         text: '',
         preview: '',
     };
 
-    handlePost = async () => {
-        const { data, text, temp } = this.state;
+    handlePost = async e => {
+        e.persist();
+        const { text, temp } = this.state;
         const { token, parent, onClose } = this.props;
         if (Boolean(temp.name)) {
             let config = {
@@ -29,19 +29,31 @@ export default class Posting extends Component {
                 config
             );
             this.setState({ data });
-        }
-        console.log(parent);
-        if (parent === undefined) {
-            await api.post(`/post/create?AccessToken=${token}`, {
-                Text: text,
-                Medias: data[0] === undefined ? [] : [data[0].Id],
-            });
+            if (parent === '') {
+                await api.post(`/post/create?AccessToken=${token}`, {
+                    Text: text,
+                    Medias: [data[0].Id],
+                });
+            } else {
+                await api.post(`/post/create?AccessToken=${token}`, {
+                    Parent: parent,
+                    Text: text,
+                    Medias: [data[0].Id],
+                });
+            }
         } else {
-            await api.post(`/post/create?AccessToken=${token}`, {
-                Parent: parent,
-                Text: text,
-                Medias: data[0] === undefined ? [] : [data[0].Id],
-            });
+            if (parent === '') {
+                await api.post(`/post/create?AccessToken=${token}`, {
+                    Text: text,
+                    Medias: [],
+                });
+            } else {
+                await api.post(`/post/create?AccessToken=${token}`, {
+                    Parent: parent,
+                    Text: text,
+                    Medias: [],
+                });
+            }
         }
         onClose();
     };
@@ -66,7 +78,7 @@ export default class Posting extends Component {
                     <label id="media" htmlFor="selecao-arquivo">
                         <FaPaperclip id="media-icon" />
                     </label>
-                    <button id="send" onClick={this.handlePost}>
+                    <button id="send" onClick={e => this.handlePost(e)}>
                         <FaPaperPlane id="send-icon" />
                     </button>
                 </div>

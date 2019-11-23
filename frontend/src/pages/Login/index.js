@@ -17,8 +17,8 @@ export default class Login extends Component {
 
     handleSubmit = e => {
         const { userName, password } = this.state;
-        e.preventDefault();
         this.setState({ loading: true });
+        e.preventDefault();
         api.post('/session', {
             Nickname: userName,
             PasswordHash: password,

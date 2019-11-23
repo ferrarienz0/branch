@@ -107,7 +107,6 @@ export const Container = styled.div`
 
         position: absolute;
 
-        background: chartreuse;
         border-radius: 5px;
         box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);
     }
