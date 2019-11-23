@@ -11,8 +11,9 @@ export default class CreateProduct extends Component {
         stock: 0,
         discount: 0.0,
         maxDiscount: 0.0,
-        temp: '',
+        image: '',
         preview: '',
+        warning: '',
     };
 
     handleName = e => {
@@ -28,42 +29,54 @@ export default class CreateProduct extends Component {
             stock,
             discount,
             maxDiscount,
-            temp,
+            image,
         } = this.state;
-        const { token, onClose } = this.props;
-        let config = {
-            headers: {
-                Accept: '',
-                'Content-Type': 'multipart/form-data',
-            },
-        };
-        let formData = new FormData();
-        formData.append('image', temp);
-        const { data } = await api.post(
-            `/media/create?AccessToken=${token}&IsUserMedia=false`,
-            formData,
-            config
-        );
-        await api.post(`/product/create?AccessToken=${token}`, {
-            Name: name,
-            Description: description,
-            Price: price,
-            Stock: stock,
-            CurrentDiscount: discount,
-            MaxDiscount: maxDiscount,
-            MediaId: data[0].Id,
-        });
-        await api.post(`/post/create?AccessToken=${token}`, {
-            Text: '$' + name + ' :: ' + description,
-            Medias: [data[0].Id],
-        });
-        onClose();
+        if (name === '')
+            this.setState({ warning: 'o produto precisa de um nome' });
+        else if (description === '')
+            this.setState({ warning: 'o produto precisa de uma descrição' });
+        else if (stock === 0)
+            this.setState({
+                warning: 'o produto precisa ter um estoque inicial',
+            });
+        else if (image === '')
+            this.setState({ warning: 'o produto precisa de uma imagem' });
+        else {
+            const { token, onClose } = this.props;
+            let config = {
+                headers: {
+                    Accept: '',
+                    'Content-Type': 'multipart/form-data',
+                },
+            };
+            let formData = new FormData();
+            formData.append('image', image);
+            const { data } = await api.post(
+                `/media/create?AccessToken=${token}&IsUserMedia=false`,
+                formData,
+                config
+            );
+            await api.post(`/product/create?AccessToken=${token}`, {
+                Name: name,
+                Description: description,
+                Price: price,
+                Stock: stock,
+                CurrentDiscount: discount,
+                MaxDiscount: maxDiscount,
+                MediaId: data[0].Id,
+            });
+            await api.post(`/post/create?AccessToken=${token}`, {
+                Text: '$' + name + ' :: ' + description,
+                Medias: [data[0].Id],
+            });
+            onClose();
+        }
     };
 
     handleFile = e => {
         this.setState({
             preview: URL.createObjectURL(e.target.files[0]),
-            temp: e.target.files[0],
+            image: e.target.files[0],
         });
     };
 
@@ -153,13 +166,3 @@ export default class CreateProduct extends Component {
         );
     }
 }
-/*
-{
-	"Name": "Camisa",
-	"Description": "Eh uma camisa, ora bolas",
-	"Price": 20.0,
-	"Stock": 10,
-	"CurrentDiscount": 0,
-	"MaxDiscount": 0.15,
-}
-*/

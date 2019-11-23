@@ -32,6 +32,7 @@ export default class Home extends Component {
             pro: false,
             users: [],
             topics: [],
+            cart: [],
         },
         topics: [],
         parent: '',
@@ -170,6 +171,10 @@ export default class Home extends Component {
                         me={me}
                         product={{
                             ID: product.Id,
+                            pro: {
+                                ID: product.Pro.Id,
+                                userName: product.Pro.Nickname,
+                            },
                             name: product.Name,
                             description: product.Description,
                             image: product.Media.URL,
@@ -177,6 +182,7 @@ export default class Home extends Component {
                             discount: product.CurrentDiscount,
                             stock: product.Stock,
                         }}
+                        handleHead={this.handleHead}
                         token={token}
                     />
                 ),
