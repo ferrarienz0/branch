@@ -40,6 +40,9 @@ namespace Branch.Controllers
 
             NewPost = TreatPostAddons(NewPost);
 
+            HandleMentionsAffinity(NewPost.Mentions, UserId);
+            HandleSubjectAffinity(NewPost.Hashtags, UserId);
+
             NoSQLContext.PostCollection.InsertOne(NewPost);
 
             if (NewPost.Parent != null)
@@ -49,6 +52,18 @@ namespace Branch.Controllers
                 if (Parent != default)
                 {
                     UpdateParent(Parent, NewPost.Id);
+                    
+                    if (Parent.UserId != UserId)
+                    {
+                        var UserFollows = UserSearchAuxiliar
+                                                            .Follows(UserId, SQLContext)
+                                                            .Select(x => x.Id);
+
+                        if(UserFollows.Contains(Parent.UserId))
+                        {
+                            DBSearchAuxiliar.IncreaseAffinityOnFollow(UserId, Parent.UserId);
+                        }
+                    }
                 }
             }
 
@@ -85,8 +100,9 @@ namespace Branch.Controllers
                                              .Union(TopicsPosts, PostComparer)
                                              .ToList();
 
-
             RecommendedPosts = PostSearchAuxiliar.UpdateOwner(RecommendedPosts, SQLContext);
+
+            RecommendedPosts = ApplyAffinityOnSuggestion(RecommendedPosts, UserId, UserTopics, UserFollows);
 
             return Ok(RecommendedPosts);
         }
@@ -354,6 +370,98 @@ namespace Branch.Controllers
             NewPost.Comments = new List<ObjectId>();
 
             return NewPost;
+        }
+
+        private void HandleMentionsAffinity(List<int> Mentions, int UserId)
+        {
+            var UserFollows = UserSearchAuxiliar
+                                                .Follows(UserId, SQLContext)
+                                                .Select(x => x.Id);
+
+            foreach (var MentionId in Mentions)
+            {
+                if(MentionId != UserId)
+                {
+                    if (UserFollows.Contains(MentionId))
+                    {
+                        DBSearchAuxiliar.IncreaseAffinityOnFollow(UserId, MentionId);
+                    }
+                }
+            }
+        }
+
+        private void HandleSubjectAffinity(List<int> Subjects, int UserId)
+        {
+            var SubjectsFollowed = UserSearchAuxiliar
+                                                .FollowedSubjects(UserId, SQLContext)
+                                                .Select(x => x.Id);
+
+            foreach (var MentionId in Subjects)
+            {
+                if (SubjectsFollowed.Contains(MentionId))
+                {
+                        DBSearchAuxiliar.IncreaseAffinityOnSubject(UserId, MentionId);
+                }
+            }
+        }
+
+        private List<Post> ApplyAffinityOnSuggestion(List<Post> RecommendedPosts, int UserId, List<Subject> UserTopics, IEnumerable<int> UserFollows)
+        {
+            var CompoundList = new List<dynamic>();
+
+            foreach (var Post in RecommendedPosts)
+            {
+                double UserAffinity = 0;
+                double TopicAffinity = 0;
+
+                var UserTopicsIds = UserTopics.Select(x => x.Id);
+
+                if (UserFollows.Contains(Post.UserId))
+                {
+                    var Follow = SQLContext.Follows.FirstOrDefault(x => x.FollowedId == Post.UserId && x.FollowerId == UserId);
+
+                    if (Follow != default)
+                    {
+                        UserAffinity += Follow.Affinity;
+                    }
+                }
+
+                foreach (var Mention in Post.Mentions)
+                {
+                    if (UserFollows.Contains(Mention))
+                    {
+                        var Follow = SQLContext.Follows.FirstOrDefault(x => x.FollowedId == Mention && x.FollowerId == UserId);
+
+                        if (Follow != default)
+                        {
+                            UserAffinity += Follow.Affinity / Post.Mentions.Count;
+                        }
+                    }
+                }
+
+                foreach (var Subject in Post.Hashtags)
+                {
+                    if (UserTopicsIds.Contains(Subject))
+                    {
+                        var UserSubject = SQLContext.UserSubjects.FirstOrDefault(x => x.SubjectId == Subject && x.UserId == UserId);
+
+                        if (Subject != default)
+                        {
+                            TopicAffinity += UserSubject.Affinity / Post.Hashtags.Count;
+                        }
+                    }
+                }
+
+                CompoundList.Add(new { Post, UserAffinity, TopicAffinity });
+            }
+
+            var ApplyiedList = CompoundList
+                                          .OrderByDescending(Compound => (double) Compound.TopicAffinity)
+                                          .ThenByDescending(Compound => (double) Compound.UserAffinity)
+                                          .Select(x => (Post) x.Post)
+                                          .ToList();
+
+            return ApplyiedList;
         }
 
         private Post FindParent(Post NewPost)

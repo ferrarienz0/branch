@@ -310,6 +310,7 @@
     <Compile Include="Models\SQL\Relationship\UserSubject.cs" />
     <Compile Include="Models\SQL\Media\TypeMedia.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SearchAuxiliars\DBSearchAuxiliar.cs" />
     <Compile Include="SearchAuxiliars\PostSearchAuxiliar.cs" />
     <Compile Include="SearchAuxiliars\UserSearchAuxiliar.cs" />
   </ItemGroup>

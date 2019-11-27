@@ -1,8 +1,10 @@
 ﻿using Branch.JWTProvider;
 using Branch.Models;
 using Branch.SearchAuxiliars;
+using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -81,6 +83,52 @@ namespace Branch.Controllers
             SQLContext.SaveChanges();
 
             return Ok(Product);
+        }
+
+        [HttpPut]
+        [Route("product/discount")]
+        [ResponseType(typeof(Product))]
+        public IHttpActionResult ApplyDiscountToProduct([FromUri] string AccessToken, [FromUri] int ProductId, [FromBody] float Discount)
+        {
+            var UserId = TokenValidator.VerifyToken(AccessToken);
+            var User = SQLContext.Users.Find(UserId);
+
+            var Product = SQLContext.Products.Find(ProductId);
+
+            if(!User.IsPro || Product.ProId != UserId)
+            {
+                return Unauthorized();
+            }
+
+            if(Discount > Product.MaxDiscount)
+            {
+                return Unauthorized();
+            }
+
+            Product.CurrentDiscount = Discount;
+
+            SQLContext.Entry(Product).State = EntityState.Modified;
+            SQLContext.SaveChanges();
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("product/discount")]
+        [ResponseType(typeof(List<dynamic>))]
+        public IHttpActionResult RecommendedDiscounts([FromUri] string AccessToken)
+        {
+            var UserId = TokenValidator.VerifyToken(AccessToken);
+            var User = SQLContext.Users.Find(UserId);
+
+            if(!User.IsPro)
+            {
+                return NotFound();
+            }
+
+            var RecommendedDiscounts = DBSearchAuxiliar.RecommendedProDiscounts(UserId);
+
+            return Ok(RecommendedDiscounts);
         }
 
         protected override void Dispose(bool disposing)
