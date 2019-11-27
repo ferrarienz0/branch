@@ -32,7 +32,15 @@ export default class Register extends Component {
     handleSubmit = e => {
         const { user } = this.state;
         e.preventDefault();
-        api.post('/user', user)
+        api.post('/user/create', {
+            Firstname: user.name,
+            Lastname: user.lastName,
+            Nickname: user.userName,
+            Password: user.password,
+            Email: user.email,
+            BirthDate: user.birthDate,
+            IsPro: false,
+        })
             .then(async () => {
                 const { data: token } = await api.post('/session', {
                     NickName: user.userName,
@@ -74,8 +82,8 @@ export default class Register extends Component {
                         onChange={e => {
                             this.setState({
                                 user: {
-                                    name: encodeURIComponent(e.target.value),
                                     ...user,
+                                    name: encodeURIComponent(e.target.value),
                                 },
                             });
                         }}
@@ -85,10 +93,10 @@ export default class Register extends Component {
                         onChange={e =>
                             this.setState({
                                 user: {
+                                    ...user,
                                     lastName: encodeURIComponent(
                                         e.target.value
                                     ),
-                                    ...user,
                                 },
                             })
                         }
@@ -106,8 +114,8 @@ export default class Register extends Component {
                         onChange={e =>
                             this.setState({
                                 user: {
-                                    birthDate: e.target.value,
                                     ...user,
+                                    birthDate: e.target.value,
                                 },
                             })
                         }
@@ -117,8 +125,8 @@ export default class Register extends Component {
                         onChange={e =>
                             this.setState({
                                 user: {
-                                    email: e.target.value,
                                     ...user,
+                                    email: e.target.value,
                                 },
                             })
                         }
@@ -128,10 +136,10 @@ export default class Register extends Component {
                         onChange={e =>
                             this.setState({
                                 user: {
+                                    ...user,
                                     userName: encodeURIComponent(
                                         e.target.value
                                     ),
-                                    ...user,
                                 },
                             })
                         }
@@ -142,8 +150,8 @@ export default class Register extends Component {
                         onChange={e =>
                             this.setState({
                                 user: {
-                                    password: md5(e.target.value),
                                     ...user,
+                                    password: md5(e.target.value),
                                 },
                             })
                         }

@@ -287,7 +287,7 @@ export default class Home extends Component {
                             <UserImage
                                 id="user-image"
                                 size="100px"
-                                image={me.image.URL}
+                                image={me.image === null ? null : me.image.URL}
                             />
                         </label>
                         <input

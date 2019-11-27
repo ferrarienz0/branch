@@ -150,7 +150,7 @@ export const Perfil = styled.div`
 
 export const Explore = styled.div`
     width: 100%;
-    max-width: 900px;
+    max-width: 1500px;
     margin: 60px 180px 0px 180px;
 
     display: flex;
