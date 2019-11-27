@@ -57,8 +57,8 @@ namespace Branch.SearchAuxiliars
         {
             var Connection = new NpgsqlConnection(ConnectionString);
             Connection.Open();
-
-            using (var SQLCommand = new NpgsqlCommand($"call IncreaseAffinityUserSubjects({ UserId }, {SubjectId})", Connection))
+            
+            using (var SQLCommand = new NpgsqlCommand($"call IncreaseAffinityUserSubjects({ UserId }, { SubjectId })", Connection))
             {
                 SQLCommand.ExecuteNonQuery();
             }

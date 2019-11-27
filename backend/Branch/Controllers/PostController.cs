@@ -40,8 +40,8 @@ namespace Branch.Controllers
 
             NewPost = TreatPostAddons(NewPost);
 
-            _ = HandleMentionsAffinity(NewPost.Mentions, UserId);
-            _ = HandleSubjectAffinity(NewPost.Hashtags, UserId);
+            HandleMentionsAffinity(NewPost.Mentions, UserId);
+            HandleSubjectAffinity(NewPost.Hashtags, UserId);
 
             NoSQLContext.PostCollection.InsertOne(NewPost);
 
@@ -372,7 +372,7 @@ namespace Branch.Controllers
             return NewPost;
         }
 
-        private async Task HandleMentionsAffinity(List<int> Mentions, int UserId)
+        private void HandleMentionsAffinity(List<int> Mentions, int UserId)
         {
             var UserFollows = UserSearchAuxiliar
                                                 .Follows(UserId, SQLContext)
@@ -390,7 +390,7 @@ namespace Branch.Controllers
             }
         }
 
-        private async Task HandleSubjectAffinity(List<int> Subjects, int UserId)
+        private void HandleSubjectAffinity(List<int> Subjects, int UserId)
         {
             var SubjectsFollowed = UserSearchAuxiliar
                                                 .FollowedSubjects(UserId, SQLContext)
@@ -398,12 +398,9 @@ namespace Branch.Controllers
 
             foreach (var MentionId in Subjects)
             {
-                if (MentionId != UserId)
+                if (SubjectsFollowed.Contains(MentionId))
                 {
-                    if (SubjectsFollowed.Contains(MentionId))
-                    {
                         DBSearchAuxiliar.IncreaseAffinityOnSubject(UserId, MentionId);
-                    }
                 }
             }
         }
