@@ -71,7 +71,7 @@ export const Body = styled.div`
 
 export const Perfil = styled.div`
     width: 150px;
-    height: 350px;
+    height: 300px;
     padding: 25px 25px 0 25px;
     top: 50px;
     left: 0px;
