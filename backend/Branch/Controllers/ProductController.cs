@@ -51,7 +51,7 @@ namespace Branch.Controllers
                 return NotFound();
             }
 
-            return Ok(UserSearchAuxiliar.Products(ProId, SQLContext));
+            return Ok(UserAuxiliar.Products(ProId, SQLContext));
         }
 
         [HttpPost]
@@ -126,7 +126,7 @@ namespace Branch.Controllers
                 return NotFound();
             }
 
-            var RecommendedDiscounts = DBSearchAuxiliar.RecommendedProDiscounts(UserId);
+            var RecommendedDiscounts = DBAuxiliar.RecommendedProDiscounts(UserId);
 
             return Ok(RecommendedDiscounts);
         }

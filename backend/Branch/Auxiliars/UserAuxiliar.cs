@@ -7,7 +7,7 @@ using System.Web;
 
 namespace Branch.SearchAuxiliars
 {
-    public static class UserSearchAuxiliar
+    public static class UserAuxiliar
     {
         /// <summary>
         /// Returns the subjects followed by a certain User 

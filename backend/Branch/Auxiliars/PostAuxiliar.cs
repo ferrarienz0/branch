@@ -9,7 +9,7 @@ using System.Web;
 
 namespace Branch.SearchAuxiliars
 {
-    public static class PostSearchAuxiliar
+    public static class PostAuxiliar
     {
         private static readonly NoSQLContext NoSQLContext = new NoSQLContext();
 

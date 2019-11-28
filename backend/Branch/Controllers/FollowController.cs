@@ -29,7 +29,7 @@ namespace Branch.Controllers
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            var Follows = UserSearchAuxiliar.Follows(UserId, SQLContext);
+            var Follows = UserAuxiliar.Follows(UserId, SQLContext);
 
             return Ok(Follows);
         }
@@ -41,7 +41,7 @@ namespace Branch.Controllers
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            var Followers = UserSearchAuxiliar.Followers(UserId, SQLContext);
+            var Followers = UserAuxiliar.Followers(UserId, SQLContext);
 
             return Ok(Followers);
         }
