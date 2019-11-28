@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Branch.SearchAuxiliars
 {
-    public static class DBSearchAuxiliar
+    public static class DBAuxiliar
     {
         private const string ConnectionString = "server=tuffi.db.elephantsql.com;" +
                                                 "User Id=vlvhqsdd;Database=vlvhqsdd;" +
