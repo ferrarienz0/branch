@@ -1,12 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import {
-    FaShoppingCart,
-    FaPowerOff,
-    FaComment,
-    FaStar,
-    FaTag,
-} from 'react-icons/fa';
+import { Link, Redirect } from 'react-router-dom';
+import { FaPowerOff, FaComment, FaStar, FaTag } from 'react-icons/fa';
 import { Container, Header, Body, Perfil, Explore } from './styles.js';
 import icone from '../../assets/icone.svg';
 import api from '../../services/api';
@@ -41,9 +35,7 @@ export default class Home extends Component {
         type: '',
         id: '',
         redirect: false,
-        loaded: false,
         head: <></>,
-        loaded_head: false,
         feed: {
             comments: [],
             loaded: false,
@@ -76,7 +68,7 @@ export default class Home extends Component {
             },
             topics,
         });
-        this.handleHead('', '');
+        this.feedConfig();
     };
 
     becomePro = () => {
@@ -146,7 +138,7 @@ export default class Home extends Component {
                         head={true}
                         me={me}
                         comment={comment}
-                        handleHead={this.handleHead}
+                        redirect={this.redirectTo}
                         token={token}
                         onPosting={this.onPosting}
                     />
@@ -182,7 +174,7 @@ export default class Home extends Component {
                             discount: product.CurrentDiscount,
                             stock: product.Stock,
                         }}
-                        handleHead={this.handleHead}
+                        redirect={this.redirectTo}
                         token={token}
                     />
                 ),
@@ -220,7 +212,8 @@ export default class Home extends Component {
         this.setState({ me: { image: data[0].URL, ...this.state.me } });
     };
 
-    handleHead = (type, id) => {
+    feedConfig = () => {
+        const { type, id } = this.props.match.params;
         switch (type) {
             case 'user':
                 this.setHeadToUser(id);
@@ -240,26 +233,37 @@ export default class Home extends Component {
     };
 
     onPosting = parent => {
-        this.setState({ posting: true, parent });
+        const { posting } = this.state;
+        posting
+            ? this.setState({ posting: false })
+            : this.setState({ posting: true, parent });
+    };
+
+    redirectTo = (type, id) => {
+        this.setState({ type, id, redirect: true });
     };
 
     render() {
         const {
             me,
+            topics,
+            parent,
             posting,
             creatingProduct,
-            parent,
-            feed,
+            type,
+            id,
+            redirect,
             head,
-            topics,
+            feed,
         } = this.state;
         const { token } = this.props.match.params;
+        if (redirect) return <Redirect to={`/${token}/${type}/${id}`} />;
         return (
             <Container>
                 <Header>
-                    <div id="logo" onClick={() => this.handleHead('', '')}>
+                    <Link id="logo" to={`/${token}`}>
                         <img src={icone} alt="Branch"></img>
-                    </div>
+                    </Link>
                     <div id="space" />
                     <Link to="/">
                         <FaPowerOff id="logoff" />
@@ -287,7 +291,7 @@ export default class Home extends Component {
                             <UserImage
                                 id="user-image"
                                 size="100px"
-                                image={me.image.URL}
+                                image={me.image === null ? null : me.image.URL}
                             />
                         </label>
                         <input
@@ -308,7 +312,6 @@ export default class Home extends Component {
                                     : this.setState({ posting: true })
                             }
                         />
-                        <FaShoppingCart id="cart-icon" />
                         {me.pro ? (
                             <FaTag
                                 id="product-icon"
@@ -334,14 +337,14 @@ export default class Home extends Component {
                             token={token}
                             head={head}
                             feed={feed}
-                            handleHead={this.handleHead}
+                            redirect={this.redirectTo}
                             onPosting={this.onPosting}
                         />
                         <Follows
                             me={me}
                             topics={topics}
                             token={token}
-                            handleHead={this.handleHead}
+                            redirect={this.redirectTo}
                         />
                     </Explore>
                 </Body>

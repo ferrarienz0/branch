@@ -93,7 +93,7 @@ export default class Comment extends Component {
     };
 
     handleText = () => {
-        const { comment, handleHead } = this.props;
+        const { comment, redirect } = this.props;
         let res = [],
             u = 0,
             t = 0,
@@ -102,36 +102,39 @@ export default class Comment extends Component {
         text.forEach(word => {
             switch (word[0]) {
                 case '@':
+                    const user = comment.Mentions[u++];
                     res.push(
                         <i
                             id="user"
-                            onClick={() =>
-                                handleHead('user', comment.Mentions[u++])
-                            }
+                            onClick={() => {
+                                redirect('user', user);
+                            }}
                         >
                             {word}
                         </i>
                     );
                     break;
                 case '#':
+                    const topic = comment.Hashtags[t++];
                     res.push(
                         <i
                             id="topic"
-                            onClick={() =>
-                                handleHead('topic', comment.Hashtags[t++])
-                            }
+                            onClick={() => {
+                                redirect('topic', topic);
+                            }}
                         >
                             {word}
                         </i>
                     );
                     break;
                 case '$':
+                    const product = comment.Products[p++];
                     res.push(
                         <i
                             id="product"
-                            onClick={() =>
-                                handleHead('product', comment.Products[p++])
-                            }
+                            onClick={() => {
+                                redirect('product', product);
+                            }}
                         >
                             {word}
                         </i>
@@ -145,8 +148,9 @@ export default class Comment extends Component {
     };
 
     render() {
-        const { comment, onHead, handleHead, onPosting, head, me } = this.props;
+        const { comment, redirect, onPosting, head, me } = this.props;
         const { iLiked, nLikes, iDisliked, nDislikes, iFollow } = this.state;
+        //console.log(comment);
         return (
             <Container head={head}>
                 <Header>
@@ -166,7 +170,7 @@ export default class Comment extends Component {
                     </div>
                     <div id="user-name">
                         <strong
-                            onClick={() => handleHead('user', comment.Owner.Id)}
+                            onClick={() => redirect('user', comment.Owner.Id)}
                         >
                             @{comment.Owner.Nickname}
                         </strong>
@@ -176,7 +180,10 @@ export default class Comment extends Component {
                     </div>
                     {head ? null : (
                         <div id="go-ahead">
-                            <FaArrowUp id="go-ahead-icon" onClick={onHead} />
+                            <FaArrowUp
+                                id="go-ahead-icon"
+                                onClick={() => redirect('comment', comment.Id)}
+                            />
                         </div>
                     )}
                 </Header>
@@ -231,9 +238,7 @@ export default class Comment extends Component {
                     {comment.Parent === null ? null : (
                         <FaReply
                             id="answered-icon"
-                            onClick={() =>
-                                handleHead('comment', comment.Parent)
-                            }
+                            onClick={() => redirect('comment', comment.Parent)}
                         />
                     )}
                 </Footer>

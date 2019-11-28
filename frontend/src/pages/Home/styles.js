@@ -71,7 +71,7 @@ export const Body = styled.div`
 
 export const Perfil = styled.div`
     width: 150px;
-    height: 350px;
+    height: 300px;
     padding: 25px 25px 0 25px;
     top: 50px;
     left: 0px;
@@ -150,7 +150,7 @@ export const Perfil = styled.div`
 
 export const Explore = styled.div`
     width: 100%;
-    max-width: 900px;
+    max-width: 1500px;
     margin: 60px 180px 0px 180px;
 
     display: flex;

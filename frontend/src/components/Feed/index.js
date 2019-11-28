@@ -4,7 +4,7 @@ import Comment from '../../components/Comment';
 
 export default class Feed extends Component {
     render() {
-        const { me, token, head, feed, handleHead, onPosting } = this.props;
+        const { me, token, head, feed, redirect, onPosting } = this.props;
         return (
             <Container>
                 {head}
@@ -15,8 +15,7 @@ export default class Feed extends Component {
                         me={me}
                         comment={comment}
                         token={token}
-                        onHead={() => handleHead('comment', comment.Id)}
-                        handleHead={handleHead}
+                        redirect={redirect}
                         onPosting={onPosting}
                     />
                 ))}

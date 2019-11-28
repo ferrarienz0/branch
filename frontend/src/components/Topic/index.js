@@ -27,7 +27,7 @@ export default class Topic extends Component {
     Follow = () => {
         const { token, topic } = this.props;
         api.post(
-            `/user/follow/subject?AccessToken=${token}&SubjectId=${topic.id}`
+            `/user/follow/subject?AccessToken=${token}&SubjectId=${topic.ID}`
         ).then(() => {
             this.setState({ follow: true });
         });
@@ -44,13 +44,13 @@ export default class Topic extends Component {
 
     render() {
         const { follow } = this.state;
-        const { head, topic, onHead } = this.props;
+        const { head, topic, redirect } = this.props;
         return (
             <Container banner={topic.banner} head={head}>
                 <h2>{topic.hashtag}</h2>
                 <Footer>
                     {head ? null : (
-                        <FaArrowUp id="go-ahead-icon" onClick={onHead} />
+                        <FaArrowUp id="go-ahead-icon" onClick={redirect} />
                     )}
                     {follow ? (
                         <FaTimes id="follow-icon" onClick={this.Unfollow} />
