@@ -35,16 +35,17 @@ namespace Branch.Controllers
                         where Cart.UserId == UserId
                         select Cart;
 
+            var UserCartsSync = UserCarts.ToList();
+
             var Response = new List<dynamic>();
 
-            foreach(var Cart in UserCarts)
+            foreach(var Cart in UserCartsSync)
             {
                 var ProductCarts = SQLContext.ProductCarts
                                                           .Where(x => x.CartId == Cart.Id)
                                                           .ToList();
 
                 Response.Add(new { Cart, Products = ProductCarts });
-
             }
 
             return Ok(Response);
@@ -56,9 +57,11 @@ namespace Branch.Controllers
         {
             var ProId = TokenValidator.VerifyToken(AccessToken);
 
-            var UserCarts = from Cart in SQLContext.Carts
+            var _UserCarts = from Cart in SQLContext.Carts
                             where Cart.ProId == ProId
                             select new { Cart.Id };
+
+            var UserCarts = _UserCarts.ToList();
 
             var Response = new List<dynamic>();
 

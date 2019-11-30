@@ -243,6 +243,7 @@
     <Compile Include="Controllers\MediaController.cs" />
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\PublicAPIController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\SubjectController.cs" />
     <Compile Include="Controllers\UserController.cs" />
