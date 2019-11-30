@@ -13,7 +13,14 @@ using Branch.Models;
 using Branch.SearchAuxiliars;
 
 namespace Branch.Controllers
-{
+{   
+    public class ProductInfo
+    {
+        public int ProId { get; set; }
+        public int ProductId { get; set; }
+        public int Amount { get; set; }
+    }
+
     public class CartsController : ApiController
     {
         private readonly SQLContext SQLContext = new SQLContext();
@@ -69,17 +76,17 @@ namespace Branch.Controllers
 
         [HttpPost]
         [Route("cart/insert")]
-        public IHttpActionResult AddProductToCart([FromUri] string AccessToken, [FromUri] int ProId, [FromBody] int ProductId, [FromBody] int Amount)
+        public IHttpActionResult AddProductToCart([FromUri] string AccessToken, [FromBody] ProductInfo ProductInfo)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            var Cart = UserAuxiliar.StoreCart(UserId, ProId, SQLContext);
+            var Cart = UserAuxiliar.StoreCart(UserId, ProductInfo.ProId, SQLContext);
 
             if (Cart == default)
             {
                 var NewCart = new Cart()
                 {
-                    ProId = ProId,
+                    ProId = ProductInfo.ProId,
                     UserId = UserId, 
                 };
 
@@ -91,9 +98,9 @@ namespace Branch.Controllers
 
             var ProductCart = new ProductCart()
             {
-                ProductId = ProductId,
+                ProductId = ProductInfo.ProductId,
                 CartId = Cart.Id,
-                Amount = Amount
+                Amount = ProductInfo.Amount
             };
 
             SQLContext.ProductCarts.Add(ProductCart);
@@ -104,19 +111,19 @@ namespace Branch.Controllers
 
         [HttpPut]
         [Route("cart/update")]
-        public IHttpActionResult ChangeProductAmountOnCart([FromUri] string AccessToken, [FromBody] int ProId, [FromBody] int ProductId, [FromBody] int NewAmount)
+        public IHttpActionResult ChangeProductAmountOnCart([FromUri] string AccessToken, [FromBody] ProductInfo UpdateInfo)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            var StoreCart = UserAuxiliar.StoreCart(UserId, ProId, SQLContext);
-            var ProductCart = SQLContext.ProductCarts.FirstOrDefault(x => x.CartId == StoreCart.Id && x.ProductId == ProductId);
+            var StoreCart = UserAuxiliar.StoreCart(UserId, UpdateInfo.ProId, SQLContext);
+            var ProductCart = SQLContext.ProductCarts.FirstOrDefault(x => x.CartId == StoreCart.Id && x.ProductId == UpdateInfo.ProductId);
 
             if(ProductCart == default)
             {
                 return NotFound();
             }
 
-            if(NewAmount == 0)
+            if(UpdateInfo.Amount == 0)
             {
                 SQLContext.ProductCarts.Remove(ProductCart);
 
@@ -125,7 +132,7 @@ namespace Branch.Controllers
             }
             else
             {
-                ProductCart.Amount = NewAmount;
+                ProductCart.Amount = UpdateInfo.Amount;
                 SQLContext.Entry(ProductCart).State = EntityState.Modified;
             }
 
