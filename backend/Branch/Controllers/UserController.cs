@@ -61,6 +61,26 @@ namespace Branch.Controllers
             return Ok(User);
         }
 
+        [HttpGet]
+        [Route("user/search")]
+        [ResponseType(typeof(List<User>))]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1304:Especificar CultureInfo", Justification = "<Pendente>")]
+        public IHttpActionResult SearchUser([FromUri] string Key)
+        {
+            var TreatedKey = Key
+                                .ToLower()
+                                .Replace(" ", "");
+
+            var Query = from User in SQLContext.Users
+                        where User.Firstname.ToLower() == Key
+                            || User.Lastname.ToLower() == Key
+                            || User.Firstname.ToLower() + User.Lastname.ToLower() == Key
+                            || User.Nickname == Key
+                        select new { User.Id, User.Firstname, User.Lastname, User.Nickname, User.IsPro };
+          
+            return Ok(Query.ToList());
+        }
+
         [HttpPut]
         [Route("user/update")]
         [ResponseType(typeof(void))]
@@ -126,6 +146,13 @@ namespace Branch.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            var Age = DateTime.Today - User.BirthDate;
+
+            if (Age.TotalDays / 365 < 13)
+            {
+                return Unauthorized();
             }
 
             SQLContext.Users.Add(User);

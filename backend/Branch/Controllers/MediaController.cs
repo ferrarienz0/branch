@@ -72,7 +72,7 @@ namespace Branch.Controllers
             var LocalFileName = _File.LocalFileName;
 
             var FileExtension = _File.Headers.ContentDisposition.FileName;
-            var PointIndex = FileExtension.IndexOf('.');
+            var PointIndex = FileExtension.LastIndexOf('.');
             FileExtension = FileExtension.Substring(PointIndex, FileExtension.Length - PointIndex - 1);
 
             Name += FileExtension;
