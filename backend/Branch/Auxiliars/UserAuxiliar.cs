@@ -82,11 +82,77 @@ namespace Branch.SearchAuxiliars
                                    .Media;
         }
 
+        /// <summary>
+        /// Returns the pro's products (profile photo)
+        /// </summary>
+        /// <param name="UserId">The pro's id</param>
         public static List<Product> Products(int UserId, SQLContext SQLContext)
         {
             return SQLContext.Products
                                       .Where(x => x.ProId == UserId)
                                       .ToList();
+        }
+
+        /// <summary>
+        /// Returns the carts of a certain user (profile photo)
+        /// </summary>
+        /// <param name="UserId">The user's id</param>
+        public static List<Cart> UserCarts(int UserId, SQLContext SQLContext)
+        {
+            return SQLContext.Carts
+                                   .Where(x => x.UserId == UserId)
+                                   .ToList();
+        }
+
+        /// <summary>
+        /// Returns the carts of a certain pro (profile photo)
+        /// </summary>
+        /// <param name="UserId">The pro's id</param>
+        public static List<Cart> ProCarts(int UserId, SQLContext SQLContext)
+        {
+            return SQLContext.Carts
+                                   .Where(x => x.ProId == UserId)
+                                   .ToList();
+        }
+
+        /// <summary>
+        /// Returns the cart of a certain store and a certain user (profile photo)
+        /// </summary>
+        /// <param name="UserId">The user's id</param>
+        /// <param name="ProId">The pro's id</param>
+        public static Cart StoreCart(int UserId, int ProId, SQLContext SQLContext)
+        {
+            return SQLContext.Carts
+                                   .FirstOrDefault(x => x.UserId == UserId && x.ProId == ProId);
+        }
+
+        /// <summary>
+        /// Returns the carts of a certain user with it's products (profile photo)
+        /// </summary>
+        /// <param name="UserId">The user's id</param>
+        public static List<ProductCart> UserProductCarts(int UserId, SQLContext SQLContext)
+        {
+            var _UserCarts = UserCarts(UserId, SQLContext);
+
+            var CartsId = _UserCarts.Select(x => x.Id);
+
+            return SQLContext.ProductCarts
+                                          .Where(x => CartsId.Contains(x.CartId))
+                                          .ToList();
+        }
+
+        /// <summary>
+        /// Returns the carts of a certain pro with it's products (profile photo)
+        /// </summary>
+        /// <param name="UserId">The pro's id</param>
+        public static List<ProductCart> ProProductCarts(int UserId, SQLContext SQLContext)
+        {
+            var _ProCarts = ProCarts(UserId, SQLContext);
+            var CartsId = _ProCarts.Select(x => x.Id);
+
+            return SQLContext.ProductCarts
+                                          .Where(x => CartsId.Contains(x.CartId))
+                                          .ToList();
         }
     }
 }

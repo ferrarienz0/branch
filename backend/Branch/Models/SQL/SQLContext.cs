@@ -12,8 +12,6 @@ namespace Branch.Models
 
         public DbSet<TypeMedia> TypeMedias { get; set; }
 
-        public DbSet<Address> Addresses { get; set; }
-
         public DbSet<Follow> Follows { get; set; }
 
         public DbSet<Subject> Subjects { get; set; }
@@ -27,10 +25,6 @@ namespace Branch.Models
         public DbSet<ProductCart> ProductCarts { get; set; }
 
         public DbSet<UserSubject> UserSubjects { get; set; }
-
-        public DbSet<City> Cities { get; set; }
-
-        public DbSet<Estate> States { get; set; }
 
         public SQLContext() : base("branchsql")
         {
