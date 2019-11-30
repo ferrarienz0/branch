@@ -76,7 +76,7 @@ namespace Branch.Controllers
                             || User.Lastname.ToLower() == Key
                             || User.Firstname.ToLower() + User.Lastname.ToLower() == Key
                             || User.Nickname == Key
-                        select new { User.Id, User.Firstname, User.Lastname, User.Nickname, User.IsPro };
+                        select new { User.Id, User.Firstname, User.Lastname, User.Nickname, User.IsPro, User.Media };
           
             return Ok(Query.ToList());
         }
