@@ -12,8 +12,11 @@ namespace Branch.Controllers
     public class PublicAPIController : ApiController
     {
         private readonly HttpClient ExternalApi = new HttpClient();
-        private readonly string Token = "<TOKEN>";
+        
+        //MAX 400 CHARS
+        private readonly string Token = "63096c5c035e43efb8fba206a1aec2d2";
         private readonly string URL = "https://svc02.api.bitext.com/sentiment/";
+
         private readonly Dictionary<string, string> Language = new Dictionary<string, string>()
         {
             { "English" , "eng" },
@@ -22,12 +25,26 @@ namespace Branch.Controllers
         };
 
         [HttpGet]
-        [Route("api/semantic")]
-        public async Task<IHttpActionResult> TestAPI()
+        [Route("api/subject/related")]
+        public async Task<IHttpActionResult> RelatedSubjects()
         {
-            return Ok();
+
         }
 
+        [HttpGet]
+        [Route("api/subject/opinion")]
+        public async Task<IHttpActionResult> OpinionOnSubject()
+        {
+            
+        }
+
+        [HttpGet]
+        [Route("api/product/opinion")]
+        public async Task<IHttpActionResult> OpinionOnProduct()
+        {
+
+        }
+            
         private async Task<dynamic> MakeRequest(string Text, string Language)
         {
             ExternalApi.DefaultRequestHeaders.Add("Authorization", "bearer " + Token);
