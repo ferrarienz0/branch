@@ -112,7 +112,9 @@ namespace Branch.Controllers
             SQLContext.ProductCarts.Add(ProductCart);
             SQLContext.SaveChanges();
 
-            return Ok(new { Cart, Product = FilterProduct(ProductCart.Product) });
+            var Product = SQLContext.Products.Find(ProductInfo.ProductId);
+
+            return Ok(new { Cart, Product = FilterProduct(Product) });
         }
 
         [HttpPut]
