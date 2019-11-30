@@ -9,6 +9,15 @@ using System.Web;
 
 namespace Branch.Auxiliars
 {
+    public class Graph<T>
+    {
+        public List<KeyValuePair<T,T>> AdjacencyList { get; set; }
+
+        public void TransformToGraph(List<T> IdentityList)
+        {
+
+        }
+    }
     public static class GraphAuxiliar
     {
         public static void IncreaseFollowAffinity(int FollowerId, int FollowedId, SQLContext SQLContext)
