@@ -43,11 +43,10 @@ namespace Branch.Controllers
             {
                 var Products = SQLContext.ProductCarts
                                                       .Where(x => x.CartId == Cart.Id)
-                                                      .Select(x => x.Product)
+                                                      .Select(x => new { Product = FilterProduct(x.Product), x.Amount })
                                                       .ToList();
 
-                var FilteredProducts = FilterProducts(Products);
-                Response.Add(new { Cart, Products = FilteredProducts });
+                Response.Add(new { Cart, Products });
             }
 
             return Ok(Response);
