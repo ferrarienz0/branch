@@ -236,7 +236,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Controllers\AddressController.cs" />
+    <Compile Include="Controllers\CartsController.cs" />
     <Compile Include="Controllers\FollowController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MediaController.cs" />
@@ -291,16 +291,17 @@
     <Compile Include="Migrations\201911211903217_ForeignKey-ProductMedia.Designer.cs">
       <DependentUpon>201911211903217_ForeignKey-ProductMedia.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201911300030242_Delete-UselessTables.cs" />
+    <Compile Include="Migrations\201911300030242_Delete-UselessTables.Designer.cs">
+      <DependentUpon>201911300030242_Delete-UselessTables.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\NoSQL\Models\Post\Owner.cs" />
     <Compile Include="Models\NoSQL\Models\Post\PostComparer.cs" />
     <Compile Include="Models\NoSQL\NoSQLContext.cs" />
     <Compile Include="Models\NoSQL\Models\Post\Post.cs" />
-    <Compile Include="Models\SQL\Social\City.cs" />
     <Compile Include="Models\SQL\SQLContext.cs" />
-    <Compile Include="Models\SQL\Social\Estate.cs" />
     <Compile Include="Models\SQL\Media\Media.cs" />
-    <Compile Include="Models\SQL\Social\Address.cs" />
     <Compile Include="Models\SQL\Store\Cart.cs" />
     <Compile Include="Models\SQL\Social\Follow.cs" />
     <Compile Include="Models\SQL\Store\Product.cs" />
@@ -448,6 +449,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201911211903217_ForeignKey-ProductMedia.resx">
       <DependentUpon>201911211903217_ForeignKey-ProductMedia.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911300030242_Delete-UselessTables.resx">
+      <DependentUpon>201911300030242_Delete-UselessTables.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
