@@ -14,43 +14,36 @@ namespace Branch.Controllers
         private readonly HttpClient ExternalApi = new HttpClient();
         
         //MAX 400 CHARS
-        private readonly string Token = "63096c5c035e43efb8fba206a1aec2d2";
+        private readonly string Token = "<TOKEN>";
         private readonly string URL = "https://svc02.api.bitext.com/sentiment/";
-
-        private readonly Dictionary<string, string> Language = new Dictionary<string, string>()
-        {
-            { "English" , "eng" },
-            { "Portuguese", "por"},
-            { "Spanish", "spa" }
-        };
 
         [HttpGet]
         [Route("api/subject/related")]
         public async Task<IHttpActionResult> RelatedSubjects()
         {
-
+            return Ok();
         }
 
         [HttpGet]
         [Route("api/subject/opinion")]
         public async Task<IHttpActionResult> OpinionOnSubject()
         {
-            
+            return Ok();
         }
 
         [HttpGet]
         [Route("api/product/opinion")]
         public async Task<IHttpActionResult> OpinionOnProduct()
         {
-
+            return Ok();
         }
             
-        private async Task<dynamic> MakeRequest(string Text, string Language)
+        private async Task<dynamic> MakeRequest(string Text)
         {
             ExternalApi.DefaultRequestHeaders.Add("Authorization", "bearer " + Token);
 
             var Response = await ExternalApi
-                                            .PostAsJsonAsync(URL, new { language = Language, text = Text })
+                                            .PostAsJsonAsync(URL, new { language = "por", text = Text })
                                             .ConfigureAwait(false);
 
             if(!Response.IsSuccessStatusCode)
@@ -84,6 +77,7 @@ namespace Branch.Controllers
 
                   }).ConfigureAwait(false);
 
+                IsFirstTime = false;
             } while (Data.sentimentanalysis == null);
 
             return Data.sentimentanalysis;

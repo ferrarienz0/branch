@@ -41,11 +41,13 @@ namespace Branch.Controllers
 
             foreach(var Cart in UserCartsSync)
             {
-                var ProductCarts = SQLContext.ProductCarts
-                                                          .Where(x => x.CartId == Cart.Id)
-                                                          .ToList();
+                var Products = SQLContext.ProductCarts
+                                                      .Where(x => x.CartId == Cart.Id)
+                                                      .Select(x => x.Product)
+                                                      .ToList();
 
-                Response.Add(new { Cart, Products = ProductCarts });
+                var FilteredProducts = FilterProducts(Products);
+                Response.Add(new { Cart, Products = FilteredProducts });
             }
 
             return Ok(Response);
@@ -69,7 +71,7 @@ namespace Branch.Controllers
             {
                 var ProductCarts = from ProductCart in SQLContext.ProductCarts
                                    where Cart.Id == ProductCart.ProductId
-                                   select new { ProductCart.Amount, ProductCart.Product };
+                                   select new { ProductCart.Amount, Product = FilterProduct(ProductCart.Product) };
 
                 Response.Add(new { Cart, Products = ProductCarts });
             }
@@ -109,7 +111,7 @@ namespace Branch.Controllers
             SQLContext.ProductCarts.Add(ProductCart);
             SQLContext.SaveChanges();
 
-            return Ok(new { Cart, ProductCart });
+            return Ok(new { Cart, Product = FilterProduct(ProductCart.Product) });
         }
 
         [HttpPut]
@@ -141,7 +143,7 @@ namespace Branch.Controllers
 
             SQLContext.SaveChanges();
 
-            return Ok(new { StoreCart, ProductCart });
+            return Ok(new { StoreCart, Product = FilterProduct(ProductCart.Product) });
         }
 
         [HttpPut]
@@ -168,6 +170,40 @@ namespace Branch.Controllers
             }
 
             return Ok(Cart);
+        }
+
+        private dynamic FilterProducts(List<Product> Products)
+        {
+            return Products.Select(x => new
+            {
+                x.Id,
+                x.Name,
+                x.Description,
+                x.Stock,
+                x.Price,
+                x.MaxDiscount,
+                x.CurrentDiscount,
+                x.CreatedAt,
+                x.UpdatedAt,
+                x.Media,
+            });
+        }
+
+        private dynamic FilterProduct(Product Product)
+        {
+            return new
+            {
+                Product.Id,
+                Product.Name,
+                Product.Description,
+                Product.Stock,
+                Product.Price,
+                Product.MaxDiscount,
+                Product.CurrentDiscount,
+                Product.CreatedAt,
+                Product.UpdatedAt,
+                Product.Media,
+            };
         }
 
         protected override void Dispose(bool disposing)
