@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using Branch.Auxiliars;
 using Branch.JWTProvider;
 using Branch.Models;
 using Branch.Models.NoSQL;
@@ -39,7 +40,7 @@ namespace Branch.Controllers
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            var Subjects = UserSearchAuxiliar.UnfollowedSubjects(UserId, SQLContext);
+            var Subjects = UserAuxiliar.UnfollowedSubjects(UserId, SQLContext);
 
             return Ok(Subjects);
         }
@@ -51,7 +52,7 @@ namespace Branch.Controllers
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            var Subjects = UserSearchAuxiliar.FollowedSubjects(UserId, SQLContext);
+            var Subjects = UserAuxiliar.FollowedSubjects(UserId, SQLContext);
 
             return Ok(Subjects);
         }

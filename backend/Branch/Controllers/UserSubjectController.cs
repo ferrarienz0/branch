@@ -32,7 +32,7 @@ namespace Branch.Controllers
                 return NotFound();
             }
 
-            var AlreadyExists = UserSearchAuxiliar.FollowedSubjects(UserId, SQLContext).Contains(Subject);
+            var AlreadyExists = UserAuxiliar.FollowedSubjects(UserId, SQLContext).Contains(Subject);
 
             if(AlreadyExists)
             {

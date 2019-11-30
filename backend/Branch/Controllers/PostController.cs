@@ -1,4 +1,5 @@
-﻿using Branch.JWTProvider;
+﻿using Branch.Auxiliars;
+using Branch.JWTProvider;
 using Branch.Models;
 using Branch.Models.NoSQL;
 using Branch.SearchAuxiliars;
@@ -36,35 +37,32 @@ namespace Branch.Controllers
             
             NewPost.UserId = UserId;
 
-            NewPost = PostSearchAuxiliar.UpdateOwner(NewPost, SQLContext);
+            NewPost = PostAuxiliar.UpdateOwner(NewPost, SQLContext);
 
             NewPost = TreatPostAddons(NewPost);
 
-            HandleMentionsAffinity(NewPost.Mentions, UserId);
-            HandleSubjectAffinity(NewPost.Hashtags, UserId);
-
             NoSQLContext.PostCollection.InsertOne(NewPost);
+
+            Post Parent = default;
 
             if (NewPost.Parent != null)
             {
-                var Parent = FindParent(NewPost);
+                Parent = FindParent(NewPost);
 
                 if (Parent != default)
                 {
                     UpdateParent(Parent, NewPost.Id);
-                    
-                    if (Parent.UserId != UserId)
-                    {
-                        var UserFollows = UserSearchAuxiliar
-                                                            .Follows(UserId, SQLContext)
-                                                            .Select(x => x.Id);
-
-                        if(UserFollows.Contains(Parent.UserId))
-                        {
-                            DBSearchAuxiliar.IncreaseAffinityOnFollow(UserId, Parent.UserId);
-                        }
-                    }
                 }
+            }
+
+            GraphAuxiliar.IncreaseFollowAffinityAsync(NewPost.UserId, NewPost.Mentions, SQLContext);
+            GraphAuxiliar.IncreaseTopicAffinityAsync(NewPost.UserId, NewPost.Hashtags, SQLContext);
+
+            if (Parent != default)
+            {
+                GraphAuxiliar.IncreaseFollowAffinityAsync(NewPost.UserId, Parent.UserId, SQLContext);
+                GraphAuxiliar.IncreaseFollowAffinityAsync(NewPost.UserId, Parent.Mentions, SQLContext);
+                GraphAuxiliar.IncreaseTopicAffinityAsync(NewPost.UserId, Parent.Hashtags, SQLContext);
             }
 
             return Ok(NewPost);
@@ -77,19 +75,19 @@ namespace Branch.Controllers
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            var UserFollows = UserSearchAuxiliar
-                                                .Follows(UserId, SQLContext)
-                                                .Select(x => x.Id);
+            var UserFollows = UserAuxiliar
+                                          .Follows(UserId, SQLContext)
+                                          .Select(x => x.Id);
 
-            var UserTopics = UserSearchAuxiliar.FollowedSubjects(UserId, SQLContext);
+            var UserTopics = UserAuxiliar.FollowedSubjects(UserId, SQLContext);
 
-            var UserPosts = PostSearchAuxiliar.PostsByAuthor(UserId);
-            var UserMentionPosts = PostSearchAuxiliar.MentionsUser(UserId, SQLContext);
+            var UserPosts = PostAuxiliar.PostsByAuthor(UserId);
+            var UserMentionPosts = PostAuxiliar.MentionsUser(UserId, SQLContext);
 
-            var FollowsPosts = PostSearchAuxiliar.PostsByAuthors(UserFollows);
-            var FollowsMentionPosts = PostSearchAuxiliar.MentionsUsers(UserFollows);
+            var FollowsPosts = PostAuxiliar.PostsByAuthors(UserFollows);
+            var FollowsMentionPosts = PostAuxiliar.MentionsUsers(UserFollows);
 
-            var TopicsPosts = PostSearchAuxiliar.PostsBySubjects(UserTopics.Select(x => x.Id));
+            var TopicsPosts = PostAuxiliar.PostsBySubjects(UserTopics.Select(x => x.Id));
 
             var PostComparer = new PostComparer();
 
@@ -100,9 +98,8 @@ namespace Branch.Controllers
                                              .Union(TopicsPosts, PostComparer)
                                              .ToList();
 
-            RecommendedPosts = PostSearchAuxiliar.UpdateOwner(RecommendedPosts, SQLContext);
-
-            RecommendedPosts = ApplyAffinityOnSuggestion(RecommendedPosts, UserId, UserTopics, UserFollows);
+            RecommendedPosts = PostAuxiliar.UpdateOwner(RecommendedPosts, SQLContext);
+            RecommendedPosts = GraphAuxiliar.OrderPostsByAffinity(UserId, RecommendedPosts, SQLContext);
 
             return Ok(RecommendedPosts);
         }
@@ -112,8 +109,8 @@ namespace Branch.Controllers
         [ResponseType(typeof(Post))]
         public IHttpActionResult PostById([FromUri] string PostId)
         {
-            var Post = PostSearchAuxiliar.PostById(PostId);
-            Post = PostSearchAuxiliar.UpdateOwner(Post, SQLContext);
+            var Post = PostAuxiliar.PostById(PostId);
+            Post = PostAuxiliar.UpdateOwner(Post, SQLContext);
 
             return Ok(Post);
         }
@@ -123,8 +120,8 @@ namespace Branch.Controllers
         [ResponseType(typeof(List<Post>))]
         public IHttpActionResult PostsBySubject([FromUri] int SubjectId)
         {
-            var Posts = PostSearchAuxiliar.PostsBySubject(SubjectId);
-            Posts = PostSearchAuxiliar.UpdateOwner(Posts, SQLContext);
+            var Posts = PostAuxiliar.PostsBySubject(SubjectId);
+            Posts = PostAuxiliar.UpdateOwner(Posts, SQLContext);
 
             return Ok(Posts);
         }
@@ -134,8 +131,8 @@ namespace Branch.Controllers
         [ResponseType(typeof(List<Post>))]
         public IHttpActionResult PostsByUser([FromUri] int UserId)
         {
-            var Posts = PostSearchAuxiliar.PostsByAuthor(UserId);
-            Posts = PostSearchAuxiliar.UpdateOwner(Posts, SQLContext);
+            var Posts = PostAuxiliar.PostsByAuthor(UserId);
+            Posts = PostAuxiliar.UpdateOwner(Posts, SQLContext);
 
             return Ok(Posts);
         }
@@ -145,8 +142,8 @@ namespace Branch.Controllers
         [ResponseType(typeof(List<Post>))]
         public IHttpActionResult PostsByProduct([FromUri] int ProductId)
         {
-            var Posts = PostSearchAuxiliar.PostsByProduct(ProductId);
-            Posts = PostSearchAuxiliar.UpdateOwner(Posts, SQLContext);
+            var Posts = PostAuxiliar.PostsByProduct(ProductId);
+            Posts = PostAuxiliar.UpdateOwner(Posts, SQLContext);
 
             return Ok(Posts);
         }
@@ -156,8 +153,8 @@ namespace Branch.Controllers
         [ResponseType(typeof(List<Post>))]
         public IHttpActionResult PostComments([FromUri] string PostId)
         {
-            var Comments = PostSearchAuxiliar.PostComments(PostId);
-            Comments = PostSearchAuxiliar.UpdateOwner(Comments, SQLContext);
+            var Comments = PostAuxiliar.PostComments(PostId);
+            Comments = PostAuxiliar.UpdateOwner(Comments, SQLContext);
 
             return Ok(Comments);
         }
@@ -168,7 +165,7 @@ namespace Branch.Controllers
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            var PostLiked = PostSearchAuxiliar.PostById(PostId);
+            var PostLiked = PostAuxiliar.PostById(PostId);
          
             if (PostLiked.Likes.Contains(UserId))
             {
@@ -188,12 +185,15 @@ namespace Branch.Controllers
                                                .Set("Likes", PostLiked.Likes)
                                                .Set("Dislikes", PostLiked.Dislikes);
 
-            PostSearchAuxiliar.UpdatePostById(PostLiked.Id, Update);
+            PostAuxiliar.UpdatePostById(PostLiked.Id, Update);
 
             int TotalLikes = PostLiked.Likes.Count;
             int TotalDeslikes = PostLiked.Dislikes.Count;
 
             dynamic Response = new { TotalLikes, TotalDeslikes };
+
+            GraphAuxiliar.IncreaseFollowAffinityAsync(UserId, PostLiked.UserId, SQLContext);
+            GraphAuxiliar.IncreaseTopicAffinityAsync(UserId, PostLiked.Hashtags, SQLContext);
 
             return Ok(Response);
         }
@@ -205,7 +205,7 @@ namespace Branch.Controllers
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
-            var PostDisliked = PostSearchAuxiliar.PostById(PostId);
+            var PostDisliked = PostAuxiliar.PostById(PostId);
 
             if (PostDisliked.Dislikes.Contains(UserId))
             {
@@ -225,7 +225,7 @@ namespace Branch.Controllers
                                                .Set("Likes", PostDisliked.Likes)
                                                .Set("Dislikes", PostDisliked.Dislikes);
 
-            PostSearchAuxiliar.UpdatePostById(PostDisliked.Id, Update);
+            PostAuxiliar.UpdatePostById(PostDisliked.Id, Update);
 
             int TotalLikes = PostDisliked.Likes.Count;
             int TotalDeslikes = PostDisliked.Dislikes.Count;
@@ -372,101 +372,9 @@ namespace Branch.Controllers
             return NewPost;
         }
 
-        private void HandleMentionsAffinity(List<int> Mentions, int UserId)
-        {
-            var UserFollows = UserSearchAuxiliar
-                                                .Follows(UserId, SQLContext)
-                                                .Select(x => x.Id);
-
-            foreach (var MentionId in Mentions)
-            {
-                if(MentionId != UserId)
-                {
-                    if (UserFollows.Contains(MentionId))
-                    {
-                        DBSearchAuxiliar.IncreaseAffinityOnFollow(UserId, MentionId);
-                    }
-                }
-            }
-        }
-
-        private void HandleSubjectAffinity(List<int> Subjects, int UserId)
-        {
-            var SubjectsFollowed = UserSearchAuxiliar
-                                                .FollowedSubjects(UserId, SQLContext)
-                                                .Select(x => x.Id);
-
-            foreach (var MentionId in Subjects)
-            {
-                if (SubjectsFollowed.Contains(MentionId))
-                {
-                        DBSearchAuxiliar.IncreaseAffinityOnSubject(UserId, MentionId);
-                }
-            }
-        }
-
-        private List<Post> ApplyAffinityOnSuggestion(List<Post> RecommendedPosts, int UserId, List<Subject> UserTopics, IEnumerable<int> UserFollows)
-        {
-            var CompoundList = new List<dynamic>();
-
-            foreach (var Post in RecommendedPosts)
-            {
-                double UserAffinity = 0;
-                double TopicAffinity = 0;
-
-                var UserTopicsIds = UserTopics.Select(x => x.Id);
-
-                if (UserFollows.Contains(Post.UserId))
-                {
-                    var Follow = SQLContext.Follows.FirstOrDefault(x => x.FollowedId == Post.UserId && x.FollowerId == UserId);
-
-                    if (Follow != default)
-                    {
-                        UserAffinity += Follow.Affinity;
-                    }
-                }
-
-                foreach (var Mention in Post.Mentions)
-                {
-                    if (UserFollows.Contains(Mention))
-                    {
-                        var Follow = SQLContext.Follows.FirstOrDefault(x => x.FollowedId == Mention && x.FollowerId == UserId);
-
-                        if (Follow != default)
-                        {
-                            UserAffinity += Follow.Affinity / Post.Mentions.Count;
-                        }
-                    }
-                }
-
-                foreach (var Subject in Post.Hashtags)
-                {
-                    if (UserTopicsIds.Contains(Subject))
-                    {
-                        var UserSubject = SQLContext.UserSubjects.FirstOrDefault(x => x.SubjectId == Subject && x.UserId == UserId);
-
-                        if (Subject != default)
-                        {
-                            TopicAffinity += UserSubject.Affinity / Post.Hashtags.Count;
-                        }
-                    }
-                }
-
-                CompoundList.Add(new { Post, UserAffinity, TopicAffinity });
-            }
-
-            var ApplyiedList = CompoundList
-                                          .OrderByDescending(Compound => (double) Compound.TopicAffinity)
-                                          .ThenByDescending(Compound => (double) Compound.UserAffinity)
-                                          .Select(x => (Post) x.Post)
-                                          .ToList();
-
-            return ApplyiedList;
-        }
-
         private Post FindParent(Post NewPost)
         {
-            var ParentPost = PostSearchAuxiliar.PostById(NewPost.Parent);
+            var ParentPost = PostAuxiliar.PostById(NewPost.Parent);
             
             return ParentPost;
         }
@@ -479,7 +387,7 @@ namespace Branch.Controllers
             };
 
             var Update = Builders<Post>.Update.Set("Comments", NewComments);
-            PostSearchAuxiliar.UpdatePostById(Parent.Id, Update);
+            PostAuxiliar.UpdatePostById(Parent.Id, Update);
         }
     }
 }
