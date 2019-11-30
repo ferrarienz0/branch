@@ -141,6 +141,32 @@ namespace Branch.Controllers
             return Ok(new { StoreCart, ProductCart });
         }
 
+        [HttpPut]
+        [Route("cart/finish")]
+        public IHttpActionResult FinishCart([FromUri] string AccessToken, [FromUri] int CartId)
+        {
+            _ = TokenValidator.VerifyToken(AccessToken);
+            var Cart = SQLContext.Carts.Find(CartId);
+
+            try
+            {
+                Cart.Finished = true;
+                SQLContext.Entry(Cart).State = EntityState.Modified;
+                SQLContext.SaveChanges();
+            }
+            catch
+            {
+                return Unauthorized();
+            }
+            
+            if(!Cart.Finished)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(Cart);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

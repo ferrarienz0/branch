@@ -1,4 +1,5 @@
-﻿using Branch.JWTProvider;
+﻿using Branch.Auxiliars;
+using Branch.JWTProvider;
 using Branch.Models;
 using Branch.SearchAuxiliars;
 using Npgsql;
@@ -83,6 +84,17 @@ namespace Branch.Controllers
             SQLContext.SaveChanges();
 
             return Ok(Product);
+        }
+
+        [HttpGet]
+        [Route("products/recommended")]
+        public IHttpActionResult RecommendedProducs([FromUri] string AccessToken)
+        {
+            var UserId = TokenValidator.VerifyToken(AccessToken);
+
+            var Recommendation = GraphAuxiliar.OrderProductsByAffinity(UserId, SQLContext.Products.ToList(), SQLContext);
+
+            return Ok(Recommendation);
         }
 
         [HttpPut]

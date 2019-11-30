@@ -80,9 +80,9 @@ namespace Branch.Auxiliars
             var AffinityPosts = CreateAffinityPosts(UserId, Posts, SQLContext);
 
             return AffinityPosts
-                                .OrderByDescending(AffinityPost => (double) AffinityPost.TopicAffinity)
-                                .ThenByDescending(AffinityPost => (double) AffinityPost.UserAffinity)
-                                .Select(AffinityPost => (Post) AffinityPost.Post)
+                                .OrderByDescending(AffinityPost => (double)AffinityPost.TopicAffinity)
+                                .ThenByDescending(AffinityPost => (double)AffinityPost.UserAffinity)
+                                .Select(AffinityPost => (Post)AffinityPost.Post)
                                 .ToList();
         }
 
@@ -95,10 +95,10 @@ namespace Branch.Auxiliars
             {
                 var NewTask = Task.Run
                 (
-                    () => 
-                    { 
+                    () =>
+                    {
                         var AffinityPost = CreateAffinityPost(UserId, Post, SQLContext);
-                        AffinityPosts.Add(AffinityPost.First());                             
+                        AffinityPosts.Add(AffinityPost.First());
                     }
                 );
 
@@ -126,7 +126,7 @@ namespace Branch.Auxiliars
 
             foreach (var Mention in Post.Mentions)
             {
-                lock(SQLContext)
+                lock (SQLContext)
                 {
                     Follow = GetFollowById(UserId, Mention, SQLContext);
                 }
@@ -136,19 +136,116 @@ namespace Branch.Auxiliars
 
             foreach (var Topic in Post.Hashtags)
             {
-               UserSubject UserSubject;
-              
-               lock (SQLContext)
-               {
-                    UserSubject = GetUserSubjectById(UserId, Topic, SQLContext);
-               } 
+                UserSubject UserSubject;
 
-               TopicAffinity += UserSubject != default ? UserSubject.Affinity / Post.Hashtags.Count : 0;
+                lock (SQLContext)
+                {
+                    UserSubject = GetUserSubjectById(UserId, Topic, SQLContext);
+                }
+
+                TopicAffinity += UserSubject != default ? UserSubject.Affinity / Post.Hashtags.Count : 0;
             }
 
             var AffinityPost = new { Post, UserAffinity, TopicAffinity };
 
             return new List<dynamic> { AffinityPost };
+        }
+
+        public static List<Product> OrderProductsByAffinity(int UserId, List<Product> Products, SQLContext SQLContext)
+        {
+            var ProductRecommendation = CreateAffinityProducts(UserId, Products, SQLContext);
+
+            return ProductRecommendation
+                                        .OrderByDescending(x => (double)x.SubjectAffinity)
+                                        .ThenByDescending(x => (double)x.FollowsAffinity)
+                                        .ThenByDescending(x => (double)x.OwnerAffinity)
+                                        .Select(x => (Product)x.Product)
+                                        .ToList();
+        }
+
+        //TA MT FEIO HORROROSO DESCULPA
+        private static List<dynamic> CreateAffinityProducts(int UserId, List<Product> Products, SQLContext SQLContext)
+        {
+            var ProductRecommendation = new List<dynamic>();
+            var TaskArray = new List<Task>();
+
+            foreach (var Product in Products)
+            {
+                var NewTask = Task.Run
+                (
+                  () =>
+                  {
+                      double OwnerAffinity = 0;
+                      double SubjectAffinity = 0;
+                      double FollowsAffinity = 0;
+
+                      var OwnerId = Product.ProId;
+
+                      IEnumerable<int> SubjectsFollowedByOwner;
+                      IEnumerable<int> UsersFollowedByOwner;
+                      IEnumerable<int> OwnerFollowers;
+
+                      lock (SQLContext)
+                      {
+                          SubjectsFollowedByOwner = UserAuxiliar.FollowedSubjects((int)OwnerId, SQLContext).Select(x => x.Id);
+                          UsersFollowedByOwner = UserAuxiliar.Follows((int)OwnerId, SQLContext).Select(x => x.Id);
+                          OwnerFollowers = UserAuxiliar.Followers((int)OwnerId, SQLContext).Select(x => x.Id);
+                      }
+
+                      var Follows = UsersFollowedByOwner.Union(OwnerFollowers);
+
+                      Follow OwnerFollow;
+
+                      lock (SQLContext)
+                      {
+                          OwnerFollow = SQLContext.Follows.FirstOrDefault(x => x.FollowerId == UserId && x.FollowedId == OwnerId);
+                      }
+
+                      if (OwnerFollow != default)
+                      {
+                          OwnerAffinity += OwnerFollow.Affinity;
+                      }
+
+                      int RawSubjectAffinity = 0;
+
+                      lock (SQLContext)
+                      {
+                          var SameSubjects = SQLContext.UserSubjects.Where(x => x.UserId == UserId && SubjectsFollowedByOwner.Contains(x.SubjectId));
+                          if(SameSubjects.Any())
+                          {
+                              RawSubjectAffinity = SameSubjects.Sum(x => x.Affinity);
+                          }
+                      }
+
+                      if(SubjectsFollowedByOwner.Any())
+                      {
+                          SubjectAffinity = RawSubjectAffinity / SubjectsFollowedByOwner.Count();
+                      }
+
+                      IQueryable<Follow> EqualFollows;
+                      lock (SQLContext)
+                      {
+                          EqualFollows = SQLContext.Follows.Where(x => Follows.Contains(x.FollowedId) && x.FollowerId == UserId);
+                          if (EqualFollows.Any())
+                          {
+                              FollowsAffinity = EqualFollows.Sum(x => x.Affinity) / EqualFollows.Count();
+                          }
+                      }
+
+                      if (OwnerAffinity != 0 || FollowsAffinity != 0 || SubjectAffinity != 0)
+                      {
+                          ProductRecommendation.Add(new { Product, OwnerAffinity, SubjectAffinity, FollowsAffinity });
+                      }
+
+                  }
+                );
+
+                TaskArray.Add(NewTask);
+            }
+
+            Task.WaitAll(TaskArray.ToArray());
+
+            return ProductRecommendation;
         }
 
         public static UserSubject GetUserSubjectById(int UserId, int TopicId, SQLContext SQLContext)
