@@ -9,17 +9,31 @@ using System.Web;
 
 namespace Branch.Auxiliars
 {
-    public class Graph<T>
-    {
-        public List<KeyValuePair<T,T>> AdjacencyList { get; set; }
-
-        public void TransformToGraph(List<T> IdentityList)
-        {
-
-        }
-    }
     public static class GraphAuxiliar
     {
+        public static dynamic CalculateSubjectSimilarity(int SubjectId, SQLContext SQLContext)
+        {
+            var UserSubject = SQLContext.UserSubjects
+                                                     .Where(x => x.SubjectId == SubjectId)
+                                                     .Select(x => x.UserId)
+                                                     .ToList();
+
+            var FollowsFollowSubjects = SQLContext.UserSubjects
+                                                               .Where(x => UserSubject.Contains(x.UserId) && x.SubjectId != SubjectId)
+                                                               .Select(x => x.Subject)
+                                                               .ToList();
+
+            var Result = FollowsFollowSubjects
+                                              .Select(x => new { Topic = x, Similarity = (double)FollowsFollowSubjects.Count(y => y == x) / SQLContext.UserSubjects.Where(y => y.SubjectId == x.Id).Count() })
+                                              .ToList();
+
+            Result = Result
+                           .DistinctBy(x => x.Topic.Id)
+                           .ToList();
+
+            return Result;
+        }
+
         public static void IncreaseFollowAffinity(int FollowerId, int FollowedId, SQLContext SQLContext)
         {
             var Follow = GetFollowById(FollowerId, FollowedId, SQLContext);
@@ -220,13 +234,13 @@ namespace Branch.Auxiliars
                       lock (SQLContext)
                       {
                           var SameSubjects = SQLContext.UserSubjects.Where(x => x.UserId == UserId && SubjectsFollowedByOwner.Contains(x.SubjectId));
-                          if(SameSubjects.Any())
+                          if (SameSubjects.Any())
                           {
                               RawSubjectAffinity = SameSubjects.Sum(x => x.Affinity);
                           }
                       }
 
-                      if(SubjectsFollowedByOwner.Any())
+                      if (SubjectsFollowedByOwner.Any())
                       {
                           SubjectAffinity = RawSubjectAffinity / SubjectsFollowedByOwner.Count();
                       }
@@ -271,6 +285,19 @@ namespace Branch.Auxiliars
                                                              && x.FollowedId == FollowedId);
 
             return Follow;
+        }
+
+        private static IEnumerable<TSource> DistinctBy<TSource, TKey>
+        (this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            HashSet<TKey> seenKeys = new HashSet<TKey>();
+            foreach (TSource element in source)
+            {
+                if (seenKeys.Add(keySelector(element)))
+                {
+                    yield return element;
+                }
+            }
         }
     }
 }

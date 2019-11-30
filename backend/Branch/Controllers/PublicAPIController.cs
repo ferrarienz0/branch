@@ -1,4 +1,5 @@
-﻿using Branch.Models;
+﻿using Branch.Auxiliars;
+using Branch.Models;
 using Branch.Models.NoSQL;
 using Branch.SearchAuxiliars;
 using Newtonsoft.Json.Linq;
@@ -35,9 +36,11 @@ namespace Branch.Controllers
 
         [HttpGet]
         [Route("api/subject/related")]
-        public async Task<IHttpActionResult> RelatedSubjects()
+        public IHttpActionResult RelatedSubjects([FromUri] int SubjectId)
         {
-            return Ok();
+            var SimilarSubjects = GraphAuxiliar.CalculateSubjectSimilarity(SubjectId, SQLContext);
+
+            return Ok(SimilarSubjects);
         }
 
         [HttpGet]
