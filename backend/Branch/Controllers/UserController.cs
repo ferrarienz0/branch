@@ -72,10 +72,10 @@ namespace Branch.Controllers
                                 .Replace(" ", "");
 
             var Query = from User in SQLContext.Users
-                        where User.Firstname.ToLower() == Key
-                            || User.Lastname.ToLower() == Key
-                            || User.Firstname.ToLower() + User.Lastname.ToLower() == Key
-                            || User.Nickname == Key
+                        where User.Firstname.ToLower().Contains(Key)
+                            || User.Lastname.ToLower().Contains(Key)
+                            || (User.Firstname.ToLower() + User.Lastname.ToLower()).Contains(Key)
+                            || User.Nickname.Contains(Key)
                         select new { User.Id, User.Firstname, User.Lastname, User.Nickname, User.IsPro, User.Media };
           
             return Ok(Query.ToList());

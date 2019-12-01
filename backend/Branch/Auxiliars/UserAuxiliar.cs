@@ -123,7 +123,7 @@ namespace Branch.SearchAuxiliars
         public static Cart StoreCart(int UserId, int ProId, SQLContext SQLContext)
         {
             return SQLContext.Carts
-                                   .FirstOrDefault(x => x.UserId == UserId && x.ProId == ProId);
+                                   .FirstOrDefault(x => x.UserId == UserId && x.ProId == ProId && !x.Finished);
         }
 
         /// <summary>

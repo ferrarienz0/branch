@@ -87,115 +87,96 @@ namespace Branch.Controllers
             var UserId = TokenValidator.VerifyToken(AccessToken);
             var Cart = UserAuxiliar.StoreCart(UserId, ProductInfo.ProId, SQLContext);
 
-            if (Cart == default)
+            if (Cart == default || Cart.Finished)
             {
                 var NewCart = new Cart()
                 {
                     ProId = ProductInfo.ProId,
                     UserId = UserId,
+                    Finished = false
                 };
 
-                Cart = NewCart;
-                SQLContext.Carts.Add(Cart);
-            }
-
-            var AlreadyExists = SQLContext.ProductCarts.FirstOrDefault(x => x.CartId == Cart.Id && x.ProductId == ProductInfo.ProductId);
-
-            if(AlreadyExists != default && !Cart.Finished)
-            {
-                AlreadyExists.Amount += ProductInfo.Amount;
-                
-                SQLContext.Entry(AlreadyExists).State = EntityState.Modified;
+                SQLContext.Carts.Add(NewCart);
                 SQLContext.SaveChanges();
 
-                return Ok(AlreadyExists);
+                try
+                {
+                    var ProductCart = new ProductCart()
+                    {
+                        ProductId = ProductInfo.ProductId,
+                        CartId = NewCart.Id,
+                        Amount = ProductInfo.Amount
+                    };
+
+                    SQLContext.ProductCarts.Add(ProductCart);
+                    SQLContext.SaveChanges();
+                }catch(DbUpdateException)
+                {
+                    return Content(HttpStatusCode.Forbidden, new { Message = "Estoque insuficente!" });
+                }
+
+                var Product = SQLContext.Products.Find(ProductInfo.ProductId);
+
+                return Ok(new { Cart = NewCart, Product = FilterProduct(Product) });
             }
 
-            SQLContext.SaveChanges();
+            var AlreadyExists = SQLContext.ProductCarts.FirstOrDefault(x => x.CartId == Cart.Id
+                                                                && x.ProductId == ProductInfo.ProductId
+                                                                && !x.Cart.Finished);
 
-            var ProductCart = new ProductCart()
+            if(AlreadyExists != default)
             {
-                ProductId = ProductInfo.ProductId,
-                CartId = Cart.Id,
-                Amount = ProductInfo.Amount
-            };
+                try
+                {
+                    AlreadyExists.Amount += ProductInfo.Amount;
+                    SQLContext.Entry(AlreadyExists).State = EntityState.Modified;
+                    SQLContext.SaveChanges();
 
-            SQLContext.ProductCarts.Add(ProductCart);
-            SQLContext.SaveChanges();
-
-            var Product = SQLContext.Products.Find(ProductInfo.ProductId);
-
-            return Ok(new { Cart, Product = FilterProduct(Product) });
-        }
-
-        [HttpPut]
-        [Route("cart/update")]
-        public IHttpActionResult ChangeProductAmountOnCart([FromUri] string AccessToken, [FromBody] ProductInfo UpdateInfo)
-        {
-            var UserId = TokenValidator.VerifyToken(AccessToken);
-
-            var StoreCart = UserAuxiliar.StoreCart(UserId, UpdateInfo.ProId, SQLContext);
-            var ProductCart = SQLContext.ProductCarts.FirstOrDefault(x => x.CartId == StoreCart.Id && x.ProductId == UpdateInfo.ProductId);
-
-            if (ProductCart == default)
-            {
-                return NotFound();
+                    return Ok(new { Cart, Product = FilterProduct(AlreadyExists.Product) });
+                }catch(DbUpdateException)
+                {
+                    return Content(HttpStatusCode.Forbidden, new { Message = "Estoque insuficente!" });
+                }
             }
 
-            if (UpdateInfo.Amount == 0)
+            try
             {
-                SQLContext.ProductCarts.Remove(ProductCart);
+                var NewProductCart = new ProductCart()
+                {
+                    ProductId = ProductInfo.ProductId,
+                    CartId = Cart.Id,
+                    Amount = ProductInfo.Amount
+                };
 
-                var Message = "Product Removed";
-                return Ok(new { Message });
+                SQLContext.ProductCarts.Add(NewProductCart);
+                SQLContext.SaveChanges();
+
+                return Ok(new { Cart, Product = FilterProduct(NewProductCart.Product)});
             }
-            else
+            catch (DbUpdateException)
             {
-                ProductCart.Amount = UpdateInfo.Amount;
-                SQLContext.Entry(ProductCart).State = EntityState.Modified;
+                return Content(HttpStatusCode.Forbidden, new { Message = "Estoque insuficente!" });
             }
-
-            SQLContext.SaveChanges();
-
-            return Ok(new { StoreCart, Product = FilterProduct(ProductCart.Product) });
         }
 
         [HttpPut]
         [Route("cart/finish")]
         public IHttpActionResult FinishCart([FromUri] string AccessToken, [FromUri] int CartId)
         {
-            var UserId = TokenValidator.VerifyToken(AccessToken);
+            TokenValidator.VerifyToken(AccessToken);
             var Cart = SQLContext.Carts.Find(CartId);
 
-
-            Cart.Finished = true;
-            SQLContext.Entry(Cart).State = EntityState.Modified;
             try
             {
+                Cart.Finished = true;
+                SQLContext.Entry(Cart).State = EntityState.Modified;
                 SQLContext.SaveChanges();
-            }catch (DbUpdateException)
+            }catch (DbUpdateException Exception)
             {
-                return Unauthorized();
+                return Content(HttpStatusCode.Forbidden, new { Exception = Exception.Message, Message = "Não foi possível concluir a compra, tente novamente mais tarde!"});
             }
 
             return Ok(Cart);
-        }
-
-        private dynamic FilterProducts(List<Product> Products)
-        {
-            return Products.Select(x => new
-            {
-                x.Id,
-                x.Name,
-                x.Description,
-                x.Stock,
-                x.Price,
-                x.MaxDiscount,
-                x.CurrentDiscount,
-                x.CreatedAt,
-                x.UpdatedAt,
-                x.Media,
-            });
         }
 
         private dynamic FilterProduct(Product Product)
