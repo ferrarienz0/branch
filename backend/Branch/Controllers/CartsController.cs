@@ -181,23 +181,6 @@ namespace Branch.Controllers
             return Ok(Cart);
         }
 
-        private dynamic FilterProducts(List<Product> Products)
-        {
-            return Products.Select(x => new
-            {
-                x.Id,
-                x.Name,
-                x.Description,
-                x.Stock,
-                x.Price,
-                x.MaxDiscount,
-                x.CurrentDiscount,
-                x.CreatedAt,
-                x.UpdatedAt,
-                x.Media,
-            });
-        }
-
         private dynamic FilterProduct(Product Product)
         {
             return new
