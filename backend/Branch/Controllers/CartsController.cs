@@ -153,7 +153,7 @@ namespace Branch.Controllers
         [Route("cart/finish")]
         public IHttpActionResult FinishCart([FromUri] string AccessToken, [FromUri] int CartId)
         {
-            _ = TokenValidator.VerifyToken(AccessToken);
+            var UserId = TokenValidator.VerifyToken(AccessToken);
             var Cart = SQLContext.Carts.Find(CartId);
 
             try
@@ -163,11 +163,6 @@ namespace Branch.Controllers
                 SQLContext.SaveChanges();
             }
             catch
-            {
-                return Unauthorized();
-            }
-            
-            if(!Cart.Finished)
             {
                 return Unauthorized();
             }
