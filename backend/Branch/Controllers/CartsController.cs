@@ -32,7 +32,7 @@ namespace Branch.Controllers
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
             var UserCarts = from Cart in SQLContext.Carts
-                            where Cart.UserId == UserId
+                            where Cart.UserId == UserId && !Cart.Finished
                             select Cart;
 
             var UserCartsSync = UserCarts.ToList();
@@ -62,7 +62,7 @@ namespace Branch.Controllers
 
             var _UserCarts = from Cart in SQLContext.Carts
                              where Cart.ProId == ProId
-                             select new { Cart.Id };
+                             select new { Cart.Id, Cart.Finished };
 
             var UserCarts = _UserCarts.ToList();
 
@@ -71,7 +71,7 @@ namespace Branch.Controllers
             foreach (var Cart in UserCarts)
             {
                 var ProductCarts = from ProductCart in SQLContext.ProductCarts
-                                   where Cart.Id == ProductCart.ProductId
+                                   where Cart.Id == ProductCart.ProductId && Cart.Finished
                                    select new { ProductCart.Amount, Product = FilterProduct(ProductCart.Product) };
 
                 Response.Add(new { Cart, Products = ProductCarts });
@@ -85,7 +85,6 @@ namespace Branch.Controllers
         public IHttpActionResult AddProductToCart([FromUri] string AccessToken, [FromBody] ProductInfo ProductInfo)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
-
             var Cart = UserAuxiliar.StoreCart(UserId, ProductInfo.ProId, SQLContext);
 
             if (Cart == default)
@@ -98,6 +97,18 @@ namespace Branch.Controllers
 
                 Cart = NewCart;
                 SQLContext.Carts.Add(Cart);
+            }
+
+            var AlreadyExists = SQLContext.ProductCarts.FirstOrDefault(x => x.CartId == Cart.Id && x.ProductId == ProductInfo.ProductId);
+
+            if(AlreadyExists != default && !Cart.Finished)
+            {
+                AlreadyExists.Amount += ProductInfo.Amount;
+                
+                SQLContext.Entry(AlreadyExists).State = EntityState.Modified;
+                SQLContext.SaveChanges();
+
+                return Ok(AlreadyExists);
             }
 
             SQLContext.SaveChanges();
