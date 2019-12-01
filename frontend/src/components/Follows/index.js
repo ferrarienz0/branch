@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Container, User } from './styles';
 import { FaAngleRight, FaAngleDown } from 'react-icons/fa';
 import Topic from '../../components/Topic';
-import Product from '../../components/Product';
 import UserImage from '../../components/UserImage';
 
 export default class Follows extends Component {
@@ -14,7 +13,7 @@ export default class Follows extends Component {
     };
     render() {
         const { showUsers, showCart, showTopics, showRecommended } = this.state;
-        const { me, topics, handleHead, token } = this.props;
+        const { me, topics, redirect, token } = this.props;
         return (
             <Container>
                 <div
@@ -31,10 +30,10 @@ export default class Follows extends Component {
                 {showUsers
                     ? me.users.map((user, index) => (
                           <User
-                              onClick={() => handleHead('user', user.Id)}
+                              onClick={() => redirect('user', user.Id)}
                               key={index}
                           >
-                              <UserImage size="30px" image={user.Media} />
+                              <UserImage size="30px" image={user.Media.URL} />
                               <div id="name">@{user.Nickname}</div>
                           </User>
                       ))
@@ -55,7 +54,7 @@ export default class Follows extends Component {
                         key={index}
                         token={token}
                         product={product}
-                        onHead={() => handleHead('topic', product.Id)}
+                        onHead={() => redirect('topic', product.Id)}
                     />
                 ))} */}
                 <div
@@ -76,12 +75,12 @@ export default class Follows extends Component {
                               head={false}
                               token={token}
                               topic={{
-                                  id: topic.Id,
+                                  ID: topic.Id,
                                   hashtag: topic.Hashtag,
                                   banner: topic.Media.URL,
                                   follow: true,
                               }}
-                              onHead={() => handleHead('topic', topic.Id)}
+                              redirect={() => redirect('topic', topic.Id)}
                           />
                       ))
                     : null}
@@ -103,7 +102,7 @@ export default class Follows extends Component {
                               head={false}
                               token={token}
                               topic={{
-                                  id: topic.Id,
+                                  ID: topic.Id,
                                   hashtag: topic.Hashtag,
                                   banner:
                                       topic.Media === null
@@ -111,7 +110,7 @@ export default class Follows extends Component {
                                           : topic.Media.URL,
                                   follow: false,
                               }}
-                              onHead={() => handleHead('topic', topic.Id)}
+                              redirect={() => redirect('topic', topic.Id)}
                           />
                       ))
                     : null}
