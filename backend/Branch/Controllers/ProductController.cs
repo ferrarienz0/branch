@@ -100,7 +100,7 @@ namespace Branch.Controllers
         [HttpPut]
         [Route("product/discount")]
         [ResponseType(typeof(Product))]
-        public IHttpActionResult ApplyDiscountToProduct([FromUri] string AccessToken, [FromUri] int ProductId, [FromBody] float Discount)
+        public IHttpActionResult ApplyDiscountToProduct([FromUri] string AccessToken, [FromUri] int ProductId, [FromUri] float Discount)
         {
             var UserId = TokenValidator.VerifyToken(AccessToken);
             var User = SQLContext.Users.Find(UserId);
@@ -109,12 +109,12 @@ namespace Branch.Controllers
 
             if(!User.IsPro || Product.ProId != UserId)
             {
-                return Unauthorized();
+                return Content(HttpStatusCode.Forbidden, new {Message = "Usuário não é Pro"});
             }
 
             if(Discount > Product.MaxDiscount)
             {
-                return Unauthorized();
+                return Content(HttpStatusCode.Forbidden, new { Message = "Desconto maior que o máximo." });
             }
 
             Product.CurrentDiscount = Discount;
