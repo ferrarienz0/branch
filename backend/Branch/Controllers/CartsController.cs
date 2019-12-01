@@ -13,7 +13,7 @@ using Branch.Models;
 using Branch.SearchAuxiliars;
 
 namespace Branch.Controllers
-{   
+{
     public class ProductInfo
     {
         public int ProId { get; set; }
@@ -32,21 +32,21 @@ namespace Branch.Controllers
             var UserId = TokenValidator.VerifyToken(AccessToken);
 
             var UserCarts = from Cart in SQLContext.Carts
-                        where Cart.UserId == UserId
-                        select Cart;
+                            where Cart.UserId == UserId
+                            select Cart;
 
             var UserCartsSync = UserCarts.ToList();
 
             var Response = new List<dynamic>();
 
-            foreach(var Cart in UserCartsSync)
+            foreach (var Cart in UserCartsSync)
             {
                 var Products = SQLContext.ProductCarts
                                                       .Where(x => x.CartId == Cart.Id)
                                                       .ToList()
                                                       .Select(x => new { Product = FilterProduct(x.Product), x.Amount })
                                                       .ToList();
-                                                      
+
 
                 Response.Add(new { Cart, Products });
             }
@@ -61,8 +61,8 @@ namespace Branch.Controllers
             var ProId = TokenValidator.VerifyToken(AccessToken);
 
             var _UserCarts = from Cart in SQLContext.Carts
-                            where Cart.ProId == ProId
-                            select new { Cart.Id };
+                             where Cart.ProId == ProId
+                             select new { Cart.Id };
 
             var UserCarts = _UserCarts.ToList();
 
@@ -93,7 +93,7 @@ namespace Branch.Controllers
                 var NewCart = new Cart()
                 {
                     ProId = ProductInfo.ProId,
-                    UserId = UserId, 
+                    UserId = UserId,
                 };
 
                 Cart = NewCart;
@@ -126,12 +126,12 @@ namespace Branch.Controllers
             var StoreCart = UserAuxiliar.StoreCart(UserId, UpdateInfo.ProId, SQLContext);
             var ProductCart = SQLContext.ProductCarts.FirstOrDefault(x => x.CartId == StoreCart.Id && x.ProductId == UpdateInfo.ProductId);
 
-            if(ProductCart == default)
+            if (ProductCart == default)
             {
                 return NotFound();
             }
 
-            if(UpdateInfo.Amount == 0)
+            if (UpdateInfo.Amount == 0)
             {
                 SQLContext.ProductCarts.Remove(ProductCart);
 
@@ -156,13 +156,13 @@ namespace Branch.Controllers
             var UserId = TokenValidator.VerifyToken(AccessToken);
             var Cart = SQLContext.Carts.Find(CartId);
 
+
+            Cart.Finished = true;
+            SQLContext.Entry(Cart).State = EntityState.Modified;
             try
             {
-                Cart.Finished = true;
-                SQLContext.Entry(Cart).State = EntityState.Modified;
                 SQLContext.SaveChanges();
-            }
-            catch
+            }catch (DbUpdateException)
             {
                 return Unauthorized();
             }
