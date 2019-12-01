@@ -117,7 +117,7 @@ namespace Branch.Controllers
 
                 var Product = SQLContext.Products.Find(ProductInfo.ProductId);
 
-                return Ok(new { NewCart, Product = FilterProduct(Product) });
+                return Ok(new { Cart = NewCart, Product = FilterProduct(Product) });
             }
 
             var AlreadyExists = SQLContext.ProductCarts.FirstOrDefault(x => x.CartId == Cart.Id
@@ -132,7 +132,7 @@ namespace Branch.Controllers
                     SQLContext.Entry(AlreadyExists).State = EntityState.Modified;
                     SQLContext.SaveChanges();
 
-                    return Ok(AlreadyExists);
+                    return Ok(new { Cart, Product = FilterProduct(AlreadyExists.Product) });
                 }catch(DbUpdateException)
                 {
                     return Content(HttpStatusCode.Forbidden, new { Message = "Estoque insuficente!" });
@@ -151,7 +151,7 @@ namespace Branch.Controllers
                 SQLContext.ProductCarts.Add(NewProductCart);
                 SQLContext.SaveChanges();
 
-                return Ok(NewProductCart);
+                return Ok(new { Cart, Product = FilterProduct(NewProductCart.Product)});
             }
             catch (DbUpdateException)
             {
