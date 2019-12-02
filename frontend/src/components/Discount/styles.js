@@ -50,6 +50,17 @@ export const Container = styled.div`
         color: var(--white);
     }
 
+    i {
+        margin-left: 30px;
+        color: var(--yellow);
+        cursor: pointer;
+
+        &:hover {
+            color: var(--white);
+            transition: 0.1s;
+        }
+    }
+
     #image {
         height: 50px;
         width: 50px;

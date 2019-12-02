@@ -15,6 +15,13 @@ export default class Discount extends Component {
         this.setState({ product });
     };
 
+    apply = async () => {
+        const { token, productID, discount } = this.props;
+        await api.put(
+            `/product/discount?AccessToken=${token}&ProductId=${productID}&Discount=${discount}`
+        );
+    };
+
     render() {
         const { product } = this.state;
         const { discount, redirect } = this.props;
@@ -41,6 +48,7 @@ export default class Discount extends Component {
                         para {(product.Price * (1 - discount)).toFixed(2)}
                     </p>
                 </div>
+                <i onClick={this.apply}>Aplicar</i>
             </Container>
         );
     }
