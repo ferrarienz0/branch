@@ -29,7 +29,6 @@ namespace Branch.Controllers
     public class PublicAPIController : ApiController
     {
         private readonly SQLContext SQLContext = new SQLContext();
-        private readonly HttpClient ExternalApi = new HttpClient();
 
         private readonly string Token = "63096c5c035e43efb8fba206a1aec2d2";
         private readonly string URL = "https://svc02.api.bitext.com/sentiment/";
@@ -134,6 +133,7 @@ namespace Branch.Controllers
 
         private async Task<dynamic> MakeRequest(string Text)
         {
+            var ExternalApi = new HttpClient();
             ExternalApi.DefaultRequestHeaders.Add("Authorization", "bearer " + Token);
 
             var Response = await ExternalApi
@@ -173,6 +173,8 @@ namespace Branch.Controllers
 
                 IsFirstTime = false;
             } while (Data.sentimentanalysis == null);
+
+            ExternalApi.Dispose();
 
             return Data.sentimentanalysis;
         }
