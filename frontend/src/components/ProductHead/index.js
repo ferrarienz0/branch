@@ -41,7 +41,10 @@ export default class ProductHead extends Component {
                             </p>
                         )}
                         <strong id="price">
-                            R$ {(product.price - product.discount).toFixed(2)}
+                            R${' '}
+                            {(product.price * (1 - product.discount)).toFixed(
+                                2
+                            )}
                         </strong>
                         <p id="description">{product.description}</p>
                     </div>
