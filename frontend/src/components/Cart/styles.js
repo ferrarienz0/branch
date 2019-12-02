@@ -1,6 +1,46 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    i {
+        color: var(--gray-4);
+        margin-left: 10px;
+    }
+
+    #footer {
+        padding-left: 30px;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        border-bottom: 1px solid var(--gray-2);
+    }
+
+    #total {
+        width: 100%;
+        font-size: 18px;
+
+        color: var(--yellow);
+    }
+
+    #buy-icon {
+        width: 30px;
+        height: 30px;
+        color: var(--white);
+
+        cursor: pointer;
+
+        &:hover {
+            color: var(--light-white);
+            transition: 0.1s;
+        }
+    }
+`;
+
+export const Item = styled.div`
     margin-left: 20px;
     padding: 5px 10px;
 

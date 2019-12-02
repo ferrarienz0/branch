@@ -33,6 +33,30 @@ export const Header = styled.div`
         cursor: pointer;
     }
 
+    input {
+        width: 200px;
+        margin-left: 15px;
+        border-radius: 15px;
+        background: var(--gray-1);
+        border: 1px solid var(--gray-2);
+        padding: 0 10px;
+        color: var(--gray-4);
+    }
+
+    #search {
+        width: 200px;
+        top: 50px;
+        left: 100px;
+        padding: 5px;
+
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+
+        border-left: 1px solid var(--dark-magenta);
+        background: var(--black);
+    }
+
     #go-home {
         width: 30px;
         height: 30px;
@@ -56,6 +80,25 @@ export const Header = styled.div`
     #logoff:hover {
         color: var(--white);
         transition: 0.1s;
+    }
+`;
+
+export const User = styled.div`
+    margin: 5px;
+
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+        transform: translateX(5px);
+        transition: 0.1s;
+    }
+
+    #name {
+        margin-left: 5px;
+
+        color: var(--magenta);
     }
 `;
 

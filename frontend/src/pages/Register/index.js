@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import md5 from 'md5';
 import { Container, Submit, Calendar } from './styles.js';
-import viacep from '../../services/viacep';
 import api from '../../services/api';
 import logo from '../../assets/logo.svg';
 
@@ -15,14 +14,6 @@ export default class Register extends Component {
             password: '',
             email: '',
             birthDate: '',
-        },
-        address: {
-            CEP: '',
-            Logradouro: '',
-            complemento: '',
-            bairro: '',
-            cidade: '',
-            estado: '',
         },
         token: '',
         warning: '',
@@ -52,22 +43,6 @@ export default class Register extends Component {
             .catch(() => {
                 this.setState({ warning: 'Ocorreu um erro' });
             });
-    };
-
-    handleAddress = async e => {
-        const { data: address } = await viacep.get(
-            `/ws/${e.target.value}/json/`
-        );
-        this.setState({
-            address: {
-                CEP: address.cep,
-                logradouro: address.logradouro,
-                complemento: address.complemento,
-                bairro: address.bairro,
-                cidade: address.localidade,
-                estado: address.uf,
-            },
-        });
     };
 
     render() {
@@ -100,11 +75,6 @@ export default class Register extends Component {
                                 },
                             })
                         }
-                    />
-                    <input
-                        placeholder="CEP"
-                        type="CEP"
-                        onChange={this.handleAddress}
                     />
                     <Calendar
                         min="1900-01-01"

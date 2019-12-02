@@ -94,6 +94,7 @@ export const Footer = styled.div`
     #add-cart {
         width: 25px;
         height: 25px !important;
+        margin-right: 10px;
 
         cursor: pointer;
 
@@ -103,5 +104,19 @@ export const Footer = styled.div`
             color: var(--light-white);
             transition: 0.1s;
         }
+    }
+
+    #stock {
+        font-size: 16px;
+        margin-right: 10px;
+        color: var(--gray-4);
+    }
+
+    input {
+        width: 50px;
+        font-size: 18px;
+        background: none;
+        color: var(--gray-4);
+        border: none;
     }
 `;

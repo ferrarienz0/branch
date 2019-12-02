@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import { Container, LogIn, Register, HalfPugg, NotYet, Or } from './styles.js';
+import { Container, LogIn, Register, NotYet } from './styles.js';
 import md5 from 'md5';
 import api from '../../services/api';
 import logo from '../../assets/logo.svg';
@@ -62,8 +62,6 @@ export default class Login extends Component {
                         Registre-se
                     </Register>
                 </form>
-                <Or>ou</Or>
-                <HalfPugg>Entrar com HalfPugg</HalfPugg>
             </Container>
         );
     }

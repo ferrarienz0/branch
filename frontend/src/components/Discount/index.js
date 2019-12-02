@@ -1,9 +1,23 @@
 import React, { Component } from 'react';
 import { Container } from './styles';
+import api from '../../services/api';
 
-export default class Product extends Component {
+export default class Discount extends Component {
+    state = {
+        product: {},
+    };
+
+    componentDidMount = async () => {
+        const { productID } = this.props;
+        const { data: product } = await api.get(
+            `/product?ProductId=${productID}`
+        );
+        this.setState({ product });
+    };
+
     render() {
-        const { product, redirect } = this.props;
+        const { product } = this.state;
+        const { discount, redirect } = this.props;
         return (
             <Container
                 image={product.Media === undefined ? null : product.Media.URL}
@@ -19,11 +33,12 @@ export default class Product extends Component {
                         </strong>
                     </div>
                     <p id="price">
-                        R${' '}
+                        de R${' '}
                         {(
                             product.Price *
                             (1 - product.CurrentDiscount)
-                        ).toFixed(2)}
+                        ).toFixed(2)}{' '}
+                        para {(product.Price * (1 - discount)).toFixed(2)}
                     </p>
                 </div>
             </Container>
