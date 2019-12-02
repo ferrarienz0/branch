@@ -7,7 +7,6 @@ export const Container = styled.div`
 
     display: flex;
     align-items: center;
-    cursor: pointer;
 
     border-bottom: 1px solid var(--dark-green);
     background-image: linear-gradient(

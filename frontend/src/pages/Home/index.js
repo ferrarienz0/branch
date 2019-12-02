@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { FaPowerOff, FaComment, FaStar, FaTag } from 'react-icons/fa';
-import { Container, Header, Body, Perfil, Explore } from './styles.js';
+import { Container, Header, User, Body, Perfil, Explore } from './styles.js';
 import icone from '../../assets/icone.svg';
 import api from '../../services/api';
 import Posting from '../../components/Posting';
@@ -28,7 +28,10 @@ export default class Home extends Component {
             topics: [],
             cart: [],
         },
+        userSearch: [],
         topics: [],
+        cart: [],
+        discount: [],
         parent: '',
         posting: false,
         creatingProduct: false,
@@ -51,9 +54,21 @@ export default class Home extends Component {
         const { data: me_topics } = await api.get(
             `/subjects/followed?AccessToken=${token}`
         );
+        const { data: me_cart } = await api.get(
+            `/carts/user?AccessToken=${token}`
+        );
         const { data: topics } = await api.get(
             `/subjects/unfollowed?AccessToken=${token}`
         );
+        const { data: cart } = await api.get(
+            `/products/recommended?AccessToken=${token}`
+        );
+        if (user.IsPro) {
+            const { data: discount } = await api.get(
+                `/product/discount?AccessToken=${token}`
+            );
+            this.setState({ discount });
+        }
         this.setState({
             me: {
                 ID: user.Id,
@@ -65,8 +80,10 @@ export default class Home extends Component {
                 pro: user.IsPro,
                 users: me_users,
                 topics: me_topics,
+                cart: me_cart,
             },
             topics,
+            cart,
         });
         this.feedConfig();
     };
@@ -243,10 +260,23 @@ export default class Home extends Component {
         this.setState({ type, id, redirect: true });
     };
 
+    search = e => {
+        if (e.target.value.replace(/ /g, '') !== '') {
+            api.get(`/user/search?Key=${e.target.value}`).then(res => {
+                this.setState({ userSearch: res.data });
+            });
+        } else {
+            this.setState({ userSearch: [] });
+        }
+    };
+
     render() {
         const {
             me,
+            userSearch,
             topics,
+            cart,
+            discount,
             parent,
             posting,
             creatingProduct,
@@ -257,17 +287,44 @@ export default class Home extends Component {
             feed,
         } = this.state;
         const { token } = this.props.match.params;
-        if (redirect) return <Redirect to={`/${token}/${type}/${id}`} />;
+        if (redirect) return <Redirect to={`/pog/${token}/${type}/${id}`} />;
         return (
             <Container>
                 <Header>
-                    <Link id="logo" to={`/${token}`}>
+                    <Link id="logo" to={`/pog/${token}`}>
                         <img src={icone} alt="Branch"></img>
                     </Link>
+                    <input
+                        placeholder="buscar..."
+                        onChange={e => this.search(e)}
+                    />
                     <div id="space" />
                     <Link to="/">
                         <FaPowerOff id="logoff" />
                     </Link>
+                    {userSearch.length === 0 ? null : (
+                        <div id="search">
+                            {userSearch.map((user, index) => (
+                                <User
+                                    onClick={() =>
+                                        this.redirectTo('user', user.Id)
+                                    }
+                                    key={index}
+                                    style={{ top: index * 40 + 50, left: 90 }}
+                                >
+                                    <UserImage
+                                        size="30px"
+                                        image={
+                                            user.Media === null
+                                                ? null
+                                                : user.Media.URL
+                                        }
+                                    />
+                                    <div id="name">@{user.Nickname}</div>
+                                </User>
+                            ))}
+                        </div>
+                    )}
                 </Header>
                 {posting ? (
                     <Posting
@@ -343,6 +400,8 @@ export default class Home extends Component {
                         <Follows
                             me={me}
                             topics={topics}
+                            cart={cart}
+                            discount={discount}
                             token={token}
                             redirect={this.redirectTo}
                         />

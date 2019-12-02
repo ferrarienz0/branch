@@ -97,37 +97,10 @@ export const Register = styled(Link)`
     }
 `;
 
-export const HalfPugg = styled(Button)`
-    height: 80px;
-    width: 250px;
-    padding: 30px;
-
-    text-align: center;
-    cursor: pointer;
-
-    border: 0;
-    border-radius: 40px;
-    font-size: 16px;
-    font-weight: bold;
-    background: #22d69a;
-    color: #21302a;
-    box-shadow: var(--shadow);
-
-    &:hover {
-        background: #0f9e6e;
-        transition: 0.1s;
-    }
-`;
-
 export const NotYet = styled.h1`
     text-align: center;
 
     font-size: 16px;
     color: var(--gray-4);
     margin-top: 40px;
-`;
-export const Or = styled.h1`
-    margin: 50px;
-    font-size: 24px;
-    color: var(--gray-4);
 `;

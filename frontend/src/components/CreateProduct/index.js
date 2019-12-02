@@ -66,7 +66,7 @@ export default class CreateProduct extends Component {
                 MediaId: data[0].Id,
             });
             await api.post(`/post/create?AccessToken=${token}`, {
-                Text: '$' + name + ' :: ' + description,
+                Text: '$' + name + ' , ' + description,
                 Medias: [data[0].Id],
             });
             onClose();

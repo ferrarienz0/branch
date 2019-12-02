@@ -1,33 +1,46 @@
 import React, { Component } from 'react';
 import { Container, User } from './styles';
 import { FaAngleRight, FaAngleDown } from 'react-icons/fa';
-import Topic from '../../components/Topic';
-import UserImage from '../../components/UserImage';
+import Topic from '../Topic';
+import Product from '../Product';
+import Discount from '../Discount';
+import Cart from '../Cart';
+import UserImage from '../UserImage';
 
 export default class Follows extends Component {
     state = {
-        showUsers: false,
-        showCart: false,
-        showTopics: false,
-        showRecommended: false,
+        show: {
+            whoIFollow: false,
+            myCart: false,
+            recommendedProducts: false,
+            recommendedDiscount: false,
+            myTopics: false,
+            recommendedTopics: false,
+        },
     };
-    render() {
-        const { showUsers, showCart, showTopics, showRecommended } = this.state;
-        const { me, topics, redirect, token } = this.props;
+
+    whoIFollow = () => {
+        const { show } = this.state;
+        const { me, redirect } = this.props;
         return (
-            <Container>
+            <>
                 <div
                     id="users"
                     onClick={() =>
-                        showUsers
-                            ? this.setState({ showUsers: false })
-                            : this.setState({ showUsers: true })
+                        show.whoIFollow
+                            ? this.setState({
+                                  show: { ...show, whoIFollow: false },
+                              })
+                            : this.setState({
+                                  show: { ...show, whoIFollow: true },
+                              })
                     }
                 >
-                    {showUsers ? <FaAngleDown /> : <FaAngleRight />}
+                    {show.whoIFollow ? <FaAngleDown /> : <FaAngleRight />}
                     Quem eu sigo
                 </div>
-                {showUsers
+
+                {show.whoIFollow
                     ? me.users.map((user, index) => (
                           <User
                               onClick={() => redirect('user', user.Id)}
@@ -38,37 +51,140 @@ export default class Follows extends Component {
                           </User>
                       ))
                     : null}
+            </>
+        );
+    };
+
+    myCart = () => {
+        const { show } = this.state;
+        const { me, token, redirect } = this.props;
+        return (
+            <>
                 <div
                     id="cart"
                     onClick={() =>
-                        showCart
-                            ? this.setState({ showCart: false })
-                            : this.setState({ showCart: true })
+                        show.myCart
+                            ? this.setState({
+                                  show: { ...show, myCart: false },
+                              })
+                            : this.setState({ show: { ...show, myCart: true } })
                     }
                 >
-                    {showCart ? <FaAngleDown /> : <FaAngleRight />}
+                    {show.myCart ? <FaAngleDown /> : <FaAngleRight />}
                     Meu carrinho
                 </div>
-                {/* {me.cart.map((product, index) => (
-                    <Product
-                        key={index}
-                        token={token}
-                        product={product}
-                        onHead={() => redirect('topic', product.Id)}
-                    />
-                ))} */}
+                {show.myCart
+                    ? me.cart.map((subCart, index) => (
+                          <Cart
+                              key={index}
+                              token={token}
+                              subCart={subCart}
+                              redirect={redirect}
+                          />
+                      ))
+                    : null}
+            </>
+        );
+    };
+
+    recommendedProducts = () => {
+        const { show } = this.state;
+        const { cart, token, redirect } = this.props;
+        return (
+            <>
+                <div
+                    id="cart"
+                    onClick={() =>
+                        show.recommendedProducts
+                            ? this.setState({
+                                  show: { ...show, recommendedProducts: false },
+                              })
+                            : this.setState({
+                                  show: { ...show, recommendedProducts: true },
+                              })
+                    }
+                >
+                    {show.recommendedProducts ? (
+                        <FaAngleDown />
+                    ) : (
+                        <FaAngleRight />
+                    )}
+                    Produtos recomendados
+                </div>
+                {show.recommendedProducts
+                    ? cart.map((product, index) => (
+                          <Product
+                              key={index}
+                              token={token}
+                              product={product}
+                              redirect={redirect}
+                          />
+                      ))
+                    : null}
+            </>
+        );
+    };
+
+    recommendedDiscounts = () => {
+        const { show } = this.state;
+        const { me, discount, token, redirect } = this.props;
+        return me.pro ? (
+            <>
+                <div
+                    id="cart"
+                    onClick={() =>
+                        show.recommendedDiscount
+                            ? this.setState({
+                                  show: { ...show, recommendedDiscount: false },
+                              })
+                            : this.setState({
+                                  show: { ...show, recommendedDiscount: true },
+                              })
+                    }
+                >
+                    {show.recommendedDiscount ? (
+                        <FaAngleDown />
+                    ) : (
+                        <FaAngleRight />
+                    )}
+                    Descontos recomendados
+                </div>
+                {show.recommendedDiscount
+                    ? discount.map((discount, index) => (
+                          <Discount
+                              key={index}
+                              token={token}
+                              productID={discount.ProductId}
+                              discount={discount.RecommendedDiscount}
+                              redirect={redirect}
+                          />
+                      ))
+                    : null}
+            </>
+        ) : null;
+    };
+
+    myTopics = () => {
+        const { show } = this.state;
+        const { me, token, redirect } = this.props;
+        return (
+            <>
                 <div
                     id="topics"
                     onClick={() =>
-                        showTopics
-                            ? this.setState({ showTopics: false })
-                            : this.setState({ showTopics: true })
+                        show.myTopics
+                            ? this.setState({
+                                  show: { ...show, myTopics: false },
+                              })
+                            : this.setState({
+                                  show: { ...show, myTopics: true },
+                              })
                     }
                 >
-                    {showTopics ? <FaAngleDown /> : <FaAngleRight />}
+                    {show.myTopics ? <FaAngleDown /> : <FaAngleRight />}
                     Meus tópicos
                 </div>
-                {showTopics
+                {show.myTopics
                     ? me.topics.map((topic, index) => (
                           <Topic
                               key={index}
@@ -84,18 +200,35 @@ export default class Follows extends Component {
                           />
                       ))
                     : null}
+            </>
+        );
+    };
+
+    recommendedTopics = () => {
+        const { show } = this.state;
+        const { topics, token, redirect } = this.props;
+        return (
+            <>
                 <div
                     id="topics"
                     onClick={() =>
-                        showRecommended
-                            ? this.setState({ showRecommended: false })
-                            : this.setState({ showRecommended: true })
+                        show.recommendedTopics
+                            ? this.setState({
+                                  show: { ...show, recommendedTopics: false },
+                              })
+                            : this.setState({
+                                  show: { ...show, recommendedTopics: true },
+                              })
                     }
                 >
-                    {showRecommended ? <FaAngleDown /> : <FaAngleRight />}
-                    Recomendado
+                    {show.recommendedTopics ? (
+                        <FaAngleDown />
+                    ) : (
+                        <FaAngleRight />
+                    )}
+                    Tópicos recomendados
                 </div>
-                {showRecommended
+                {show.recommendedTopics
                     ? topics.map((topic, index) => (
                           <Topic
                               key={index}
@@ -114,6 +247,19 @@ export default class Follows extends Component {
                           />
                       ))
                     : null}
+            </>
+        );
+    };
+
+    render() {
+        return (
+            <Container>
+                {this.whoIFollow()}
+                {this.myCart()}
+                {this.recommendedProducts()}
+                {this.recommendedDiscounts()}
+                {this.myTopics()}
+                {this.recommendedTopics()}
             </Container>
         );
     }

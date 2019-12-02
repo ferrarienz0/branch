@@ -55,14 +55,14 @@ namespace Branch.Controllers
                 }
             }
 
-            GraphAuxiliar.IncreaseFollowAffinityAsync(NewPost.UserId, NewPost.Mentions, SQLContext);
-            GraphAuxiliar.IncreaseTopicAffinityAsync(NewPost.UserId, NewPost.Hashtags, SQLContext);
+            GraphAuxiliar.IncreaseFollowAffinity(NewPost.UserId, NewPost.Mentions, SQLContext);
+            GraphAuxiliar.IncreaseTopicAffinity(NewPost.UserId, NewPost.Hashtags, SQLContext);
 
             if (Parent != default)
             {
-                GraphAuxiliar.IncreaseFollowAffinityAsync(NewPost.UserId, Parent.UserId, SQLContext);
-                GraphAuxiliar.IncreaseFollowAffinityAsync(NewPost.UserId, Parent.Mentions, SQLContext);
-                GraphAuxiliar.IncreaseTopicAffinityAsync(NewPost.UserId, Parent.Hashtags, SQLContext);
+                GraphAuxiliar.IncreaseFollowAffinity(NewPost.UserId, Parent.UserId, SQLContext);
+                GraphAuxiliar.IncreaseFollowAffinity(NewPost.UserId, Parent.Mentions, SQLContext);
+                GraphAuxiliar.IncreaseTopicAffinity(NewPost.UserId, Parent.Hashtags, SQLContext);
             }
 
             return Ok(NewPost);
@@ -192,8 +192,8 @@ namespace Branch.Controllers
 
             dynamic Response = new { TotalLikes, TotalDeslikes };
 
-            GraphAuxiliar.IncreaseFollowAffinityAsync(UserId, PostLiked.UserId, SQLContext);
-            GraphAuxiliar.IncreaseTopicAffinityAsync(UserId, PostLiked.Hashtags, SQLContext);
+            GraphAuxiliar.IncreaseFollowAffinity(UserId, PostLiked.UserId, SQLContext);
+            GraphAuxiliar.IncreaseTopicAffinity(UserId, PostLiked.Hashtags, SQLContext);
 
             return Ok(Response);
         }
@@ -388,6 +388,15 @@ namespace Branch.Controllers
 
             var Update = Builders<Post>.Update.Set("Comments", NewComments);
             PostAuxiliar.UpdatePostById(Parent.Id, Update);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                SQLContext.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }
