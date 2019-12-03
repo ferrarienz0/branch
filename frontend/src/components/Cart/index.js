@@ -16,6 +16,7 @@ export default class Cart extends Component {
     };
     render() {
         const { subCart, redirect } = this.props;
+        console.log(subCart);
         return (
             <Container>
                 <i>de {subCart.Cart.Pro.Nickname}</i>
@@ -47,7 +48,11 @@ export default class Cart extends Component {
                     </Item>
                 ))}
                 <div id="footer">
-                    <p id="total">Total: R$ {subCart.Cart.Total.toFixed(2)}</p>
+                    <p id="total">
+                        Total: R${' '}
+                        {subCart.Cart.Total.toFixed(2) *
+                            (1 - subCart.Products[0].Product.CurrentDiscount)}
+                    </p>
                     <FaMoneyBillWave id="buy-icon" onClick={this.buy} />
                 </div>
             </Container>

@@ -134,7 +134,11 @@ namespace Branch.Controllers
             var Posts = PostAuxiliar.PostsByAuthor(UserId);
             Posts = PostAuxiliar.UpdateOwner(Posts, SQLContext);
 
-            return Ok(Posts);
+            var MentionsPosts = PostAuxiliar.MentionsUser(UserId, SQLContext);
+
+            var Response = Posts.Union(MentionsPosts, new PostComparer()).ToList();
+
+            return Ok(Response);
         }
 
         [HttpGet]
